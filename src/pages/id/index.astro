@@ -24,7 +24,7 @@ const description = 'A lifelong builder applying learnings in tech and business,
 					height="300"
 				/>
 
-				<h1>Hai, Saya Syaiful Anam 👋</h1>
+				<h1 class="hero-heading">👋 Hai, Saya Syaiful Anam</h1>
 				<p class="hero-aka">a.k.a. syanampro</p>
 				<p class="hero-subtitle">
 					A lifelong builder. Applying my learnings in tech and business.
@@ -113,7 +113,7 @@ const description = 'A lifelong builder applying learnings in tech and business,
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 		gap: var(--spacing-lg);
-		margin-bottom: var(--spacing-2xl);
+		margin-bottom: var(--spacing-lg);
 		text-align: left;
 	}
 
@@ -202,6 +202,7 @@ const description = 'A lifelong builder applying learnings in tech and business,
 
 		.hero-subtitle {
 			font-size: 1.125rem;
+			margin-bottom: var(--spacing-xl);
 		}
 
 		.content-boxes {
@@ -215,6 +216,23 @@ const description = 'A lifelong builder applying learnings in tech and business,
 
 		.focus-section {
 			padding: var(--spacing-lg);
+			text-align: left;
+		}
+
+		/* Hero heading responsive */
+		.hero-heading {
+			white-space: nowrap;
+		}
+
+		@media (max-width: 768px) {
+			.hero-heading {
+				white-space: normal;
+			}
+		}
+
+		.content-box h2,
+		.focus-section h2 {
+			font-size: 1.125rem;
 		}
 	}
 </style>

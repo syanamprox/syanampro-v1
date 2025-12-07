@@ -79,7 +79,7 @@ const description = 'Connect with me to discuss technology, business, AI, and po
 						</div>
 					</div>
 
-					<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; font-family: monospace; font-size: 0.75rem; line-height: 1.5; word-break: break-all; white-space: pre-wrap; overflow-x: auto;">-----BEGIN PGP PUBLIC KEY BLOCK-----
+					<div class="monospace-key" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; font-family: monospace; font-size: 0.75rem; line-height: 1.5; word-break: break-all; white-space: pre-wrap; overflow-x: auto;">-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: Keybase OpenPGP v1.0.0
 Comment: https://keybase.io/crypto
 
@@ -332,10 +332,86 @@ oqNtREk69msjGoYb9A==
 		color: var(--color-text);
 	}
 
+	/* Mobile-specific styles for contact grid */
+	.contact-methods .contact-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+		margin-bottom: 16px;
+	}
+
+	.contact-methods .contact-card {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: 20px;
+		text-align: center;
+		transition: all 0.3s ease;
+	}
+
+	.contact-methods .contact-card:hover {
+		transform: translateY(-2px);
+		border-color: var(--color-accent);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.contact-methods .contact-card h3 {
+		margin: 0 0 12px 0;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.contact-methods .contact-card div[style*="font-family: monospace"] {
+		font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+		font-size: 0.875rem;
+		margin-bottom: 8px;
+		word-break: break-all;
+		line-height: 1.4;
+	}
+
+	.contact-methods .contact-card p {
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+		margin: 0;
+		line-height: 1.3;
+	}
+
+	/* PGP Key mobile optimisation */
+	.pgp-section .monospace-key {
+		font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+		font-size: 0.625rem;
+		line-height: 1.4;
+		word-break: break-all;
+		white-space: pre-wrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.connect-content {
-			padding: var(--spacing-lg) 0;
+			padding: var(--spacing-lg) 20px;
+		}
+
+		.contact-methods .contact-grid {
+			grid-template-columns: 1fr;
+			gap: 12px;
+		}
+
+		.contact-methods .contact-card {
+			padding: 16px;
+		}
+
+		.contact-methods .contact-card h3 {
+			font-size: 0.95rem;
+		}
+
+		.contact-methods .contact-card div[style*="font-family: monospace"] {
+			font-size: 0.8rem;
+		}
+
+		.contact-methods .contact-card p {
+			font-size: 0.7rem;
 		}
 
 		.contact-grid {
@@ -366,6 +442,47 @@ oqNtREk69msjGoYb9A==
 			width: 100%;
 			max-width: 300px;
 			text-align: center;
+		}
+
+		/* PGP Key mobile improvements */
+		.pgp-section .monospace-key {
+			font-size: 0.55rem;
+			padding: 12px;
+		}
+
+		/* Improve touch targets for mobile */
+		.contact-methods .contact-card a {
+			display: inline-block;
+			padding: 4px 0;
+			min-height: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	/* Extra small screens */
+	@media (max-width: 480px) {
+		.connect-content {
+			padding: var(--spacing-md) 20px;
+		}
+
+		.contact-methods .contact-card {
+			padding: 12px;
+		}
+
+		.contact-methods .contact-card h3 {
+			font-size: 0.9rem;
+			margin-bottom: 8px;
+		}
+
+		.contact-methods .contact-card div[style*="font-family: monospace"] {
+			font-size: 0.75rem;
+		}
+
+		.pgp-section .monospace-key {
+			font-size: 0.5rem;
+			padding: 8px;
 		}
 	}
 </style>
