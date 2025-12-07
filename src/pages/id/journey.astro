@@ -1,0 +1,271 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const currentPath = Astro.url.pathname;
+const lang = 'id';
+
+const title = 'Perjalanan Saya dalam Pembelajaran Berkelanjutan - Syaiful Anam';
+const description = 'Ikuti perjalanan pembelajaran berkelanjutan saya dari perancang hingga orkestrator, menerapkan teknologi untuk menciptakan dampak bisnis.';
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="journey-content">
+				<h1>Perjalanan Saya dalam Pembelajaran Berkelanjutan</h1>
+
+				<p class="intro">
+					Teknologi telah menjadi teman setia sepanjang karir saya. Setiap fase mengajarkan saya pelajaran berharga
+					yang saya bawa maju, membangun di atas pengalaman sebelumnya untuk menciptakan dampak yang bermakna.
+				</p>
+
+				<div class="timeline">
+					<div class="timeline-item">
+						<div class="timeline-marker">1</div>
+						<div class="timeline-content">
+							<h2>Perancang (CorelDRAW)</h2>
+							<div class="timeline-period">2015 - 2017</div>
+							<p>
+								Perjalanan saya dimulai dengan desain visual. Saya mempelajari prinsip-prinsip komposisi, teori warna,
+								dan pengalaman pengguna melalui pembuatan grafik dan materi pemasaran. Fondasi ini mengajarkan saya
+								pentingnya estetika dan bagaimana pilihan desain mempengaruhi persepsi pengguna.
+							</p>
+							<ul class="learnings">
+								<li>Komposisi visual dan prinsip desain</li>
+								<li>Memahami pengalaman pengguna</li>
+								<li>Komunikasi klien dan pengumpulan kebutuhan</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="timeline-item">
+						<div class="timeline-marker">2</div>
+						<div class="timeline-content">
+							<h2>Pemprakarsa (WordPress)</h2>
+							<div class="timeline-period">2017 - 2019</div>
+							<p>
+								Beralih dari desain statis ke website dinamis, saya mengadopsi WordPress dan pengembangan PHP.
+								Fase ini mengajarkan saya bagaimana website berfungsi di balik layar, pentingnya desain database,
+								dan cara membuat solusi kustom yang memenuhi kebutuhan bisnis spesifik.
+							</p>
+							<ul class="learnings">
+								<li>Fundamental pengembangan web (HTML, CSS, JavaScript)</li>
+								<li>PHP dan pengembangan kustom WordPress</li>
+								<li>Desain dan manajemen database</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="timeline-item">
+						<div class="timeline-marker">3</div>
+						<div class="timeline-content">
+							<h2>Arditek (Laravel)</h2>
+							<div class="timeline-period">2019 - 2022</div>
+							<p>
+								Saat proyek tumbuh kompleksitasnya, saya beralih ke Laravel dan mengadopsi praktik PHP modern.
+								Periode ini membentuk pemahaman saya tentang arsitektur perangkat lunak, prinsip kode bersih,
+								dan cara membangun aplikasi scalable yang dapat tumbuh dengan kebutuhan bisnis.
+							</p>
+							<ul class="learnings">
+								<li>Framework PHP modern dan prinsip OOP</li>
+								<li>Desain dan pengembangan API RESTful</li>
+								<li>Arsitektur sistem dan skalabilitas</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="timeline-item">
+						<div class="timeline-marker">4</div>
+						<div class="timeline-content">
+							<h2>Orkestrator (AI & Next.js)</h2>
+							<div class="timeline-period">2022 - Sekarang</div>
+							<p>
+								Saat ini, saya mengeksplorasi bagaimana AI dapat meningkatkan siklus pengembangan. Bekerja dengan Next.js,
+								framework JavaScript modern, dan alat AI telah membuka kemungkinan baru untuk menciptakan
+								solusi yang cerdas, efisien, dan berpusat pada pengguna.
+							</p>
+							<ul class="learnings">
+								<li>Pengembangan berbasis AI dan otomasi</li>
+								<li>Ekosistem JavaScript modern (Next.js, React)</li>
+								<li>Strategi DevOps dan deployment cloud</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="conclusion">
+					<h2>Perjalanan Berlanjut</h2>
+					<p>
+						Setiap fase dibangun di atas yang sebelumnya, menciptakan perspektif unik yang menggabungkan design thinking,
+						keahlian teknis, dan bisnis akal. Saya terus belajar dan beradaptasi, siap untuk babak selanjutnya
+						dalam lanskap teknologi yang terus berkembang ini.
+					</p>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+	}
+
+	.journey-content {
+		padding: var(--spacing-xl) 0;
+	}
+
+	.intro {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-2xl);
+		text-align: center;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.timeline {
+		position: relative;
+		margin-bottom: var(--spacing-2xl);
+	}
+
+	.timeline::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		background-color: var(--color-border);
+	}
+
+	.timeline-item {
+		position: relative;
+		padding-left: var(--spacing-xl);
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.timeline-marker {
+		position: absolute;
+		left: -15px;
+		top: 0;
+		width: 32px;
+		height: 32px;
+		background-color: var(--color-accent);
+		color: white;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 600;
+		font-size: 0.875rem;
+		border: 3px solid var(--color-background);
+		z-index: 1;
+	}
+
+	.timeline-content {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		transition: all 0.3s ease;
+	}
+
+	.timeline-content:hover {
+		transform: translateX(4px);
+		border-color: var(--color-accent);
+	}
+
+	.timeline-content h2 {
+		margin-top: 0;
+		margin-bottom: var(--spacing-xs);
+		color: var(--color-text);
+	}
+
+	.timeline-period {
+		color: var(--color-accent);
+		font-size: 0.875rem;
+		font-weight: 600;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.timeline-content p {
+		margin-bottom: var(--spacing-md);
+		color: var(--color-text-secondary);
+	}
+
+	.learnings {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.learnings li {
+		padding: var(--spacing-xs) 0;
+		color: var(--color-text-secondary);
+		position: relative;
+		padding-left: var(--spacing-md);
+	}
+
+	.learnings li::before {
+		content: '→';
+		position: absolute;
+		left: 0;
+		color: var(--color-accent);
+		font-weight: 600;
+	}
+
+	.conclusion {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-xl);
+		text-align: center;
+		margin-top: var(--spacing-xl);
+	}
+
+	.conclusion h2 {
+		margin-top: 0;
+		margin-bottom: var(--spacing-md);
+		color: var(--color-text);
+	}
+
+	.conclusion p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: 0;
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.journey-content {
+			padding: var(--spacing-lg) 0;
+		}
+
+		.timeline::before {
+			left: var(--spacing-sm);
+		}
+
+		.timeline-item {
+			padding-left: var(--spacing-2xl);
+		}
+
+		.timeline-marker {
+			left: calc(var(--spacing-sm) - 15px);
+		}
+
+		.timeline-content {
+			padding: var(--spacing-md);
+		}
+
+		.timeline-content:hover {
+			transform: none;
+		}
+	}
+</style>

@@ -1,0 +1,393 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const currentPath = Astro.url.pathname;
+const lang = 'id';
+
+const title = 'Mari Terhubung & Belajar Bersama - Syaiful Anam';
+const description = 'Terhubung dengan saya untuk diskusi tentang teknologi, bisnis, AI, dan potensi kolaborasi. Mari bangun sesuatu yang luar biasa bersama.';
+
+// Social links and contact info dalam bahasa Indonesia
+const socialLinks = [
+	{
+		name: 'Email',
+		url: 'mailto:iam@syanam.pro',
+		icon: '📧',
+		description: 'Untuk pertanyaan bisnis, kolaborasi, atau sekedar salam'
+	},
+	{
+		name: 'LinkedIn',
+		url: 'https://linkedin.com/in/syaifulanam',
+		icon: '💼',
+		description: 'Jaringan profesional dan kolaborasi bisnis'
+	},
+	{
+		name: 'GitHub',
+		url: 'https://github.com/syanampro',
+		icon: '💻',
+		description: 'Proyek open source dan kontribusi kode'
+	},
+	{
+		name: 'Twitter/X',
+		url: 'https://twitter.com/syanampro',
+		icon: '🐦',
+		description: 'Pemikiran harian tentang tech, AI, dan pembelajaran berkelanjutan'
+	},
+	{
+		name: 'Instagram',
+		url: 'https://instagram.com/syanampro',
+		icon: '📸',
+		description: 'Dibalik layar perjalanan wirausaha saya'
+	},
+	{
+		name: 'Telegram',
+		url: 'https://t.me/syanampro',
+		icon: '💬',
+		description: 'Chat cepat dan diskusi teknologi'
+	}
+];
+
+// Topics I'm interested in discussing
+const discussionTopics = [
+	'Pengembangan dan otomasi berbasis AI',
+	'Arsitektur dan skalabilitas B2B SaaS',
+	'Implementasi teknologi di industri tradisional',
+	'Praktik terbaik pengembangan full-stack',
+	'Strategi DevOps dan deployment cloud',
+	'Membangun dan menskalakan tim remote',
+	'Pembelajaran berkelanjutan dan pengembangan skill',
+	'Kewirausahaan dan ventura teknologi'
+];
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="connect-content">
+				<h1>Mari Terhubung & Belajar Bersama</h1>
+
+				<div class="intro-section">
+					<p>
+						Saya selalu bersemangat untuk terhubung dengan sesama builder, entrepreneur, dan teknologi enthusiasts.
+						Baik Anda ingin mendiskusikan implementasi AI, berbagi insight tentang software B2B, atau mengeksplorasi
+						potensi kolaborasi, saya siap untuk percakapan yang bermakna.
+					</p>
+				</div>
+
+				<div class="contact-methods">
+					<h2>Cara Menghubungi Saya</h2>
+					<div class="contact-grid">
+						{socialLinks.map((social) => (
+							<a href={social.url} target="_blank" rel="noopener noreferrer" class="contact-card">
+								<div class="contact-icon">{social.icon}</div>
+								<div class="contact-info">
+									<h3>{social.name}</h3>
+									<p>{social.description}</p>
+									<span class="contact-url">{social.url.replace('mailto:', '').replace('https://', '')}</span>
+								</div>
+								<div class="contact-arrow">→</div>
+							</a>
+						))}
+					</div>
+				</div>
+
+				<div class="topics-section">
+					<h2>Saya Senang Mendiskusikan</h2>
+					<div class="topics-grid">
+						{discussionTopics.map((topic) => (
+							<div class="topic-item">
+								<span class="topic-bullet">💡</span>
+								<span>{topic}</span>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<div class="cta-section">
+					<div class="cta-card">
+						<h2>🚀 Mari Bangun Sesuatu Bersama</h2>
+						<p>
+							Saya tertarik pada kolaborasi yang menggabungkan teknologi dan dampak bisnis.
+							Jika Anda sedang mengerjakan sesuatu yang inovatif atau butuh keahlian teknis untuk ventura Anda,
+							saya senang mendengar dari Anda.
+						</p>
+						<div class="cta-buttons">
+							<a href="mailto:iam@syanam.pro?subject=Mari berkolaborasi!" class="cta-primary">
+								Email Saya Langsung
+							</a>
+							<a href="https://linkedin.com/in/syaifulanam" target="_blank" rel="noopener noreferrer" class="cta-secondary">
+								Terhubung di LinkedIn
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="response-note">
+					<p>
+						<strong>Waktu Respon:</strong> Saya biasanya merespons dalam 24-48 jam. Untuk hal mendesak,
+						silakan sebutkan di subjek email Anda.
+					</p>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+	}
+
+	.connect-content {
+		padding: var(--spacing-xl) 0;
+	}
+
+	.intro-section {
+		text-align: center;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.intro-section p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.contact-methods {
+		margin-bottom: var(--spacing-2xl);
+	}
+
+	.contact-methods h2 {
+		text-align: center;
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.contact-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: var(--spacing-md);
+	}
+
+	.contact-card {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-md);
+		text-decoration: none;
+		color: var(--color-text);
+		transition: all 0.3s ease;
+		position: relative;
+	}
+
+	.contact-card:hover {
+		transform: translateY(-2px);
+		border-color: var(--color-accent);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.contact-card:hover .contact-arrow {
+		transform: translateX(4px);
+		color: var(--color-accent);
+	}
+
+	.contact-icon {
+		font-size: 2rem;
+		width: 60px;
+		height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--color-background);
+		border-radius: 12px;
+		flex-shrink: 0;
+	}
+
+	.contact-info {
+		flex: 1;
+	}
+
+	.contact-info h3 {
+		margin: 0 0 var(--spacing-xs) 0;
+		font-size: 1.125rem;
+	}
+
+	.contact-info p {
+		margin: 0 0 var(--spacing-xs) 0;
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+		line-height: 1.4;
+	}
+
+	.contact-url {
+		font-size: 0.75rem;
+		color: var(--color-text-light);
+		font-family: monospace;
+	}
+
+	.contact-arrow {
+		color: var(--color-text-light);
+		font-size: 1.25rem;
+		transition: all 0.2s ease;
+		flex-shrink: 0;
+	}
+
+	.topics-section {
+		margin-bottom: var(--spacing-2xl);
+	}
+
+	.topics-section h2 {
+		text-align: center;
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.topics-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--spacing-sm);
+	}
+
+	.topic-item {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--spacing-md);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+	}
+
+	.topic-bullet {
+		font-size: 1rem;
+		flex-shrink: 0;
+	}
+
+	.cta-section {
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.cta-card {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-xl);
+		text-align: center;
+	}
+
+	.cta-card h2 {
+		margin-top: 0;
+		margin-bottom: var(--spacing-md);
+		font-size: 1.5rem;
+	}
+
+	.cta-card p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-lg);
+		line-height: 1.6;
+	}
+
+	.cta-buttons {
+		display: flex;
+		gap: var(--spacing-md);
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.cta-primary,
+	.cta-secondary {
+		padding: var(--spacing-md) var(--spacing-lg);
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.2s ease;
+	}
+
+	.cta-primary {
+		background-color: var(--color-accent);
+		color: white;
+	}
+
+	.cta-primary:hover {
+		background-color: var(--color-accent-hover);
+		transform: translateY(-2px);
+	}
+
+	.cta-secondary {
+		background-color: var(--color-background);
+		color: var(--color-accent);
+		border: 2px solid var(--color-accent);
+	}
+
+	.cta-secondary:hover {
+		background-color: var(--color-accent);
+		color: white;
+		transform: translateY(-2px);
+	}
+
+	.response-note {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		text-align: center;
+	}
+
+	.response-note p {
+		margin: 0;
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
+	.response-note strong {
+		color: var(--color-text);
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.connect-content {
+			padding: var(--spacing-lg) 0;
+		}
+
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.contact-card {
+			padding: var(--spacing-md);
+		}
+
+		.contact-icon {
+			width: 50px;
+			height: 50px;
+			font-size: 1.5rem;
+		}
+
+		.topics-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.cta-buttons {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.cta-primary,
+		.cta-secondary {
+			width: 100%;
+			max-width: 300px;
+			text-align: center;
+		}
+	}
+</style>

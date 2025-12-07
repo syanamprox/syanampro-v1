@@ -1,0 +1,287 @@
+---
+interface Props {
+	lang: string;
+}
+
+const { lang } = Astro.props;
+
+// Social links untuk footer
+const socialLinks = [
+	{
+		name: 'LinkedIn',
+		url: 'https://linkedin.com/in/syaifulanam',
+		icon: '/images/ln.png'
+	},
+	{
+		name: 'GitHub',
+		url: 'https://github.com/syanampro',
+		icon: '/images/github.png'
+	},
+	{
+		name: 'Twitter/X',
+		url: 'https://twitter.com/syanampro',
+		icon: '/images/x.png'
+	},
+	{
+		name: 'Instagram',
+		url: 'https://instagram.com/syanampro',
+		icon: '/images/ig.png'
+	},
+	{
+		name: 'Telegram',
+		url: 'https://t.me/syanampro',
+		icon: '/images/telegram.png'
+	}
+];
+
+// Technology links untuk powered by
+const techLinks = [
+	{
+		name: 'Astro',
+		url: 'https://astro.build',
+		icon: '/images/astro.svg'
+	},
+	{
+		name: 'Cloudflare',
+		url: 'https://cloudflare.com',
+		icon: '/images/cloudflare.svg'
+	}
+];
+
+const poweredByText = lang === 'id'
+	? 'Ditenagai oleh'
+	: 'Powered by';
+---
+
+<footer class="site-footer">
+	<div class="container">
+		<div class="footer-content">
+			<div class="footer-left">
+				<span class="powered-by-text">{poweredByText}</span>
+				<div class="tech-links">
+					{techLinks.map((tech) => (
+						<a
+							href={tech.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="tech-link"
+							title={tech.name}
+						>
+							<img
+								src={tech.icon}
+								alt={tech.name}
+								class="tech-icon"
+								width="30"
+								height="30"
+							/>
+						</a>
+					))}
+					<a
+						href="https://github.com/syanampro"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="tech-link"
+						title="GitHub"
+					>
+						<img
+							src="/images/github.png"
+							alt="GitHub"
+							class="tech-icon"
+							width="30"
+							height="30"
+						/>
+					</a>
+				</div>
+			</div>
+
+			<div class="footer-right">
+				<div class="social-links">
+					{socialLinks.map((social) => (
+						<a
+							href={social.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="social-link"
+							title={social.name}
+						>
+							<img
+								src={social.icon}
+								alt={social.name}
+								class="social-icon"
+								width="30"
+								height="30"
+							/>
+						</a>
+					))}
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		border-top: 1px solid var(--color-border);
+		margin-top: var(--spacing-2xl);
+		padding: var(--spacing-lg) 0;
+		background-color: var(--color-background);
+	}
+
+	.container {
+		max-width: var(--max-width);
+		margin: 0 auto;
+		padding: 0 var(--spacing-sm);
+	}
+
+	.footer-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.footer-left {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+	}
+
+	.powered-by-text {
+		color: var(--color-text-light);
+		font-size: 0.875rem;
+		white-space: nowrap;
+	}
+
+	.tech-links {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+	}
+
+	.tech-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		border-radius: 4px;
+		transition: all 0.2s ease;
+		background-color: transparent;
+	}
+
+	.tech-link:hover {
+		background-color: var(--color-surface);
+	}
+
+	.tech-icon {
+		width: 30px;
+		height: 30px;
+		object-fit: contain;
+		opacity: 0.7;
+		transition: opacity 0.2s ease;
+	}
+
+	.tech-link:hover .tech-icon {
+		opacity: 1;
+	}
+
+	.footer-right {
+		flex-shrink: 0;
+	}
+
+	.social-links {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+	}
+
+	.social-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		transition: all 0.2s ease;
+		background-color: transparent;
+		border: none;
+	}
+
+	.social-link:hover {
+		background-color: var(--color-surface);
+	}
+
+	.social-icon {
+		width: 30px;
+		height: 30px;
+		object-fit: contain;
+		opacity: 0.7;
+		transition: opacity 0.2s ease;
+	}
+
+	.social-link:hover .social-icon {
+		opacity: 1;
+	}
+
+	/* Dark mode styles */
+	.dark .social-link:hover {
+		background-color: var(--color-surface);
+	}
+
+	/* Mobile responsive */
+	@media (max-width: 640px) {
+		.site-footer {
+			padding: var(--spacing-md) 0;
+			margin-top: var(--spacing-xl);
+		}
+
+		.footer-content {
+			flex-direction: column;
+			gap: var(--spacing-sm);
+			align-items: center;
+			text-align: center;
+		}
+
+		.footer-left,
+		.footer-right {
+			flex: none;
+		}
+
+		.footer-left {
+			flex-direction: column;
+			gap: var(--spacing-xs);
+		}
+
+		.tech-links {
+			gap: var(--spacing-xs);
+		}
+
+		.tech-link {
+			width: 36px;
+			height: 36px;
+		}
+
+		.tech-icon {
+			width: 24px;
+			height: 24px;
+		}
+
+		.social-links {
+			gap: var(--spacing-sm);
+		}
+
+		.social-link {
+			width: 36px;
+			height: 36px;
+		}
+
+		.social-icon {
+			width: 24px;
+			height: 24px;
+		}
+
+		.powered-by-text {
+			font-size: 0.75rem;
+		}
+	}
+</style>

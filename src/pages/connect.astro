@@ -1,0 +1,393 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const currentPath = Astro.url.pathname;
+const lang = 'en';
+
+const title = "Let's Connect & Learn Together - Syaiful Anam";
+const description = 'Connect with me to discuss technology, business, AI, and potential collaborations. Let\'s build something amazing together.';
+
+// Social links and contact info
+const socialLinks = [
+	{
+		name: 'Email',
+		url: 'mailto:iam@syanam.pro',
+		icon: '📧',
+		description: 'For business inquiries, collaborations, or just a friendly hello'
+	},
+	{
+		name: 'LinkedIn',
+		url: 'https://linkedin.com/in/syaifulanam',
+		icon: '💼',
+		description: 'Professional network and business collaborations'
+	},
+	{
+		name: 'GitHub',
+		url: 'https://github.com/syanampro',
+		icon: '💻',
+		description: 'Open source projects and code contributions'
+	},
+	{
+		name: 'Twitter/X',
+		url: 'https://twitter.com/syanampro',
+		icon: '🐦',
+		description: 'Daily thoughts on tech, AI, and continuous learning'
+	},
+	{
+		name: 'Instagram',
+		url: 'https://instagram.com/syanampro',
+		icon: '📸',
+		description: 'Behind the scenes of my entrepreneurial journey'
+	},
+	{
+		name: 'Telegram',
+		url: 'https://t.me/syanampro',
+		icon: '💬',
+		description: 'Quick chats and tech discussions'
+	}
+];
+
+// Topics I'm interested in discussing
+const discussionTopics = [
+	'AI-driven development and automation',
+	'B2B SaaS architecture and scaling',
+	'Technology implementation in traditional industries',
+	'Full-stack development best practices',
+	'DevOps and cloud deployment strategies',
+	'Building and scaling remote teams',
+	'Continuous learning and skill development',
+	'Entrepreneurship and technology ventures'
+];
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="connect-content">
+				<h1>Let's Connect & Learn Together</h1>
+
+				<div class="intro-section">
+					<p>
+						I'm always excited to connect with fellow builders, entrepreneurs, and technology enthusiasts.
+						Whether you want to discuss AI implementation, share insights about B2B software, or explore
+						potential collaborations, I'm here for meaningful conversations.
+					</p>
+				</div>
+
+				<div class="contact-methods">
+					<h2>Ways to Reach Me</h2>
+					<div class="contact-grid">
+						{socialLinks.map((social) => (
+							<a href={social.url} target="_blank" rel="noopener noreferrer" class="contact-card">
+								<div class="contact-icon">{social.icon}</div>
+								<div class="contact-info">
+									<h3>{social.name}</h3>
+									<p>{social.description}</p>
+									<span class="contact-url">{social.url.replace('mailto:', '').replace('https://', '')}</span>
+								</div>
+								<div class="contact-arrow">→</div>
+							</a>
+						))}
+					</div>
+				</div>
+
+				<div class="topics-section">
+					<h2>I'd Love to Discuss</h2>
+					<div class="topics-grid">
+						{discussionTopics.map((topic) => (
+							<div class="topic-item">
+								<span class="topic-bullet">💡</span>
+								<span>{topic}</span>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<div class="cta-section">
+					<div class="cta-card">
+						<h2>🚀 Let's Build Something Together</h2>
+						<p>
+							I'm particularly interested in collaborations that combine technology and business impact.
+							If you're working on something innovative or need technical expertise for your venture,
+							I'd love to hear from you.
+						</p>
+						<div class="cta-buttons">
+							<a href="mailto:iam@syanam.pro?subject=Let's collaborate!" class="cta-primary">
+								Email Me Directly
+							</a>
+							<a href="https://linkedin.com/in/syaifulanam" target="_blank" rel="noopener noreferrer" class="cta-secondary">
+								Connect on LinkedIn
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="response-note">
+					<p>
+						<strong>Response Time:</strong> I typically respond within 24-48 hours. For urgent matters,
+						please mention it in your subject line.
+					</p>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+	}
+
+	.connect-content {
+		padding: var(--spacing-xl) 0;
+	}
+
+	.intro-section {
+		text-align: center;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.intro-section p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.contact-methods {
+		margin-bottom: var(--spacing-2xl);
+	}
+
+	.contact-methods h2 {
+		text-align: center;
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.contact-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: var(--spacing-md);
+	}
+
+	.contact-card {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-md);
+		text-decoration: none;
+		color: var(--color-text);
+		transition: all 0.3s ease;
+		position: relative;
+	}
+
+	.contact-card:hover {
+		transform: translateY(-2px);
+		border-color: var(--color-accent);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.contact-card:hover .contact-arrow {
+		transform: translateX(4px);
+		color: var(--color-accent);
+	}
+
+	.contact-icon {
+		font-size: 2rem;
+		width: 60px;
+		height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--color-background);
+		border-radius: 12px;
+		flex-shrink: 0;
+	}
+
+	.contact-info {
+		flex: 1;
+	}
+
+	.contact-info h3 {
+		margin: 0 0 var(--spacing-xs) 0;
+		font-size: 1.125rem;
+	}
+
+	.contact-info p {
+		margin: 0 0 var(--spacing-xs) 0;
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+		line-height: 1.4;
+	}
+
+	.contact-url {
+		font-size: 0.75rem;
+		color: var(--color-text-light);
+		font-family: monospace;
+	}
+
+	.contact-arrow {
+		color: var(--color-text-light);
+		font-size: 1.25rem;
+		transition: all 0.2s ease;
+		flex-shrink: 0;
+	}
+
+	.topics-section {
+		margin-bottom: var(--spacing-2xl);
+	}
+
+	.topics-section h2 {
+		text-align: center;
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.topics-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--spacing-sm);
+	}
+
+	.topic-item {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--spacing-md);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+	}
+
+	.topic-bullet {
+		font-size: 1rem;
+		flex-shrink: 0;
+	}
+
+	.cta-section {
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.cta-card {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-xl);
+		text-align: center;
+	}
+
+	.cta-card h2 {
+		margin-top: 0;
+		margin-bottom: var(--spacing-md);
+		font-size: 1.5rem;
+	}
+
+	.cta-card p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-lg);
+		line-height: 1.6;
+	}
+
+	.cta-buttons {
+		display: flex;
+		gap: var(--spacing-md);
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.cta-primary,
+	.cta-secondary {
+		padding: var(--spacing-md) var(--spacing-lg);
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.2s ease;
+	}
+
+	.cta-primary {
+		background-color: var(--color-accent);
+		color: white;
+	}
+
+	.cta-primary:hover {
+		background-color: var(--color-accent-hover);
+		transform: translateY(-2px);
+	}
+
+	.cta-secondary {
+		background-color: var(--color-background);
+		color: var(--color-accent);
+		border: 2px solid var(--color-accent);
+	}
+
+	.cta-secondary:hover {
+		background-color: var(--color-accent);
+		color: white;
+		transform: translateY(-2px);
+	}
+
+	.response-note {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		text-align: center;
+	}
+
+	.response-note p {
+		margin: 0;
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
+	.response-note strong {
+		color: var(--color-text);
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.connect-content {
+			padding: var(--spacing-lg) 0;
+		}
+
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.contact-card {
+			padding: var(--spacing-md);
+		}
+
+		.contact-icon {
+			width: 50px;
+			height: 50px;
+			font-size: 1.5rem;
+		}
+
+		.topics-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.cta-buttons {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.cta-primary,
+		.cta-secondary {
+			width: 100%;
+			max-width: 300px;
+			text-align: center;
+		}
+	}
+</style>

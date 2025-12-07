@@ -1,0 +1,354 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const currentPath = Astro.url.pathname;
+const lang = 'en';
+
+const title = 'My Learning Log - Syaiful Anam';
+const description = 'My public notebook where I document experiments, share thoughts on technology, and track my progress as a lifelong builder.';
+
+// Sample learning log entries
+const learningLogs = [
+	{
+		title: 'Building AI-Powered Development Tools',
+		summary: 'Exploring how AI can accelerate the development workflow and improve code quality through intelligent automation.',
+		category: 'AI & Development',
+		date: '2024-11-15',
+		link: '#',
+		tags: ['AI', 'Development', 'Automation']
+	},
+	{
+		title: 'Next.js App Router Performance Deep Dive',
+		summary: 'Investigating performance optimizations in Next.js 14 App Router and how to leverage Server Components effectively.',
+		category: 'Web Development',
+		date: '2024-10-28',
+		link: '#',
+		tags: ['Next.js', 'Performance', 'React']
+	},
+	{
+		title: 'Implementing Type-Safe API Development',
+		summary: 'My approach to building robust APIs with TypeScript, including validation strategies and error handling patterns.',
+		category: 'Backend',
+		date: '2024-10-15',
+		link: '#',
+		tags: ['TypeScript', 'API', 'Backend']
+	},
+	{
+		title: 'Container Strategy for Multi-Brand E-commerce',
+		summary: 'How we\'re using Docker and Kubernetes to manage multiple fashion brands under Fabrik Group efficiently.',
+		category: 'DevOps',
+		date: '2024-09-30',
+		link: '#',
+		tags: ['Docker', 'Kubernetes', 'E-commerce']
+	},
+	{
+		title: 'B2B SaaS Product Architecture Patterns',
+		summary: 'Key architectural decisions and patterns we\'re implementing at Digital360 for scalable B2B software.',
+		category: 'Architecture',
+		date: '2024-09-12',
+		link: '#',
+		tags: ['SaaS', 'Architecture', 'B2B']
+	},
+	{
+		title: 'Dark Mode Implementation Best Practices',
+		summary: 'A comprehensive guide to implementing dark mode that considers accessibility, performance, and user preference.',
+		category: 'Frontend',
+		date: '2024-08-25',
+		link: '#',
+		tags: ['CSS', 'Dark Mode', 'UI/UX']
+	}
+];
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="log-content">
+				<h1>My Learning Log</h1>
+
+				<div class="intro-section">
+					<p>
+						This is my public notebook. It's where I document my experiments, share my thoughts on technology,
+						and track my progress. Everything here is a work in progress, just like me.
+					</p>
+				</div>
+
+				<div class="filters">
+					<button class="filter-btn active" data-category="all">All Posts</button>
+					<button class="filter-btn" data-category="AI & Development">AI & Development</button>
+					<button class="filter-btn" data-category="Web Development">Web Development</button>
+					<button class="filter-btn" data-category="Backend">Backend</button>
+					<button class="filter-btn" data-category="DevOps">DevOps</button>
+					<button class="filter-btn" data-category="Architecture">Architecture</button>
+					<button class="filter-btn" data-category="Frontend">Frontend</button>
+				</div>
+
+				<div class="log-list">
+					{learningLogs.map((post) => (
+						<article class="log-item" data-category={post.category}>
+							<div class="log-header">
+								<div class="log-meta">
+									<time datetime={post.date} class="log-date">
+										{new Date(post.date).toLocaleDateString('en-US', {
+											year: 'numeric',
+											month: 'short',
+											day: 'numeric'
+										})}
+									</time>
+									<span class="log-category">{post.category}</span>
+								</div>
+							</div>
+
+							<div class="log-content">
+								<h2 class="log-title">
+									<a href={post.link}>{post.title}</a>
+								</h2>
+								<p class="log-summary">{post.summary}</p>
+
+								<div class="log-tags">
+									{post.tags.map((tag) => (
+										<span class="tag" data-tag={tag}>{tag}</span>
+									))}
+								</div>
+
+								<a href={post.link} class="read-more">
+									Read more →
+								</a>
+							</div>
+						</article>
+					))}
+				</div>
+
+				<div class="footer-note">
+					<p>
+						<strong>Work in Progress:</strong> This learning log is continuously evolving as I document my journey.
+						Some posts might be rough drafts, others might be detailed tutorials. All represent real learning experiences.
+					</p>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+	}
+
+	.log-content {
+		padding: var(--spacing-xl) 0;
+	}
+
+	.intro-section {
+		text-align: center;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.intro-section p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm);
+		justify-content: center;
+		margin-bottom: var(--spacing-xl);
+		padding: var(--spacing-md);
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+	}
+
+	.filter-btn {
+		padding: var(--spacing-xs) var(--spacing-md);
+		border: 1px solid var(--color-border);
+		background-color: var(--color-background);
+		color: var(--color-text-secondary);
+		border-radius: 20px;
+		cursor: pointer;
+		font-size: 0.875rem;
+		transition: all 0.2s ease;
+	}
+
+	.filter-btn:hover,
+	.filter-btn.active {
+		background-color: var(--color-accent);
+		color: white;
+		border-color: var(--color-accent);
+	}
+
+	.log-list {
+		display: grid;
+		gap: var(--spacing-lg);
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.log-item {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		transition: all 0.3s ease;
+	}
+
+	.log-item:hover {
+		transform: translateY(-2px);
+		border-color: var(--color-accent);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.log-header {
+		margin-bottom: var(--spacing-md);
+	}
+
+	.log-meta {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		font-size: 0.875rem;
+	}
+
+	.log-date {
+		color: var(--color-text-light);
+	}
+
+	.log-category {
+		background-color: var(--color-accent);
+			color: white;
+			padding: 2px var(--spacing-sm);
+			border-radius: 12px;
+			font-weight: 600;
+			font-size: 0.75rem;
+		}
+
+	.log-title {
+		margin: 0 0 var(--spacing-sm) 0;
+		font-size: 1.25rem;
+	}
+
+	.log-title a {
+		color: var(--color-text);
+		text-decoration: none;
+			transition: color 0.2s ease;
+		}
+
+	.log-title a:hover {
+		color: var(--color-accent);
+	}
+
+	.log-summary {
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-md);
+		line-height: 1.6;
+	}
+
+	.log-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-xs);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.tag {
+		background-color: var(--color-border);
+		color: var(--color-text-secondary);
+		padding: 2px var(--spacing-sm);
+		border-radius: 12px;
+		font-size: 0.75rem;
+		font-weight: 500;
+	}
+
+	.read-more {
+		display: inline-flex;
+		align-items: center;
+		color: var(--color-accent);
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		font-size: 0.875rem;
+	}
+
+	.read-more:hover {
+		color: var(--color-accent-hover);
+		transform: translateX(4px);
+	}
+
+	.footer-note {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		text-align: center;
+	}
+
+	.footer-note p {
+		color: var(--color-text-secondary);
+		margin: 0;
+		font-size: 0.875rem;
+	}
+
+	.footer-note strong {
+		color: var(--color-text);
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.log-content {
+			padding: var(--spacing-lg) 0;
+		}
+
+		.filters {
+			justify-content: flex-start;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+
+		.log-item {
+			padding: var(--spacing-md);
+		}
+
+		.log-title {
+			font-size: 1.125rem;
+		}
+
+		.log-meta {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--spacing-xs);
+		}
+	}
+</style>
+
+<script>
+	// Filter functionality
+	const filterButtons = document.querySelectorAll('.filter-btn');
+	const logItems = document.querySelectorAll('.log-item');
+
+	filterButtons.forEach(button => {
+		button.addEventListener('click', () => {
+			const category = button.dataset.category;
+
+			// Update active button
+			filterButtons.forEach(btn => btn.classList.remove('active'));
+			button.classList.add('active');
+
+			// Filter items
+			logItems.forEach(item => {
+				if (category === 'all' || item.dataset.category === category) {
+					item.style.display = 'block';
+				} else {
+					item.style.display = 'none';
+				}
+			});
+		});
+	});
+</script>

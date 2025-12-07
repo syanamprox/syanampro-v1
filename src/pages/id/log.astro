@@ -1,0 +1,354 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const currentPath = Astro.url.pathname;
+const lang = 'id';
+
+const title = 'Catatan Pembelajaran Saya - Syaiful Anam';
+const description = 'Buku catatan publik saya tempat saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi, dan melacak kemajuan saya.';
+
+// Sample learning log entries dalam bahasa Indonesia
+const learningLogs = [
+	{
+		title: 'Membangun Alat Pengembangan Berbasis AI',
+		summary: 'Mengeksplorasi bagaimana AI dapat mempercepat alur kerja pengembangan dan meningkatkan kualitas kode melalui otomasi cerdas.',
+		category: 'AI & Pengembangan',
+		date: '2024-11-15',
+		link: '#',
+		tags: ['AI', 'Pengembangan', 'Otomasi']
+	},
+	{
+		title: 'Analisis Kinerja Next.js App Router',
+		summary: 'Menyelidiki optimasi kinerja di Next.js 14 App Router dan cara menggunakan Server Components secara efektif.',
+		category: 'Pengembangan Web',
+		date: '2024-10-28',
+		link: '#',
+		tags: ['Next.js', 'Kinerja', 'React']
+	},
+	{
+		title: 'Implementasi API Development Type-Safe',
+		summary: 'Pendekatan saya untuk membangun API yang kuat dengan TypeScript, termasuk strategi validasi dan pola penanganan error.',
+		category: 'Backend',
+		date: '2024-10-15',
+		link: '#',
+		tags: ['TypeScript', 'API', 'Backend']
+	},
+	{
+		title: 'Strategi Container untuk E-commerce Multi-Brand',
+		summary: 'Bagaimana kami menggunakan Docker dan Kubernetes untuk mengelola multiple brand fashion di Fabrik Group secara efisien.',
+		category: 'DevOps',
+		date: '2024-09-30',
+		link: '#',
+		tags: ['Docker', 'Kubernetes', 'E-commerce']
+	},
+	{
+		title: 'Pola Arsitektur Produk B2B SaaS',
+		summary: 'Keputusan arsitektur kunci dan pola yang kami implementasikan di Digital360 untuk software B2B yang scalable.',
+		category: 'Arsitektur',
+		date: '2024-09-12',
+		link: '#',
+		tags: ['SaaS', 'Arsitektur', 'B2B']
+	},
+	{
+		title: 'Praktik Terbaik Implementasi Dark Mode',
+		summary: 'Panduan komprehensif untuk mengimplementasikan dark mode yang mempertimbangkan aksesibilitas, kinerja, dan preferensi pengguna.',
+		category: 'Frontend',
+		date: '2024-08-25',
+		link: '#',
+		tags: ['CSS', 'Dark Mode', 'UI/UX']
+	}
+];
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="log-content">
+				<h1>Catatan Pembelajaran Saya</h1>
+
+				<div class="intro-section">
+					<p>
+						Ini adalah buku catatan publik saya. Di sinilah saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi,
+						dan melacak kemajuan saya. Semua di sini adalah karya yang sedang berjalan, sama seperti saya.
+					</p>
+				</div>
+
+				<div class="filters">
+					<button class="filter-btn active" data-category="all">Semua Post</button>
+					<button class="filter-btn" data-category="AI & Pengembangan">AI & Pengembangan</button>
+					<button class="filter-btn" data-category="Pengembangan Web">Pengembangan Web</button>
+					<button class="filter-btn" data-category="Backend">Backend</button>
+					<button class="filter-btn" data-category="DevOps">DevOps</button>
+					<button class="filter-btn" data-category="Arsitektur">Arsitektur</button>
+					<button class="filter-btn" data-category="Frontend">Frontend</button>
+				</div>
+
+				<div class="log-list">
+					{learningLogs.map((post) => (
+						<article class="log-item" data-category={post.category}>
+							<div class="log-header">
+								<div class="log-meta">
+									<time datetime={post.date} class="log-date">
+										{new Date(post.date).toLocaleDateString('id-ID', {
+											year: 'numeric',
+											month: 'short',
+											day: 'numeric'
+										})}
+									</time>
+									<span class="log-category">{post.category}</span>
+								</div>
+							</div>
+
+							<div class="log-content">
+								<h2 class="log-title">
+									<a href={post.link}>{post.title}</a>
+								</h2>
+								<p class="log-summary">{post.summary}</p>
+
+								<div class="log-tags">
+									{post.tags.map((tag) => (
+										<span class="tag" data-tag={tag}>{tag}</span>
+									))}
+								</div>
+
+								<a href={post.link} class="read-more">
+									Baca selengkapnya →
+								</a>
+							</div>
+						</article>
+					))}
+				</div>
+
+				<div class="footer-note">
+					<p>
+						<strong>Sedang Dalam Pengerjaan:</strong> Catatan pembelajaran ini terus berkembang saat saya mendokumentasikan perjalanan saya.
+						Beberapa post mungkin draft kasar, lainnya mungkin tutorial detail. Semua mewakili pengalaman belajar yang nyata.
+					</p>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+	}
+
+	.log-content {
+		padding: var(--spacing-xl) 0;
+	}
+
+	.intro-section {
+		text-align: center;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.intro-section p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm);
+		justify-content: center;
+		margin-bottom: var(--spacing-xl);
+		padding: var(--spacing-md);
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+	}
+
+	.filter-btn {
+		padding: var(--spacing-xs) var(--spacing-md);
+		border: 1px solid var(--color-border);
+		background-color: var(--color-background);
+		color: var(--color-text-secondary);
+		border-radius: 20px;
+		cursor: pointer;
+		font-size: 0.875rem;
+		transition: all 0.2s ease;
+	}
+
+	.filter-btn:hover,
+	.filter-btn.active {
+		background-color: var(--color-accent);
+		color: white;
+		border-color: var(--color-accent);
+	}
+
+	.log-list {
+		display: grid;
+		gap: var(--spacing-lg);
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.log-item {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		transition: all 0.3s ease;
+	}
+
+	.log-item:hover {
+		transform: translateY(-2px);
+		border-color: var(--color-accent);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.log-header {
+		margin-bottom: var(--spacing-md);
+	}
+
+	.log-meta {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		font-size: 0.875rem;
+	}
+
+	.log-date {
+		color: var(--color-text-light);
+	}
+
+	.log-category {
+		background-color: var(--color-accent);
+			color: white;
+			padding: 2px var(--spacing-sm);
+			border-radius: 12px;
+			font-weight: 600;
+			font-size: 0.75rem;
+		}
+
+	.log-title {
+		margin: 0 0 var(--spacing-sm) 0;
+		font-size: 1.25rem;
+	}
+
+	.log-title a {
+		color: var(--color-text);
+		text-decoration: none;
+			transition: color 0.2s ease;
+		}
+
+	.log-title a:hover {
+		color: var(--color-accent);
+	}
+
+	.log-summary {
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-md);
+		line-height: 1.6;
+	}
+
+	.log-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-xs);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.tag {
+		background-color: var(--color-border);
+		color: var(--color-text-secondary);
+		padding: 2px var(--spacing-sm);
+		border-radius: 12px;
+		font-size: 0.75rem;
+		font-weight: 500;
+	}
+
+	.read-more {
+		display: inline-flex;
+		align-items: center;
+		color: var(--color-accent);
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.2s ease;
+		font-size: 0.875rem;
+	}
+
+	.read-more:hover {
+		color: var(--color-accent-hover);
+		transform: translateX(4px);
+	}
+
+	.footer-note {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: var(--spacing-lg);
+		text-align: center;
+	}
+
+	.footer-note p {
+		color: var(--color-text-secondary);
+		margin: 0;
+		font-size: 0.875rem;
+	}
+
+	.footer-note strong {
+		color: var(--color-text);
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.log-content {
+			padding: var(--spacing-lg) 0;
+		}
+
+		.filters {
+			justify-content: flex-start;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+
+		.log-item {
+			padding: var(--spacing-md);
+		}
+
+		.log-title {
+			font-size: 1.125rem;
+		}
+
+		.log-meta {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--spacing-xs);
+		}
+	}
+</style>
+
+<script>
+	// Filter functionality
+	const filterButtons = document.querySelectorAll('.filter-btn');
+	const logItems = document.querySelectorAll('.log-item');
+
+	filterButtons.forEach(button => {
+		button.addEventListener('click', () => {
+			const category = button.dataset.category;
+
+			// Update active button
+			filterButtons.forEach(btn => btn.classList.remove('active'));
+			button.classList.add('active');
+
+			// Filter items
+			logItems.forEach(item => {
+				if (category === 'all' || item.dataset.category === category) {
+					item.style.display = 'block';
+				} else {
+					item.style.display = 'none';
+				}
+			});
+		});
+	});
+</script>

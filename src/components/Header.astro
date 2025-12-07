@@ -1,0 +1,298 @@
+---
+interface Props {
+	currentPath: string;
+	lang: string;
+}
+
+const { currentPath, lang } = Astro.props;
+
+// Helper function to get the base path without language prefix
+function getBasePath(path: string): string {
+	if (path.startsWith('/id/')) {
+		return path.substring(3); // Remove '/id' prefix
+	}
+	return path;
+}
+
+// Helper function to create localized path
+function getLocalizedPath(basePath: string, targetLang: string): string {
+	if (targetLang === 'id') {
+		return `/id${basePath}` || '/id';
+	}
+	return basePath || '/';
+}
+
+const basePath = getBasePath(currentPath);
+
+const navItems = [
+	{
+		href: getLocalizedPath('/journey', lang),
+		label: lang === 'id' ? 'Perjalanan' : 'Journey',
+		active: getBasePath(currentPath) === '/journey'
+	},
+	{
+		href: getLocalizedPath('/log', lang),
+		label: lang === 'id' ? 'Log' : 'Learning Log',
+		active: getBasePath(currentPath) === '/log'
+	},
+	{
+		href: getLocalizedPath('/connect', lang),
+		label: lang === 'id' ? 'Terhubung' : 'Connect',
+		active: getBasePath(currentPath) === '/connect'
+	},
+];
+---
+
+<header class="site-header">
+	<nav class="nav">
+		<div class="nav-left">
+			<a href={getLocalizedPath('/', lang)} class="site-name">
+				<img
+					src="/images/syanampro.webp"
+					alt="Syaiful Anam"
+					class="header-avatar"
+					width="32"
+					height="32"
+				/>
+				Syaiful Anam
+			</a>
+		</div>
+
+		<div class="nav-right">
+			<ul class="nav-list">
+				{navItems.map((item) => (
+					<li>
+						<a href={item.href} class={item.active ? 'active' : ''}>
+							{item.label}
+						</a>
+					</li>
+				))}
+			</ul>
+
+			<div class="nav-controls">
+				<!-- Language Toggle -->
+				<a
+					href={getLocalizedPath(basePath, lang === 'id' ? 'en' : 'id')}
+					class="lang-toggle"
+					title={lang === 'id' ? 'Switch to English' : 'Ganti ke Bahasa Indonesia'}
+				>
+					{lang === 'id' ? 'EN' : 'ID'}
+				</a>
+
+				<!-- Dark Mode Toggle -->
+				<button
+					class="theme-toggle"
+					type="button"
+					aria-label="Toggle dark mode"
+					title="Toggle dark mode"
+				>
+					<span class="theme-icon sun">☀️</span>
+					<span class="theme-icon moon">🌙</span>
+				</button>
+			</div>
+		</div>
+	</nav>
+</header>
+
+<style>
+	.site-header {
+		border-bottom: 1px solid var(--color-border);
+		margin-bottom: var(--spacing-lg);
+		background-color: var(--color-background);
+		position: relative;
+		z-index: 100;
+	}
+
+	.nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--spacing-md) 0;
+		max-width: var(--max-width);
+		margin: 0 auto;
+		padding-left: var(--spacing-sm);
+		padding-right: var(--spacing-sm);
+	}
+
+	.nav-left .site-name {
+		font-size: 1.125rem;
+		font-weight: 500;
+		color: var(--color-text);
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+	}
+
+	.header-avatar {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 1px solid var(--color-border);
+		transition: border-color 0.2s ease;
+	}
+
+	.nav-left .site-name:hover .header-avatar {
+		border-color: var(--color-accent);
+	}
+
+	.nav-right {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-md);
+	}
+
+	.nav-list {
+		display: flex;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		gap: var(--spacing-md);
+	}
+
+	.nav-list a {
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		font-weight: 400;
+		font-size: 0.9375rem;
+		padding: var(--spacing-xs) var(--spacing-sm);
+		border-radius: 4px;
+		transition: color 0.2s ease;
+	}
+
+	.nav-list a:hover,
+	.nav-list a.active {
+		color: var(--color-text);
+		background-color: transparent;
+	}
+
+	.nav-controls {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+	}
+
+	.lang-toggle,
+	.theme-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border: none;
+		background-color: transparent;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		font-size: 0.875rem;
+		font-weight: 400;
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
+
+	.lang-toggle:hover,
+	.theme-toggle:hover {
+		color: var(--color-text);
+	}
+
+	.theme-toggle {
+		position: relative;
+		padding: 0;
+	}
+
+	.theme-icon {
+		font-size: 1rem;
+		position: absolute;
+		transition: opacity 0.2s ease;
+	}
+
+	.theme-icon.sun {
+		opacity: 1;
+	}
+
+	.theme-icon.moon {
+		opacity: 0;
+	}
+
+	/* Dark mode styles */
+	.dark .theme-icon.sun {
+		opacity: 0;
+	}
+
+	.dark .theme-icon.moon {
+		opacity: 1;
+	}
+
+	/* Mobile responsive */
+	@media (max-width: 640px) {
+		.nav {
+			padding: var(--spacing-sm) 0;
+		}
+
+		.nav-left .site-name {
+			font-size: 1rem;
+		}
+
+		.header-avatar {
+			width: 28px;
+			height: 28px;
+		}
+
+		.nav-list {
+			gap: var(--spacing-sm);
+		}
+
+		.nav-list a {
+			padding: var(--spacing-xs);
+			font-size: 0.875rem;
+		}
+
+		.nav-controls {
+			gap: var(--spacing-xs);
+		}
+
+		.lang-toggle,
+		.theme-toggle {
+			width: 28px;
+			height: 28px;
+			font-size: 0.75rem;
+		}
+
+		.theme-icon {
+			font-size: 0.875rem;
+		}
+	}
+</style>
+
+<script>
+	// Dark mode toggle functionality
+	const themeToggle = document.querySelector('.theme-toggle');
+	const html = document.documentElement;
+
+	// Set initial state
+	updateThemeIcon();
+
+	themeToggle.addEventListener('click', () => {
+		if (html.classList.contains('dark')) {
+			html.classList.remove('dark');
+			localStorage.setItem('theme', 'light');
+		} else {
+			html.classList.add('dark');
+			localStorage.setItem('theme', 'dark');
+		}
+		updateThemeIcon();
+	});
+
+	function updateThemeIcon() {
+		const sunIcon = themeToggle.querySelector('.sun');
+		const moonIcon = themeToggle.querySelector('.moon');
+
+		if (html.classList.contains('dark')) {
+			sunIcon.style.opacity = '0';
+			moonIcon.style.opacity = '1';
+		} else {
+			sunIcon.style.opacity = '1';
+			moonIcon.style.opacity = '0';
+		}
+	}
+</script>

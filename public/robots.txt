@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://syanam.pro/sitemap.xml
+
+# Allow specific directories
+Allow: /images/
+Allow: /css/
+Allow: /js/
+
+# Block specific files if any
+Disallow: /_astro/
+Disallow: /.git/

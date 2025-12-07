@@ -1,0 +1,197 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+import Footer from '../../components/Footer.astro';
+
+const currentPath = Astro.url.pathname;
+const lang = 'id';
+
+const title = 'Syaiful Anam - Lifelong Builder';
+const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di teknologi dan bisnis, berkontribusi pada Digital360 dan Fabrik Group dengan pengembangan berbasis AI.';
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="hero-section">
+				<img
+					src="/images/syanampro.webp"
+					alt="Syaiful Anam"
+					class="profile-image"
+					width="120"
+					height="120"
+				/>
+
+				<h1>Syaiful Anam</h1>
+				<p class="hero-subtitle">
+					Seorang builder seumur hidup. Menerapkan ilmu saya di teknologi dan bisnis.
+				</p>
+
+				<div class="content-boxes">
+					<div class="content-box">
+						<h2>🚀 Contributing at Digital360</h2>
+						<p>
+							Saya bagian dari tim yang membangun generasi software B2B berikutnya.
+							Saya belajar menerapkan pengetahuan full-stack dan AI saya untuk membantu mempercepat pengembangan produk.
+						</p>
+						<a href="https://digital360.co.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
+							Lihat Karya Kami →
+						</a>
+					</div>
+
+					<div class="content-box">
+						<h2>👕 Contributing at Fabrik Group</h2>
+						<p>
+							Saya juga belajar cara membawa pola pikir *tech-first* ke industri garment.
+							Saya bekerja dengan para founder dari 5 brand fashion kami untuk menjajaki dan menerapkan teknologi yang dapat menyederhanakan operasional kami.
+						</p>
+						<a href="https://fabrik.group/" target="_blank" rel="noopener noreferrer" class="cta-link">
+							Jelajahi Brand Kami →
+						</a>
+					</div>
+				</div>
+
+				<div class="focus-section">
+					<h2>🤖 Fokus Utama Saya: Pengembangan Berbasis AI</h2>
+					<p>
+						Di kedua perusahaan tersebut, fokus utama saya adalah belajar dan menggunakan AI sebagai alat untuk membangun, menguji,
+						dan menerapkan solusi secara lebih cepat dan efisien.
+					</p>
+				</div>
+			</div>
+		</main>
+		<Footer lang={lang} />
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+	}
+
+	.hero-section {
+		text-align: center;
+		padding: var(--spacing-xl) 0;
+	}
+
+	.profile-image {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		margin-bottom: var(--spacing-lg);
+		border: 3px solid var(--color-border);
+		transition: border-color 0.3s ease;
+	}
+
+	.profile-image:hover {
+		border-color: var(--color-accent);
+	}
+
+	.hero-subtitle {
+		font-size: 1.25rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-2xl);
+		font-weight: 500;
+	}
+
+	.content-boxes {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: var(--spacing-lg);
+		margin-bottom: var(--spacing-2xl);
+		text-align: left;
+	}
+
+	.content-box {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		padding: var(--spacing-lg);
+		transition: border-color 0.2s ease;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.content-box:hover {
+		border-color: var(--color-text);
+	}
+
+	.content-box h2 {
+		font-size: 1.25rem;
+		margin-top: 0;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.content-box p {
+		margin-bottom: var(--spacing-lg);
+		color: var(--color-text-secondary);
+	}
+
+	.cta-link {
+		display: inline-flex;
+		align-items: center;
+		color: var(--color-text-secondary);
+		font-weight: 400;
+		text-decoration: none;
+		transition: color 0.2s ease;
+		font-size: 0.9375rem;
+	}
+
+	.cta-link:hover {
+		color: var(--color-text);
+	}
+
+	.focus-section {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		padding: var(--spacing-lg);
+		text-align: center;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.focus-section h2 {
+		font-size: 1.5rem;
+		margin-top: 0;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.focus-section p {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: 0;
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.hero-section {
+			padding: var(--spacing-lg) 0;
+		}
+
+		.profile-image {
+			width: 100px;
+			height: 100px;
+		}
+
+		.hero-subtitle {
+			font-size: 1.125rem;
+		}
+
+		.content-boxes {
+			grid-template-columns: 1fr;
+			gap: var(--spacing-md);
+		}
+
+		.content-box {
+			padding: var(--spacing-lg);
+		}
+
+		.focus-section {
+			padding: var(--spacing-lg);
+		}
+	}
+</style>
