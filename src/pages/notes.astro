@@ -6,58 +6,74 @@ import Footer from '../components/Footer.astro';
 const currentPath = Astro.url.pathname;
 const lang = 'en';
 
-const title = 'My Learning Log - Syaiful Anam';
+const title = 'My Notes - Syaiful Anam';
 const description = 'My public notebook where I document experiments, share thoughts on technology, and track my progress as a lifelong builder.';
 
 // Sample learning log entries
 const learningLogs = [
 	{
-		title: 'Building AI-Powered Development Tools',
-		summary: 'Exploring how AI can accelerate the development workflow and improve code quality through intelligent automation.',
-		category: 'AI & Development',
+		title: 'E-commerce Platform Development for Fabrik Group',
+		summary: 'Building a scalable e-commerce platform to manage multiple fashion brands with inventory and payment gateway integration.',
+		category: 'Portfolio',
 		date: '2024-11-15',
 		link: '#',
-		tags: ['AI', 'Development', 'Automation']
+		tags: ['E-commerce', 'Multi-brand', 'Laravel']
 	},
 	{
-		title: 'Next.js App Router Performance Deep Dive',
-		summary: 'Investigating performance optimizations in Next.js 14 App Router and how to leverage Server Components effectively.',
-		category: 'Web Development',
+		title: 'B2B SaaS Architecture for Digital360',
+		summary: 'Designing and implementing microservices architecture for B2B software with high availability and auto-scaling.',
+		category: 'Portfolio',
 		date: '2024-10-28',
 		link: '#',
-		tags: ['Next.js', 'Performance', 'React']
+		tags: ['SaaS', 'Microservices', 'DevOps']
 	},
 	{
-		title: 'Implementing Type-Safe API Development',
-		summary: 'My approach to building robust APIs with TypeScript, including validation strategies and error handling patterns.',
-		category: 'Backend',
+		title: 'WordPress Development for Hundreds of Clients',
+		summary: 'Experience developing 200+ WordPress websites with custom themes and plugins for various industries.',
+		category: 'Portfolio',
 		date: '2024-10-15',
 		link: '#',
-		tags: ['TypeScript', 'API', 'Backend']
+		tags: ['WordPress', 'PHP', 'Custom Development']
 	},
 	{
-		title: 'Container Strategy for Multi-Brand E-commerce',
-		summary: 'How we\'re using Docker and Kubernetes to manage multiple fashion brands under Fabrik Group efficiently.',
-		category: 'DevOps',
+		title: 'Continuous Technology Learning Strategy',
+		summary: 'Methods and approaches I use to stay updated with latest technologies while building a career in tech industry.',
+		category: 'Education',
 		date: '2024-09-30',
 		link: '#',
-		tags: ['Docker', 'Kubernetes', 'E-commerce']
+		tags: ['Learning', 'Career Development', 'Tech']
 	},
 	{
-		title: 'B2B SaaS Product Architecture Patterns',
-		summary: 'Key architectural decisions and patterns we\'re implementing at Digital360 for scalable B2B software.',
-		category: 'Architecture',
+		title: 'From Designer to Full-Stack Developer',
+		summary: 'Transformation journey from graphic designer to full-stack developer and how design background helps development.',
+		category: 'Education',
 		date: '2024-09-12',
 		link: '#',
-		tags: ['SaaS', 'Architecture', 'B2B']
+		tags: ['Career Change', 'Design', 'Development']
 	},
 	{
-		title: 'Dark Mode Implementation Best Practices',
-		summary: 'A comprehensive guide to implementing dark mode that considers accessibility, performance, and user preference.',
-		category: 'Frontend',
+		title: 'Mentorship and Networking in Tech Industry',
+		summary: 'Importance of mentors and networking in career acceleration, and how to build meaningful relationships in tech.',
+		category: 'Personal',
 		date: '2024-08-25',
 		link: '#',
-		tags: ['CSS', 'Dark Mode', 'UI/UX']
+		tags: ['Mentorship', 'Networking', 'Career']
+	},
+	{
+		title: 'Work-Life Balance as Tech Entrepreneur',
+		summary: 'Strategies and tips for maintaining life balance while leading technology companies and managing multiple projects.',
+		category: 'Personal',
+		date: '2024-08-10',
+		link: '#',
+		tags: ['Entrepreneurship', 'Productivity', 'Lifestyle']
+	},
+	{
+		title: 'Leading Development Team in Startup',
+		summary: 'Experience building and leading development team, from hiring to scaling team for complex B2B products.',
+		category: 'Personal',
+		date: '2024-07-20',
+		link: '#',
+		tags: ['Leadership', 'Team Building', 'Management']
 	}
 ];
 ---
@@ -68,7 +84,7 @@ const learningLogs = [
 
 		<main class="main-content">
 			<div class="log-content">
-				<h1>My Learning Log</h1>
+				<h1 style="text-align: center;">My Learning Log</h1>
 
 				<div class="intro-section">
 					<p>
@@ -79,12 +95,9 @@ const learningLogs = [
 
 				<div class="filters">
 					<button class="filter-btn active" data-category="all">All Posts</button>
-					<button class="filter-btn" data-category="AI & Development">AI & Development</button>
-					<button class="filter-btn" data-category="Web Development">Web Development</button>
-					<button class="filter-btn" data-category="Backend">Backend</button>
-					<button class="filter-btn" data-category="DevOps">DevOps</button>
-					<button class="filter-btn" data-category="Architecture">Architecture</button>
-					<button class="filter-btn" data-category="Frontend">Frontend</button>
+					<button class="filter-btn" data-category="Portfolio">Portfolio</button>
+					<button class="filter-btn" data-category="Education">Education</button>
+					<button class="filter-btn" data-category="Personal">Personal</button>
 				</div>
 
 				<div class="log-list">
@@ -176,6 +189,8 @@ const learningLogs = [
 		border-radius: 20px;
 		cursor: pointer;
 		font-size: 0.875rem;
+		font-family: var(--font-sans);
+		font-weight: 500;
 		transition: all 0.2s ease;
 	}
 

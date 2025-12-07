@@ -6,58 +6,74 @@ import Footer from '../../components/Footer.astro';
 const currentPath = Astro.url.pathname;
 const lang = 'id';
 
-const title = 'Catatan Pembelajaran Saya - Syaiful Anam';
+const title = 'Catatan Saya - Syaiful Anam';
 const description = 'Buku catatan publik saya tempat saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi, dan melacak kemajuan saya.';
 
 // Sample learning log entries dalam bahasa Indonesia
 const learningLogs = [
 	{
-		title: 'Membangun Alat Pengembangan Berbasis AI',
-		summary: 'Mengeksplorasi bagaimana AI dapat mempercepat alur kerja pengembangan dan meningkatkan kualitas kode melalui otomasi cerdas.',
-		category: 'AI & Pengembangan',
+		title: 'E-commerce Platform Development untuk Fabrik Group',
+		summary: 'Membangun platform e-commerce scalable untuk mengelola multiple brand fashion dengan integrasi inventory dan payment gateway.',
+		category: 'Portfolio',
 		date: '2024-11-15',
 		link: '#',
-		tags: ['AI', 'Pengembangan', 'Otomasi']
+		tags: ['E-commerce', 'Multi-brand', 'Laravel']
 	},
 	{
-		title: 'Analisis Kinerja Next.js App Router',
-		summary: 'Menyelidiki optimasi kinerja di Next.js 14 App Router dan cara menggunakan Server Components secara efektif.',
-		category: 'Pengembangan Web',
+		title: 'B2B SaaS Architecture untuk Digital360',
+		summary: 'Merancang dan mengimplementasikan arsitektur microservices untuk software B2B dengan high availability dan auto-scaling.',
+		category: 'Portfolio',
 		date: '2024-10-28',
 		link: '#',
-		tags: ['Next.js', 'Kinerja', 'React']
+		tags: ['SaaS', 'Microservices', 'DevOps']
 	},
 	{
-		title: 'Implementasi API Development Type-Safe',
-		summary: 'Pendekatan saya untuk membangun API yang kuat dengan TypeScript, termasuk strategi validasi dan pola penanganan error.',
-		category: 'Backend',
+		title: 'WordPress Development untuk Ratusan Klien',
+		summary: 'Pengalaman mengembangkan 200+ website WordPress dengan custom themes dan plugins untuk berbagai industri.',
+		category: 'Portfolio',
 		date: '2024-10-15',
 		link: '#',
-		tags: ['TypeScript', 'API', 'Backend']
+		tags: ['WordPress', 'PHP', 'Custom Development']
 	},
 	{
-		title: 'Strategi Container untuk E-commerce Multi-Brand',
-		summary: 'Bagaimana kami menggunakan Docker dan Kubernetes untuk mengelola multiple brand fashion di Fabrik Group secara efisien.',
-		category: 'DevOps',
+		title: 'Strategi Pembelajaran Teknologi Berkelanjutan',
+		summary: 'Metode dan pendekatan yang saya gunakan untuk tetap update dengan teknologi terbaru sambil membangun karir di tech industry.',
+		category: 'Edukasi',
 		date: '2024-09-30',
 		link: '#',
-		tags: ['Docker', 'Kubernetes', 'E-commerce']
+		tags: ['Learning', 'Career Development', 'Tech']
 	},
 	{
-		title: 'Pola Arsitektur Produk B2B SaaS',
-		summary: 'Keputusan arsitektur kunci dan pola yang kami implementasikan di Digital360 untuk software B2B yang scalable.',
-		category: 'Arsitektur',
+		title: 'Dari Designer ke Full-Stack Developer',
+		summary: 'Perjalanan transformasi dari graphic designer menjadi full-stack developer dan bagaimana design background membantu development.',
+		category: 'Edukasi',
 		date: '2024-09-12',
 		link: '#',
-		tags: ['SaaS', 'Arsitektur', 'B2B']
+		tags: ['Career Change', 'Design', 'Development']
 	},
 	{
-		title: 'Praktik Terbaik Implementasi Dark Mode',
-		summary: 'Panduan komprehensif untuk mengimplementasikan dark mode yang mempertimbangkan aksesibilitas, kinerja, dan preferensi pengguna.',
-		category: 'Frontend',
+		title: 'Mentorship dan Networking di Tech Industry',
+		summary: 'Pentingnya mentor dan networking dalam percepatan karir, serta bagaimana membangun relasi yang meaningful di industri teknologi.',
+		category: 'Personal',
 		date: '2024-08-25',
 		link: '#',
-		tags: ['CSS', 'Dark Mode', 'UI/UX']
+		tags: ['Mentorship', 'Networking', 'Career']
+	},
+	{
+		title: 'Work-Life Balance sebagai Tech Entrepreneur',
+		summary: 'Strategi dan tips menjaga keseimbangan hidup sambil memimpin perusahaan teknologi dan mengelola multiple projects.',
+		category: 'Personal',
+		date: '2024-08-10',
+		link: '#',
+		tags: ['Entrepreneurship', 'Productivity', 'Lifestyle']
+	},
+	{
+		title: 'Memimpin Team Development di Startup',
+		summary: 'Pengalaman membangun dan memimpin development team, dari hiring hingga scaling team untuk produk B2B yang kompleks.',
+		category: 'Personal',
+		date: '2024-07-20',
+		link: '#',
+		tags: ['Leadership', 'Team Building', 'Management']
 	}
 ];
 ---
@@ -68,23 +84,20 @@ const learningLogs = [
 
 		<main class="main-content">
 			<div class="log-content">
-				<h1>Catatan Pembelajaran Saya</h1>
+				<h1 style="text-align: center;">Catatan Pembelajaran Saya</h1>
 
 				<div class="intro-section">
 					<p>
 						Ini adalah buku catatan publik saya. Di sinilah saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi,
-						dan melacak kemajuan saya. Semua di sini adalah karya yang sedang berjalan, sama seperti saya.
+						dan melacak kemajuan. Semua di sini adalah karya yang sedang berjalan, sama seperti saya.
 					</p>
 				</div>
 
 				<div class="filters">
 					<button class="filter-btn active" data-category="all">Semua Post</button>
-					<button class="filter-btn" data-category="AI & Pengembangan">AI & Pengembangan</button>
-					<button class="filter-btn" data-category="Pengembangan Web">Pengembangan Web</button>
-					<button class="filter-btn" data-category="Backend">Backend</button>
-					<button class="filter-btn" data-category="DevOps">DevOps</button>
-					<button class="filter-btn" data-category="Arsitektur">Arsitektur</button>
-					<button class="filter-btn" data-category="Frontend">Frontend</button>
+					<button class="filter-btn" data-category="Portfolio">Portfolio</button>
+					<button class="filter-btn" data-category="Edukasi">Edukasi</button>
+					<button class="filter-btn" data-category="Personal">Personal</button>
 				</div>
 
 				<div class="log-list">
@@ -176,6 +189,8 @@ const learningLogs = [
 		border-radius: 20px;
 		cursor: pointer;
 		font-size: 0.875rem;
+		font-family: var(--font-sans);
+		font-weight: 500;
 		transition: all 0.2s ease;
 	}
 

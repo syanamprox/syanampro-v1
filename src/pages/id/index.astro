@@ -1,13 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 
 const currentPath = Astro.url.pathname;
 const lang = 'id';
 
-const title = 'Syaiful Anam - Lifelong Builder';
-const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di teknologi dan bisnis, berkontribusi pada Digital360 dan Fabrik Group dengan pengembangan berbasis AI.';
+const title = 'Syaiful Anam a.k.a syanampro - Lifelong Builder';
+const description = 'A lifelong builder applying learnings in tech and business, contributing to Digital360 and Fabrik Group with AI-driven development.';
 ---
 
 <Layout title={title} description={description} lang={lang}>
@@ -17,52 +17,55 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 		<main class="main-content">
 			<div class="hero-section">
 				<img
-					src="/images/syanampro.webp"
+					src="/images/profile/syanampro.webp"
 					alt="Syaiful Anam"
 					class="profile-image"
-					width="120"
-					height="120"
+					width="300"
+					height="300"
 				/>
 
-				<h1>Syaiful Anam</h1>
+				<h1>Hai, Saya Syaiful Anam 👋</h1>
+				<p class="hero-aka">a.k.a. syanampro</p>
 				<p class="hero-subtitle">
-					Seorang builder seumur hidup. Menerapkan ilmu saya di teknologi dan bisnis.
+					A lifelong builder. Applying my learnings in tech and business.
 				</p>
 
 				<div class="content-boxes">
 					<div class="content-box">
-						<h2>🚀 Contributing at Digital360</h2>
+						<h2>Berkontribusi di Digital360</h2>
 						<p>
-							Saya bagian dari tim yang membangun generasi software B2B berikutnya.
-							Saya belajar menerapkan pengetahuan full-stack dan AI saya untuk membantu mempercepat pengembangan produk.
+							Membangun solusi software B2B generasi berikutnya dengan
+							keahlian full-stack dan AI untuk mempercepat inovasi produk
+							bagi klien enterprise.
 						</p>
-						<a href="https://digital360.co.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
+						<a href="https://digital360.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
 							Lihat Karya Kami →
 						</a>
 					</div>
 
 					<div class="content-box">
-						<h2>👕 Contributing at Fabrik Group</h2>
+						<h2>Berkontribusi di Fabrik Group</h2>
 						<p>
-							Saya juga belajar cara membawa pola pikir *tech-first* ke industri garment.
-							Saya bekerja dengan para founder dari 5 brand fashion kami untuk menjajaki dan menerapkan teknologi yang dapat menyederhanakan operasional kami.
+							Mengintegrasikan pendekatan *tech-first* ke industri garment.
+							Bekerja dengan founder brand fashion untuk menyederhanakan
+							operasional dan implementasi solusi digital.
 						</p>
-						<a href="https://fabrik.group/" target="_blank" rel="noopener noreferrer" class="cta-link">
+						<a href="https://fabrikgroup.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
 							Jelajahi Brand Kami →
 						</a>
 					</div>
 				</div>
 
 				<div class="focus-section">
-					<h2>🤖 Fokus Utama Saya: Pengembangan Berbasis AI</h2>
+					<h2>Fokus Utama: Pengembangan Berbasis AI</h2>
 					<p>
-						Di kedua perusahaan tersebut, fokus utama saya adalah belajar dan menggunakan AI sebagai alat untuk membangun, menguji,
-						dan menerapkan solusi secara lebih cepat dan efisien.
+						Memanfaatkan kecerdasan buatan sebagai alat utama di seluruh
+						perusahaan untuk membangun, menguji, dan implementasikan
+						solusi perangkat lunak lebih efisien.
 					</p>
 				</div>
 			</div>
 		</main>
-		<Footer lang={lang} />
 		<Footer lang={lang} />
 	</div>
 </Layout>
@@ -78,28 +81,37 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 	}
 
 	.profile-image {
-		width: 120px;
-		height: 120px;
+		width: 300px;
+		height: 300px;
 		border-radius: 50%;
-		margin-bottom: var(--spacing-lg);
-		border: 3px solid var(--color-border);
+		margin-bottom: var(--spacing-md);
+		border: 2px solid var(--color-border);
 		transition: border-color 0.3s ease;
 	}
 
 	.profile-image:hover {
-		border-color: var(--color-accent);
+		border-color: var(--color-text);
+	}
+
+	.hero-aka {
+		font-size: 1rem;
+		color: var(--color-text-light);
+		margin-bottom: var(--spacing-md);
+		font-weight: 400;
+		font-style: italic;
 	}
 
 	.hero-subtitle {
-		font-size: 1.25rem;
+		font-size: 1.125rem;
 		color: var(--color-text-secondary);
 		margin-bottom: var(--spacing-2xl);
-		font-weight: 500;
+		font-weight: 400;
+		line-height: 1.5;
 	}
 
 	.content-boxes {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 		gap: var(--spacing-lg);
 		margin-bottom: var(--spacing-2xl);
 		text-align: left;
@@ -113,6 +125,8 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 		transition: border-color 0.2s ease;
 		position: relative;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.content-box:hover {
@@ -128,6 +142,8 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 	.content-box p {
 		margin-bottom: var(--spacing-lg);
 		color: var(--color-text-secondary);
+		line-height: 1.6;
+		flex-grow: 1;
 	}
 
 	.cta-link {
@@ -138,6 +154,7 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 		text-decoration: none;
 		transition: color 0.2s ease;
 		font-size: 0.9375rem;
+		margin-top: auto;
 	}
 
 	.cta-link:hover {
@@ -166,6 +183,11 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 		margin-bottom: 0;
 	}
 
+	.focus-section .detail-text {
+		line-height: 1.6;
+		text-align: center;
+	}
+
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.hero-section {
@@ -173,8 +195,9 @@ const description = 'Seorang builder seumur hidup. Menerapkan ilmu saya di tekno
 		}
 
 		.profile-image {
-			width: 100px;
-			height: 100px;
+			width: 200px;
+			height: 200px;
+			margin-bottom: var(--spacing-sm);
 		}
 
 		.hero-subtitle {

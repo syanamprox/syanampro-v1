@@ -17,14 +17,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico?v=2" />
+		<link rel="shortcut icon" href="/favicon.ico?v=2" />
+		<link rel="apple-touch-icon" href="/favicon.ico?v=2" />
 		<meta name="generator" content={Astro.generator} />
 
-		<!-- Preload fonts for performance -->
+		<!-- Preload SF Pro fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=SF+Pro+Text:wght@400;500;600&display=swap" rel="stylesheet">
 
 		<title>{title}</title>
+
+	<!-- Dark mode script to prevent flash - inline critical -->
+	<script>
+		// Immediately apply dark mode to prevent flash
+		(function() {
+			const theme = localStorage.getItem('theme');
+			if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+				document.documentElement.classList.add('dark');
+			}
+		})();
+	</script>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
 
@@ -33,24 +47,57 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={image || "/images/syanampro.webp"} />
+		<meta property="og:image" content={image || "/images/profile/syanampro.webp"} />
 
 		<!-- Twitter -->
 		<meta property="twitter:card" content="summary_large_image" />
 		<meta property="twitter:url" content={canonicalURL} />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={image || "/images/syanampro.webp"} />
+		<meta property="twitter:image" content={image || "/images/profile/syanampro.webp"} />
 
 		<!-- Dark mode script to prevent flash -->
 		<script>
-			const theme = localStorage.getItem('theme');
-			if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-				document.documentElement.classList.add('dark');
-			}
+			// Immediately apply dark mode to prevent flash
+			(function() {
+				const theme = localStorage.getItem('theme');
+				if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+					document.documentElement.classList.add('dark');
+				}
+				// Mark body as ready for smooth transitions
+				document.addEventListener('DOMContentLoaded', function() {
+					document.body.classList.add('dark-mode-ready');
+				});
+			})();
 		</script>
 
 		<style is:global>
+		/* Prevent flash of unstyled content */
+		html {
+			visibility: hidden;
+		}
+		html.dark-mode-ready {
+			visibility: visible;
+		}
+	</style>
+
+	<script>
+			// Apply dark mode and make visible
+			(function() {
+				const theme = localStorage.getItem('theme');
+				if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+					document.documentElement.classList.add('dark');
+				}
+				// Make visible immediately
+				document.documentElement.classList.add('dark-mode-ready');
+				// Mark body as ready for smooth transitions
+				document.addEventListener('DOMContentLoaded', function() {
+					document.body.classList.add('dark-mode-ready');
+				});
+			})();
+		</script>
+
+	<style is:global>
 			:root {
 				--color-text: #171717;
 				--color-text-secondary: #52525b;
@@ -89,14 +136,46 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				scroll-behavior: smooth;
 			}
 
+			/* Prevent flash on dark mode toggle */
+			html, body {
+				transition: none;
+			}
+
+			/* No background transitions anywhere - prevent flash */
+			* {
+				transition-property: color, fill !important;
+			}
+
+			/* No transition for structural elements during initial load */
+			html:not(.dark-mode-ready) *,
+			html:not(.dark-mode-ready) *::before,
+			html:not(.dark-mode-ready) *::after {
+				transition: none !important;
+			}
+
+			/* Only text and icons have transition during toggle */
+			.dark-mode-transition p,
+			.dark-mode-transition h1,
+			.dark-mode-transition h2,
+			.dark-mode-transition h3,
+			.dark-mode-transition h4,
+			.dark-mode-transition h5,
+			.dark-mode-transition h6,
+			.dark-mode-transition span,
+			.dark-mode-transition a,
+			.dark-mode-transition .theme-icon {
+				transition: color 0.2s ease;
+			}
+
 			body {
 				font-family: var(--font-sans);
+				font-weight: 500;
 				background-color: var(--color-background);
 				color: var(--color-text);
 				line-height: 1.6;
 				margin: 0;
 				padding: 0;
-				transition: background-color 0.3s ease, color 0.3s ease;
+				transition: color 0.2s ease;
 			}
 
 			.container {
@@ -132,7 +211,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 			h1, h2, h3, h4, h5, h6 {
 				line-height: 1.2;
-				font-weight: 600;
+				font-weight: 700;
 			}
 
 			h1 {
@@ -163,6 +242,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				margin-bottom: var(--spacing-md);
 				line-height: 1.6;
 				font-size: 1rem;
+				font-weight: 400;
 			}
 
 			/* Responsive design */

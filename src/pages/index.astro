@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 const currentPath = Astro.url.pathname;
 const lang = 'en';
 
-const title = 'Syaiful Anam - Lifelong Builder';
+const title = 'Syaiful Anam a.k.a syanampro - Lifelong Builder';
 const description = 'A lifelong builder applying learnings in tech and business, contributing to Digital360 and Fabrik Group with AI-driven development.';
 ---
 
@@ -17,47 +17,50 @@ const description = 'A lifelong builder applying learnings in tech and business,
 		<main class="main-content">
 			<div class="hero-section">
 				<img
-					src="/images/syanampro.webp"
+					src="/images/profile/syanampro.webp"
 					alt="Syaiful Anam"
 					class="profile-image"
-					width="120"
-					height="120"
+					width="300"
+					height="300"
 				/>
 
-				<h1>Syaiful Anam</h1>
+				<h1>Hi, I'm Syaiful Anam 👋</h1>
+				<p class="hero-aka">a.k.a. syanampro</p>
 				<p class="hero-subtitle">
 					A lifelong builder. Applying my learnings in tech and business.
 				</p>
 
 				<div class="content-boxes">
 					<div class="content-box">
-						<h2>🚀 Contributing at Digital360</h2>
+						<h2>Contributing at Digital360</h2>
 						<p>
-							I'm part of the team building the next generation of B2B software.
-							I'm learning to apply my full-stack and AI knowledge to help accelerate our product development.
+							Building next-generation B2B software solutions with
+							full-stack development and AI expertise to accelerate
+							product innovation for enterprise clients.
 						</p>
-						<a href="https://digital360.co.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
+						<a href="https://digital360.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
 							See Our Work →
 						</a>
 					</div>
 
 					<div class="content-box">
-						<h2>👕 Contributing at Fabrik Group</h2>
+						<h2>Contributing at Fabrik Group</h2>
 						<p>
-							I'm also learning how to bring a tech-first mindset to the garment industry.
-							I work with the founders of our 5 fashion brands to explore and implement technology that can streamline our operations.
+							Integrating technology-first approach into the garment
+							industry. Working with fashion brand founders
+							to streamline operations and implement digital solutions.
 						</p>
-						<a href="https://fabrik.group/" target="_blank" rel="noopener noreferrer" class="cta-link">
+						<a href="https://fabrikgroup.id/" target="_blank" rel="noopener noreferrer" class="cta-link">
 							Explore Our Brands →
 						</a>
 					</div>
 				</div>
 
 				<div class="focus-section">
-					<h2>🤖 My Core Focus: AI-Driven Development</h2>
+					<h2>Core Focus: AI-Driven Development</h2>
 					<p>
-						Across both ventures, my main focus is on learning and using AI as a tool to build, test,
-						and deploy solutions faster and more efficiently.
+						Leveraging artificial intelligence as a primary tool across
+						both ventures to build, test, and deploy solutions more efficiently.
 					</p>
 				</div>
 			</div>
@@ -77,8 +80,8 @@ const description = 'A lifelong builder applying learnings in tech and business,
 	}
 
 	.profile-image {
-		width: 80px;
-		height: 80px;
+		width: 300px;
+		height: 300px;
 		border-radius: 50%;
 		margin-bottom: var(--spacing-md);
 		border: 2px solid var(--color-border);
@@ -87,6 +90,14 @@ const description = 'A lifelong builder applying learnings in tech and business,
 
 	.profile-image:hover {
 		border-color: var(--color-text);
+	}
+
+	.hero-aka {
+		font-size: 1rem;
+		color: var(--color-text-light);
+		margin-bottom: var(--spacing-md);
+		font-weight: 400;
+		font-style: italic;
 	}
 
 	.hero-subtitle {
@@ -113,6 +124,8 @@ const description = 'A lifelong builder applying learnings in tech and business,
 		transition: border-color 0.2s ease;
 		position: relative;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.content-box:hover {
@@ -128,6 +141,8 @@ const description = 'A lifelong builder applying learnings in tech and business,
 	.content-box p {
 		margin-bottom: var(--spacing-lg);
 		color: var(--color-text-secondary);
+		line-height: 1.6;
+		flex-grow: 1;
 	}
 
 	.cta-link {
@@ -138,6 +153,7 @@ const description = 'A lifelong builder applying learnings in tech and business,
 		text-decoration: none;
 		transition: color 0.2s ease;
 		font-size: 0.9375rem;
+		margin-top: auto;
 	}
 
 	.cta-link:hover {
@@ -164,6 +180,8 @@ const description = 'A lifelong builder applying learnings in tech and business,
 		font-size: 1.125rem;
 		color: var(--color-text-secondary);
 		margin-bottom: 0;
+		line-height: 1.6;
+		text-align: center;
 	}
 
 	/* Responsive design */
@@ -173,8 +191,8 @@ const description = 'A lifelong builder applying learnings in tech and business,
 		}
 
 		.profile-image {
-			width: 64px;
-			height: 64px;
+			width: 200px;
+			height: 200px;
 			margin-bottom: var(--spacing-sm);
 		}
 

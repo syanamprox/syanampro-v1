@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <mask id="mask">
-      <circle cx="16" cy="16" r="16" fill="white"/>
-    </mask>
-  </defs>
-  <circle cx="16" cy="16" r="16" fill="var(--color-text)" mask="url(#mask)"/>
-  <image href="/images/syanampro.webp" x="0" y="0" width="32" height="32" mask="url(#mask)"/>
-</svg>

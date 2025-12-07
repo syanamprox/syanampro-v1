@@ -9,28 +9,33 @@ const { lang } = Astro.props;
 const socialLinks = [
 	{
 		name: 'LinkedIn',
-		url: 'https://linkedin.com/in/syaifulanam',
-		icon: '/images/ln.png'
+		url: 'https://id.linkedin.com/in/syanampro',
+		icon: '/images/social/ln.png'
 	},
 	{
-		name: 'GitHub',
-		url: 'https://github.com/syanampro',
-		icon: '/images/github.png'
-	},
-	{
-		name: 'Twitter/X',
-		url: 'https://twitter.com/syanampro',
-		icon: '/images/x.png'
+		name: 'Google',
+		url: 'https://skillshop.credential.net/profile/syaifulanam141763/wallet',
+		icon: '/images/social/google.webp'
 	},
 	{
 		name: 'Instagram',
 		url: 'https://instagram.com/syanampro',
-		icon: '/images/ig.png'
+		icon: '/images/social/ig.png'
+	},
+	{
+		name: 'Twitter/X',
+		url: 'https://x.com/syanampro',
+		icon: '/images/social/x.png'
 	},
 	{
 		name: 'Telegram',
 		url: 'https://t.me/syanampro',
-		icon: '/images/telegram.png'
+		icon: '/images/social/telegram.png'
+	},
+	{
+		name: 'GitHub',
+		url: 'https://github.com/syanamprox',
+		icon: '/images/social/github.png'
 	}
 ];
 
@@ -39,12 +44,17 @@ const techLinks = [
 	{
 		name: 'Astro',
 		url: 'https://astro.build',
-		icon: '/images/astro.svg'
+		icon: '/images/tech/astro.svg'
 	},
 	{
-		name: 'Cloudflare',
-		url: 'https://cloudflare.com',
-		icon: '/images/cloudflare.svg'
+		name: 'Cloudflare Pages',
+		url: 'https://pages.cloudflare.com',
+		icon: '/images/tech/cloudflare.svg'
+	},
+	{
+		name: 'GitHub',
+		url: 'https://github.com',
+		icon: '/images/social/github.png'
 	}
 ];
 
@@ -76,21 +86,6 @@ const poweredByText = lang === 'id'
 							/>
 						</a>
 					))}
-					<a
-						href="https://github.com/syanampro"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="tech-link"
-						title="GitHub"
-					>
-						<img
-							src="/images/github.png"
-							alt="GitHub"
-							class="tech-icon"
-							width="30"
-							height="30"
-						/>
-					</a>
 				</div>
 			</div>
 
@@ -149,6 +144,7 @@ const poweredByText = lang === 'id'
 	.powered-by-text {
 		color: var(--color-text-light);
 		font-size: 0.875rem;
+		font-weight: 600;
 		white-space: nowrap;
 	}
 

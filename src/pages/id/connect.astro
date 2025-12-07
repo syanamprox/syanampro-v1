@@ -12,12 +12,6 @@ const description = 'Terhubung dengan saya untuk diskusi tentang teknologi, bisn
 // Social links and contact info dalam bahasa Indonesia
 const socialLinks = [
 	{
-		name: 'Email',
-		url: 'mailto:iam@syanam.pro',
-		icon: '📧',
-		description: 'Untuk pertanyaan bisnis, kolaborasi, atau sekedar salam'
-	},
-	{
 		name: 'LinkedIn',
 		url: 'https://linkedin.com/in/syaifulanam',
 		icon: '💼',
@@ -68,75 +62,124 @@ const discussionTopics = [
 
 		<main class="main-content">
 			<div class="connect-content">
-				<h1>Mari Terhubung & Belajar Bersama</h1>
+				<h1 style="text-align: center;">Mari Terhubung & Belajar Bersama</h1>
 
 				<div class="intro-section">
 					<p>
-						Saya selalu bersemangat untuk terhubung dengan sesama builder, entrepreneur, dan teknologi enthusiasts.
-						Baik Anda ingin mendiskusikan implementasi AI, berbagi insight tentang software B2B, atau mengeksplorasi
-						potensi kolaborasi, saya siap untuk percakapan yang bermakna.
+						Saya selalu bersemangat untuk terhubung dengan sesama builder, entrepreneur, dan teknologi enthusiasts. Baik Anda ingin mendiskusikan implementasi AI, berbagi insight tentang software B2B, atau mengeksplorasi potensi kolaborasi, saya siap untuk percakapan yang bermakna.
 					</p>
 				</div>
 
 				<div class="contact-methods">
-					<h2>Cara Menghubungi Saya</h2>
-					<div class="contact-grid">
-						{socialLinks.map((social) => (
-							<a href={social.url} target="_blank" rel="noopener noreferrer" class="contact-card">
-								<div class="contact-icon">{social.icon}</div>
-								<div class="contact-info">
-									<h3>{social.name}</h3>
-									<p>{social.description}</p>
-									<span class="contact-url">{social.url.replace('mailto:', '').replace('https://', '')}</span>
-								</div>
-								<div class="contact-arrow">→</div>
-							</a>
-						))}
-					</div>
-				</div>
+					<h2 style="text-align: center; margin: 32px 0 16px 0;">Ways to Reach Me</h2>
 
-				<div class="topics-section">
-					<h2>Saya Senang Mendiskusikan</h2>
-					<div class="topics-grid">
-						{discussionTopics.map((topic) => (
-							<div class="topic-item">
-								<span class="topic-bullet">💡</span>
-								<span>{topic}</span>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+						<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; text-align: center;">
+							<h3 style="margin: 0 0 16px 0; font-size: 1.125rem;">Email</h3>
+							<div style="font-family: monospace; font-size: 1rem; margin-bottom: 8px;">
+								<a href="mailto:iam@syanam.pro" style="text-decoration: none; color: var(--color-text);">iam@syanam.pro</a>
 							</div>
-						))}
-					</div>
-				</div>
+							<p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0;">
+								Untuk percakapan pribadi atau pertanyaan umum
+							</p>
+						</div>
 
-				<div class="cta-section">
-					<div class="cta-card">
-						<h2>🚀 Mari Bangun Sesuatu Bersama</h2>
-						<p>
-							Saya tertarik pada kolaborasi yang menggabungkan teknologi dan dampak bisnis.
-							Jika Anda sedang mengerjakan sesuatu yang inovatif atau butuh keahlian teknis untuk ventura Anda,
-							saya senang mendengar dari Anda.
-						</p>
-						<div class="cta-buttons">
-							<a href="mailto:iam@syanam.pro?subject=Mari berkolaborasi!" class="cta-primary">
-								Email Saya Langsung
-							</a>
-							<a href="https://linkedin.com/in/syaifulanam" target="_blank" rel="noopener noreferrer" class="cta-secondary">
-								Terhubung di LinkedIn
-							</a>
+						<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; text-align: center;">
+							<h3 style="margin: 0 0 16px 0; font-size: 1.125rem;">WhatsApp</h3>
+							<div style="font-family: monospace; font-size: 1rem; margin-bottom: 8px;">
+								<a href="https://wa.me/6285156858298?text=Halo+Syaiful+Anam,+saya+tertarik+untuk+diskusi+bisnis+dengan+Digital360" target="_blank" style="text-decoration: none; color: var(--color-text);" rel="noopener noreferrer">0851-5685-8298</a>
+							</div>
+							<p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0;">
+								Digital360 - Untuk bisnis dan kerjasama
+							</p>
 						</div>
 					</div>
-				</div>
 
-				<div class="response-note">
-					<p>
-						<strong>Waktu Respon:</strong> Saya biasanya merespons dalam 24-48 jam. Untuk hal mendesak,
-						silakan sebutkan di subjek email Anda.
+					<p style="text-align: center; font-size: 0.875rem; color: var(--color-text-secondary); font-style: italic; margin-top: 16px;">
+						Jika kamu menghubungi via email yang tertera di halaman ini, sangat disarankan untuk encrypt email yang kamu kirimkan.
+						Informasi PGP Key ada di bawah ini.
 					</p>
 				</div>
+
+				<div class="pgp-section">
+					<h2 style="text-align: center; margin: 32px 0 16px 0;">Security Key</h2>
+
+					<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; margin-bottom: 16px;">
+						<div style="font-family: monospace; font-size: 0.875rem; line-height: 1.8;">
+							<div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px;">
+								<strong>Name:</strong>
+								<div>Syaiful Anam</div>
+
+								<strong>Email:</strong>
+								<div>iam@syanam.pro</div>
+
+								<strong>Key Type:</strong>
+								<div>ECC (Elliptic Curve Cryptography)</div>
+
+								<strong>Key Size:</strong>
+								<div>384 bits</div>
+							</div>
+						</div>
+					</div>
+
+					<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; font-family: monospace; font-size: 0.75rem; line-height: 1.5; word-break: break-all; white-space: pre-wrap; overflow-x: auto;">-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: Keybase OpenPGP v1.0.0
+Comment: https://keybase.io/crypto
+
+xm8EaTVdNBMFK4EEACIDAwT22n7FIs0r/jDn6LzfaQ6PplxygKo5GzFh3pp0M8EC
+u2nUPnnhUcsVj9s62JDDiSSusxmBX9pnnoBqw23uU+toeRVYth1yArUlE6bi+qKX
+4SlKd+0d01lv1hU3UVhEUDfNHVN5YWlmdWwgQW5hbSA8aWFtQHN5YW5hbS5wcm8+
+wo8EExMKABcFAmk1XTQCGy8DCwkHAxUKCAIeAQIXgAAKCRD9QpjuUlfyChSvAYDc
+MnmnznAsGJ0DZ01Ew1rS2KNKoNUG4ue+NNxO+QMZSR7lEanqfA1lQXBLr2xOLPwB
+fifHvZ4uwfjL1lwiyMTP2z2ZtOktxHbBAm9Y66jI4yt2+4dU12v6z/Cq+CQGIpB+
+085SBGk1XTQTCCqGSM49AwEHAgMEl5Zell1SSwF5y7N0iLG7/rabhFITgAFfVOlR
+d7tMQ4fMToMMSVeLP8xfWgNYhf84sum69VplDXhohEq20eZJ6MLAJwQYEwoADwUC
+aTVdNAUJDwmcAAIbLgBqCRD9QpjuUlfyCl8gBBkTCgAGBQJpNV00AAoJECoiCA71
+/QZssekA/AwsyA8A98iVxemBx533tv6OeDOcpQk2pDznvTlQH7nzAP9OB66CdU1S
+bFkQsoKPXHBb/xNrIduyFQROti9CUkwsF6mkAX0VRinx2hGFskdMRTlJOLxQVxrf
+oo+g2M7qVrigHeh2a5Lt+IB3Ke16WVXTT7fZepkBgJ5Y+imUNVeQ2Zjk3uR0awjv
+Q/5rbAqxvWP9epCjePOe4wxxsuwAy4S+DFHuUDImIs5SBGk1XTQTCCqGSM49AwEH
+AgMENCFPOPR0VjXiA4fSJMoKgIXjeC+cMrqKBFlB28A8d7TKH29bdhgWJd5CKM/a
+ZMT1KnyKW0Vcq9uNzqCVfaxt2MLAJwQYEwoADwUCaTVdNAUJDwmcAAIbLgBqCRD9
+QpjuUlfyCl8gBBkTCgAGBQJpNV00AAoJEAx9xesr25lRUbkBANbijA4b1H8vhk+Q
+5lAAX1z/HkSaBjfpuQuK9dTmVlcxAQDdyJTuH3NEfkZ15ZH5YAc0A90yfzWirBpM
+B17Q6yfA4NAFAYDM5cXMHcRDwCJF9btV2jN2WBPRY5xX5SeSLWNeE3XWTsu9Jd/6
+EwUZtQXU2CbLAigBewfl/G86XUCjH0pyIsGZug00WBPMzwXIg0XNN9WLtHfxtTCT
+oqNtREk69msjGoYb9A==
+=vrNO
+-----END PGP PUBLIC KEY BLOCK-----</div>
+
+					<p style="margin: 16px 0 0 0; font-size: 0.875rem; color: var(--color-text-secondary); font-style: italic; text-align: center;">
+						Ketika generate new key, PGP Key yang terbaru akan tersedia dari halaman web ini.
+					</p>
+				</div>
+			</div>
 			</div>
 		</main>
 		<Footer lang={lang} />
 	</div>
 </Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const toggleKey = document.getElementById('toggle-key');
+		const publicKeyBlock = document.getElementById('public-key-block');
+
+		if (toggleKey && publicKeyBlock) {
+			toggleKey.addEventListener('click', function(e) {
+				e.preventDefault();
+
+				if (publicKeyBlock.style.display === 'none') {
+					publicKeyBlock.style.display = 'block';
+					toggleKey.textContent = 'Hide Public Key';
+				} else {
+					publicKeyBlock.style.display = 'none';
+					toggleKey.textContent = 'Show Public Key';
+				}
+			});
+		}
+	});
+</script>
 
 <style>
 	.main-content {

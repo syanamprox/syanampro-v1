@@ -17,9 +17,31 @@ function getBasePath(path: string): string {
 // Helper function to create localized path
 function getLocalizedPath(basePath: string, targetLang: string): string {
 	if (targetLang === 'id') {
-		return `/id${basePath}` || '/id';
+		if (basePath === '/' || basePath === '') {
+			return '/id';
+		}
+		return `/id${basePath}`;
 	}
-	return basePath || '/';
+	// For English, return the base path or '/' if empty
+	if (basePath === '' || basePath === '/') {
+		return '/';
+	}
+	return basePath;
+}
+
+// Helper function to get language toggle URL
+function getLanguageToggleUrl(currentPath: string): string {
+	if (currentPath.startsWith('/id')) {
+		// From Indonesian to English
+		const basePath = currentPath.substring(3);
+		return basePath || '/';
+	} else {
+		// From English to Indonesian
+		if (currentPath === '/' || currentPath === '') {
+			return '/id';
+		}
+		return `/id${currentPath}`;
+	}
 }
 
 const basePath = getBasePath(currentPath);
@@ -31,9 +53,9 @@ const navItems = [
 		active: getBasePath(currentPath) === '/journey'
 	},
 	{
-		href: getLocalizedPath('/log', lang),
-		label: lang === 'id' ? 'Log' : 'Learning Log',
-		active: getBasePath(currentPath) === '/log'
+		href: getLocalizedPath('/notes', lang),
+		label: lang === 'id' ? 'Catatan' : 'Notes',
+		active: getBasePath(currentPath) === '/notes'
 	},
 	{
 		href: getLocalizedPath('/connect', lang),
@@ -48,13 +70,13 @@ const navItems = [
 		<div class="nav-left">
 			<a href={getLocalizedPath('/', lang)} class="site-name">
 				<img
-					src="/images/syanampro.webp"
+					src="/images/profile/syanampro.webp"
 					alt="Syaiful Anam"
 					class="header-avatar"
 					width="32"
 					height="32"
 				/>
-				Syaiful Anam
+				<span>Syaiful Anam</span>
 			</a>
 		</div>
 
@@ -72,11 +94,11 @@ const navItems = [
 			<div class="nav-controls">
 				<!-- Language Toggle -->
 				<a
-					href={getLocalizedPath(basePath, lang === 'id' ? 'en' : 'id')}
+					href={getLanguageToggleUrl(currentPath)}
 					class="lang-toggle"
 					title={lang === 'id' ? 'Switch to English' : 'Ganti ke Bahasa Indonesia'}
 				>
-					{lang === 'id' ? 'EN' : 'ID'}
+					{lang === 'id' ? '🇮🇩' : '🇺🇸'}
 				</a>
 
 				<!-- Dark Mode Toggle -->
@@ -99,8 +121,11 @@ const navItems = [
 		border-bottom: 1px solid var(--color-border);
 		margin-bottom: var(--spacing-lg);
 		background-color: var(--color-background);
-		position: relative;
+		position: sticky;
+		top: 0;
 		z-index: 100;
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 
 	.nav {
@@ -116,7 +141,7 @@ const navItems = [
 
 	.nav-left .site-name {
 		font-size: 1.125rem;
-		font-weight: 500;
+		font-weight: 700;
 		color: var(--color-text);
 		text-decoration: none;
 		display: flex;
@@ -130,7 +155,6 @@ const navItems = [
 		border-radius: 50%;
 		object-fit: cover;
 		border: 1px solid var(--color-border);
-		transition: border-color 0.2s ease;
 	}
 
 	.nav-left .site-name:hover .header-avatar {
@@ -155,10 +179,9 @@ const navItems = [
 		color: var(--color-text-secondary);
 		text-decoration: none;
 		font-weight: 400;
-		font-size: 0.9375rem;
+		font-size: 1rem;
 		padding: var(--spacing-xs) var(--spacing-sm);
 		border-radius: 4px;
-		transition: color 0.2s ease;
 	}
 
 	.nav-list a:hover,
@@ -184,10 +207,9 @@ const navItems = [
 		background-color: transparent;
 		color: var(--color-text-secondary);
 		text-decoration: none;
-		font-size: 0.875rem;
+		font-size: 1rem;
 		font-weight: 400;
 		cursor: pointer;
-		transition: color 0.2s ease;
 	}
 
 	.lang-toggle:hover,
@@ -233,6 +255,10 @@ const navItems = [
 			font-size: 1rem;
 		}
 
+		.nav-left .site-name span {
+			display: none;
+		}
+
 		.header-avatar {
 			width: 28px;
 			height: 28px;
@@ -244,7 +270,7 @@ const navItems = [
 
 		.nav-list a {
 			padding: var(--spacing-xs);
-			font-size: 0.875rem;
+			font-size: 0.9375rem;
 		}
 
 		.nav-controls {
@@ -255,7 +281,7 @@ const navItems = [
 		.theme-toggle {
 			width: 28px;
 			height: 28px;
-			font-size: 0.75rem;
+			font-size: 0.875rem;
 		}
 
 		.theme-icon {
@@ -273,6 +299,9 @@ const navItems = [
 	updateThemeIcon();
 
 	themeToggle.addEventListener('click', () => {
+		// Add transition class for smooth toggle to ALL elements
+		document.documentElement.classList.add('dark-mode-transition');
+
 		if (html.classList.contains('dark')) {
 			html.classList.remove('dark');
 			localStorage.setItem('theme', 'light');
@@ -280,7 +309,13 @@ const navItems = [
 			html.classList.add('dark');
 			localStorage.setItem('theme', 'dark');
 		}
+
 		updateThemeIcon();
+
+		// Remove transition class after animation
+		setTimeout(() => {
+			document.documentElement.classList.remove('dark-mode-transition');
+		}, 200);
 	});
 
 	function updateThemeIcon() {

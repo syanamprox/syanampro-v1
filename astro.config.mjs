@@ -8,7 +8,7 @@ const pkg = require('./package.json');
 export default defineConfig({
   site: 'https://syanam.pro',
   output: 'static',
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
 
   // Build options
   build: {

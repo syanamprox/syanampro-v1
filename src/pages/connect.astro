@@ -9,57 +9,8 @@ const lang = 'en';
 const title = "Let's Connect & Learn Together - Syaiful Anam";
 const description = 'Connect with me to discuss technology, business, AI, and potential collaborations. Let\'s build something amazing together.';
 
-// Social links and contact info
-const socialLinks = [
-	{
-		name: 'Email',
-		url: 'mailto:iam@syanam.pro',
-		icon: '📧',
-		description: 'For business inquiries, collaborations, or just a friendly hello'
-	},
-	{
-		name: 'LinkedIn',
-		url: 'https://linkedin.com/in/syaifulanam',
-		icon: '💼',
-		description: 'Professional network and business collaborations'
-	},
-	{
-		name: 'GitHub',
-		url: 'https://github.com/syanampro',
-		icon: '💻',
-		description: 'Open source projects and code contributions'
-	},
-	{
-		name: 'Twitter/X',
-		url: 'https://twitter.com/syanampro',
-		icon: '🐦',
-		description: 'Daily thoughts on tech, AI, and continuous learning'
-	},
-	{
-		name: 'Instagram',
-		url: 'https://instagram.com/syanampro',
-		icon: '📸',
-		description: 'Behind the scenes of my entrepreneurial journey'
-	},
-	{
-		name: 'Telegram',
-		url: 'https://t.me/syanampro',
-		icon: '💬',
-		description: 'Quick chats and tech discussions'
-	}
-];
+// Contact options
 
-// Topics I'm interested in discussing
-const discussionTopics = [
-	'AI-driven development and automation',
-	'B2B SaaS architecture and scaling',
-	'Technology implementation in traditional industries',
-	'Full-stack development best practices',
-	'DevOps and cloud deployment strategies',
-	'Building and scaling remote teams',
-	'Continuous learning and skill development',
-	'Entrepreneurship and technology ventures'
-];
 ---
 
 <Layout title={title} description={description} lang={lang}>
@@ -68,68 +19,95 @@ const discussionTopics = [
 
 		<main class="main-content">
 			<div class="connect-content">
-				<h1>Let's Connect & Learn Together</h1>
+				<h1 style="text-align: center;">Let's Connect & Learn Together</h1>
 
 				<div class="intro-section">
 					<p>
-						I'm always excited to connect with fellow builders, entrepreneurs, and technology enthusiasts.
-						Whether you want to discuss AI implementation, share insights about B2B software, or explore
-						potential collaborations, I'm here for meaningful conversations.
+						I'm always excited to connect with fellow builders, entrepreneurs, and technology enthusiasts. Whether you want to discuss AI implementation, share insights about B2B software, or explore potential collaborations, I'm here for meaningful conversations.
 					</p>
 				</div>
 
 				<div class="contact-methods">
-					<h2>Ways to Reach Me</h2>
-					<div class="contact-grid">
-						{socialLinks.map((social) => (
-							<a href={social.url} target="_blank" rel="noopener noreferrer" class="contact-card">
-								<div class="contact-icon">{social.icon}</div>
-								<div class="contact-info">
-									<h3>{social.name}</h3>
-									<p>{social.description}</p>
-									<span class="contact-url">{social.url.replace('mailto:', '').replace('https://', '')}</span>
-								</div>
-								<div class="contact-arrow">→</div>
-							</a>
-						))}
-					</div>
-				</div>
+					<h2 style="text-align: center; margin: 32px 0 16px 0;">Ways to Reach Me</h2>
 
-				<div class="topics-section">
-					<h2>I'd Love to Discuss</h2>
-					<div class="topics-grid">
-						{discussionTopics.map((topic) => (
-							<div class="topic-item">
-								<span class="topic-bullet">💡</span>
-								<span>{topic}</span>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+						<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; text-align: center;">
+							<h3 style="margin: 0 0 16px 0; font-size: 1.125rem;">Email</h3>
+							<div style="font-family: monospace; font-size: 1rem; margin-bottom: 8px;">
+								<a href="mailto:iam@syanam.pro" style="text-decoration: none; color: var(--color-text);">iam@syanam.pro</a>
 							</div>
-						))}
-					</div>
-				</div>
+							<p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0;">
+								For personal conversations or general questions
+							</p>
+						</div>
 
-				<div class="cta-section">
-					<div class="cta-card">
-						<h2>🚀 Let's Build Something Together</h2>
-						<p>
-							I'm particularly interested in collaborations that combine technology and business impact.
-							If you're working on something innovative or need technical expertise for your venture,
-							I'd love to hear from you.
-						</p>
-						<div class="cta-buttons">
-							<a href="mailto:iam@syanam.pro?subject=Let's collaborate!" class="cta-primary">
-								Email Me Directly
-							</a>
-							<a href="https://linkedin.com/in/syaifulanam" target="_blank" rel="noopener noreferrer" class="cta-secondary">
-								Connect on LinkedIn
-							</a>
+						<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; text-align: center;">
+							<h3 style="margin: 0 0 16px 0; font-size: 1.125rem;">WhatsApp</h3>
+							<div style="font-family: monospace; font-size: 1rem; margin-bottom: 8px;">
+								<a href="https://wa.me/6285156858298?text=Hi+Syaiful+Anam,+I'm+interested+in+discussing+business+with+Digital360" target="_blank" style="text-decoration: none; color: var(--color-text);" rel="noopener noreferrer">0851-5685-8298</a>
+							</div>
+							<p style="font-size: 0.875rem; color: var(--color-text-secondary); margin: 0;">
+								Digital360 - For business and collaborations
+							</p>
 						</div>
 					</div>
+
+					<p style="text-align: center; font-size: 0.875rem; color: var(--color-text-secondary); font-style: italic; margin-top: 16px;">
+						If you contact me via email listed on this page, I highly recommend encrypting your email.
+						My PGP Key information is available below.
+					</p>
 				</div>
 
-				<div class="response-note">
-					<p>
-						<strong>Response Time:</strong> I typically respond within 24-48 hours. For urgent matters,
-						please mention it in your subject line.
+				<div class="pgp-section">
+					<h2 style="text-align: center; margin: 32px 0 16px 0;">Security Key</h2>
+
+					<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; margin-bottom: 16px;">
+						<div style="font-family: monospace; font-size: 0.875rem; line-height: 1.8;">
+							<div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px;">
+								<strong>Name:</strong>
+								<div>Syaiful Anam</div>
+
+								<strong>Email:</strong>
+								<div>iam@syanam.pro</div>
+
+								<strong>Key Type:</strong>
+								<div>ECC (Elliptic Curve Cryptography)</div>
+
+								<strong>Key Size:</strong>
+								<div>384 bits</div>
+							</div>
+						</div>
+					</div>
+
+					<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; font-family: monospace; font-size: 0.75rem; line-height: 1.5; word-break: break-all; white-space: pre-wrap; overflow-x: auto;">-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: Keybase OpenPGP v1.0.0
+Comment: https://keybase.io/crypto
+
+xm8EaTVdNBMFK4EEACIDAwT22n7FIs0r/jDn6LzfaQ6PplxygKo5GzFh3pp0M8EC
+u2nUPnnhUcsVj9s62JDDiSSusxmBX9pnnoBqw23uU+toeRVYth1yArUlE6bi+qKX
+4SlKd+0d01lv1hU3UVhEUDfNHVN5YWlmdWwgQW5hbSA8aWFtQHN5YW5hbS5wcm8+
+wo8EExMKABcFAmk1XTQCGy8DCwkHAxUKCAIeAQIXgAAKCRD9QpjuUlfyChSvAYDc
+MnmnznAsGJ0DZ01Ew1rS2KNKoNUG4ue+NNxO+QMZSR7lEanqfA1lQXBLr2xOLPwB
+fifHvZ4uwfjL1lwiyMTP2z2ZtOktxHbBAm9Y66jI4yt2+4dU12v6z/Cq+CQGIpB+
+085SBGk1XTQTCCqGSM49AwEHAgMEl5Zell1SSwF5y7N0iLG7/rabhFITgAFfVOlR
+d7tMQ4fMToMMSVeLP8xfWgNYhf84sum69VplDXhohEq20eZJ6MLAJwQYEwoADwUC
+aTVdNAUJDwmcAAIbLgBqCRD9QpjuUlfyCl8gBBkTCgAGBQJpNV00AAoJECoiCA71
+/QZssekA/AwsyA8A98iVxemBx533tv6OeDOcpQk2pDznvTlQH7nzAP9OB66CdU1S
+bFkQsoKPXHBb/xNrIduyFQROti9CUkwsF6mkAX0VRinx2hGFskdMRTlJOLxQVxrf
+oo+g2M7qVrigHeh2a5Lt+IB3Ke16WVXTT7fZepkBgJ5Y+imUNVeQ2Zjk3uR0awjv
+Q/5rbAqxvWP9epCjePOe4wxxsuwAy4S+DFHuUDImIs5SBGk1XTQTCCqGSM49AwEH
+AgMENCFPOPR0VjXiA4fSJMoKgIXjeC+cMrqKBFlB28A8d7TKH29bdhgWJd5CKM/a
+ZMT1KnyKW0Vcq9uNzqCVfaxt2MLAJwQYEwoADwUCaTVdNAUJDwmcAAIbLgBqCRD9
+QpjuUlfyCl8gBBkTCgAGBQJpNV00AAoJEAx9xesr25lRUbkBANbijA4b1H8vhk+Q
+5lAAX1z/HkSaBjfpuQuK9dTmVlcxAQDdyJTuH3NEfkZ15ZH5YAc0A90yfzWirBpM
+B17Q6yfA4NAFAYDM5cXMHcRDwCJF9btV2jN2WBPRY5xX5SeSLWNeE3XWTsu9Jd/6
+EwUZtQXU2CbLAigBewfl/G86XUCjH0pyIsGZug00WBPMzwXIg0XNN9WLtHfxtTCT
+oqNtREk69msjGoYb9A==
+=vrNO
+-----END PGP PUBLIC KEY BLOCK-----</div>
+
+					<p style="margin: 16px 0 0 0; font-size: 0.875rem; color: var(--color-text-secondary); font-style: italic; text-align: center;">
+						When I generate new key, the latest PGP Key will be available on this page.
 					</p>
 				</div>
 			</div>
