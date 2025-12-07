@@ -76,18 +76,18 @@ const discussionTopics = [
 					<div class="contact-methods-grid">
 						<div class="contact-card">
 							<h3>Email</h3>
-							<div>
-								<a href="mailto:iam@syanam.pro" style="text-decoration: none; color: var(--color-text);">iam@syanam.pro</a>
+							<div class="contact-email">
+								<a href="mailto:iam@syanam.pro">iam@syanam.pro</a>
 							</div>
-							<p>Untuk percakapan pribadi atau pertanyaan umum</p>
+							<p class="contact-description">Untuk percakapan pribadi atau pertanyaan umum</p>
 						</div>
 
 						<div class="contact-card">
 							<h3>WhatsApp</h3>
-							<div>
-								<a href="https://wa.me/6285156858298?text=Halo+Syaiful+Anam,+saya+tertarik+untuk+diskusi+bisnis+dengan+Digital360" target="_blank" style="text-decoration: none; color: var(--color-text);" rel="noopener noreferrer">0851-5685-8298</a>
+							<div class="contact-email">
+								<a href="https://wa.me/6285156858298?text=Halo+Syaiful+Anam,+saya+tertarik+untuk+diskusi+bisnis+dengan+Digital360" target="_blank" rel="noopener noreferrer">0851-5685-8298</a>
 							</div>
-							<p>Digital360 - Untuk bisnis dan kerjasama</p>
+							<p class="contact-description">Digital360 - Untuk bisnis dan kerjasama</p>
 						</div>
 					</div>
 
@@ -414,7 +414,6 @@ oqNtREk69msjGoYb9A==
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--spacing-xs);
 	}
 
 	.contact-methods-grid .contact-card:hover {
@@ -424,10 +423,9 @@ oqNtREk69msjGoYb9A==
 	}
 
 	.contact-methods-grid .contact-card h3 {
-		margin: 0;
+		margin: 0 0 4px 0;
 		font-size: 1rem;
 		font-weight: 600;
-		order: 1;
 	}
 
 	.contact-methods-grid .contact-card div[style*="font-family: monospace"] {
@@ -435,16 +433,52 @@ oqNtREk69msjGoYb9A==
 		font-size: 0.875rem;
 		margin: 0;
 		word-break: break-all;
-		line-height: 1.4;
-		order: 2;
+		line-height: 1;
 	}
 
 	.contact-methods-grid .contact-card p {
 		font-size: 0.75rem;
 		color: var(--color-text-secondary);
+		margin: -8px 0 0 0 !important;
+		line-height: 1;
+		padding: 0 !important;
+	}
+
+	/* Specific styles for contact email and description */
+	.contact-methods-grid .contact-email {
 		margin: 0;
-		line-height: 1.4;
-		order: 3;
+		padding: 0;
+		line-height: 1;
+	}
+
+	.contact-methods-grid .contact-email a {
+		text-decoration: none;
+		color: var(--color-text);
+		display: block;
+		font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+		font-size: 0.875rem;
+		word-break: break-all;
+	}
+
+	.contact-methods-grid .contact-description {
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+		margin: -6px 0 0 0 !important;
+		line-height: 1;
+		padding: 0;
+	}
+
+	/* Ensure contact-email div has no extra spacing */
+	.contact-methods-grid .contact-email {
+		margin: 0;
+		padding: 0;
+		line-height: 1;
+	}
+
+	.contact-methods-grid .contact-email a {
+		display: block;
+		margin: 0 !important;
+		padding: 0 !important;
 	}
 
 	/* Mobile-specific styles for contact grid */
@@ -520,6 +554,7 @@ oqNtREk69msjGoYb9A==
 
 		.contact-methods-grid .contact-card h3 {
 			font-size: 1rem;
+			margin: 0 0 2px 0 !important; /* Even tighter for mobile */
 		}
 
 		.contact-methods-grid .contact-card div[style*="font-family: monospace"] {
@@ -528,6 +563,11 @@ oqNtREk69msjGoYb9A==
 
 		.contact-methods-grid .contact-card p {
 			font-size: 0.75rem;
+			margin: -10px 0 0 0 !important; /* Even tighter spacing for mobile */
+		}
+
+		.contact-methods-grid .contact-description {
+			margin: -8px 0 0 0 !important; /* Even tighter for mobile */
 		}
 
 		.contact-methods .contact-grid {
@@ -590,11 +630,8 @@ oqNtREk69msjGoYb9A==
 		/* Improve touch targets for mobile */
 		.contact-methods .contact-card a {
 			display: inline-block;
-			padding: 4px 0;
-			min-height: 44px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
+			padding: 0;
+			display: block;
 		}
 	}
 
