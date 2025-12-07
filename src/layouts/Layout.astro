@@ -260,9 +260,349 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 					font-size: 1.5rem;
 				}
 			}
+
+			/* View Transitions */
+			@keyframes fade-in {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			@keyframes fade-out {
+				from {
+					opacity: 1;
+				}
+				to {
+					opacity: 0;
+				}
+			}
+
+			@keyframes slide-up {
+				from {
+					transform: translateY(20px);
+					opacity: 0;
+				}
+				to {
+					transform: translateY(0);
+					opacity: 1;
+				}
+			}
+
+			/* View transition animations */
+			html::view-transition-old(*) {
+				animation: fade-out 0.3s ease-out;
+			}
+
+			html::view-transition-new(*) {
+				animation: fade-in 0.3s ease-out;
+			}
+
+			/* More specific animations for main content */
+			html::view-transition-old(main) {
+				animation: fade-out 0.2s ease-out;
+			}
+
+			html::view-transition-new(main) {
+				animation: slide-up 0.3s ease-out;
+			}
+
+			/* Loading indicator for prefetch */
+			.nav-link {
+				position: relative;
+			}
+
+			.nav-link[data-prefetch="true"]::after {
+				content: '';
+				position: absolute;
+				bottom: -2px;
+				left: 0;
+				right: 0;
+				height: 2px;
+				background: var(--color-accent);
+				transform: scaleX(0);
+				transform-origin: left;
+				transition: transform 0.3s ease;
+			}
+
+			.nav-link[data-prefetch="true"]:hover::after {
+				transform: scaleX(1);
+			}
+
+			/* Loading state for page transitions */
+			.loading-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0.1);
+				display: none;
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+			}
+
+			.loading-overlay.active {
+				display: flex;
+			}
+
+			.loading-spinner {
+				width: 40px;
+				height: 40px;
+				border: 3px solid var(--color-border);
+				border-top: 3px solid var(--color-accent);
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+			}
+
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
 		</style>
 	</head>
 	<body>
+		<!-- Loading Elements -->
+		<div id="nav-loading" style="
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 2px;
+			background: linear-gradient(90deg, var(--color-accent), var(--color-text-light));
+			transform: scaleX(0);
+			transform-origin: left;
+			transition: transform 0.2s ease;
+			z-index: 1000;
+		"></div>
+
+		<!-- Skeleton Loading Container -->
+		<div id="skeleton-loader" style="
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: var(--color-background);
+			z-index: 999;
+			padding: 100px 20px 20px;
+		">
+			<div class="skeleton-nav" style="
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 40px;
+				padding: 16px 0;
+			">
+				<div style="width: 150px; height: 32px; background: var(--color-surface); border-radius: 8px;"></div>
+				<div style="display: flex; gap: 32px;">
+					<div style="width: 80px; height: 20px; background: var(--color-surface); border-radius: 4px;"></div>
+					<div style="width: 60px; height: 20px; background: var(--color-surface); border-radius: 4px;"></div>
+					<div style="width: 80px; height: 20px; background: var(--color-surface); border-radius: 4px;"></div>
+				</div>
+			</div>
+			<div class="skeleton-content" style="
+				max-width: 768px;
+				margin: 0 auto;
+			">
+				<div style="width: 60%; height: 48px; background: var(--color-surface); border-radius: 8px; margin-bottom: 24px;"></div>
+				<div style="width: 100%; height: 20px; background: var(--color-surface); border-radius: 4px; margin-bottom: 12px;"></div>
+				<div style="width: 90%; height: 20px; background: var(--color-surface); border-radius: 4px; margin-bottom: 12px;"></div>
+				<div style="width: 95%; height: 20px; background: var(--color-surface); border-radius: 4px; margin-bottom: 32px;"></div>
+				<div class="skeleton-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+					<div style="width: 100%; height: 180px; background: var(--color-surface); border-radius: 8px;"></div>
+					<div style="width: 100%; height: 180px; background: var(--color-surface); border-radius: 8px;"></div>
+					<div style="width: 100%; height: 180px; background: var(--color-surface); border-radius: 8px;"></div>
+				</div>
+			</div>
+		</div>
+
 		<slot />
+
+		<script>
+			// Enhanced navigation with loading states and smooth transitions
+			document.addEventListener('DOMContentLoaded', () => {
+				const loadingIndicator = document.getElementById('nav-loading');
+				const skeletonLoader = document.getElementById('skeleton-loader');
+				const navLinks = document.querySelectorAll('.nav-list a');
+				let navigationTimeout;
+
+				// Add loading pulse animation to skeleton
+				const skeletonPulse = `
+					@keyframes pulse {
+						0%, 100% { opacity: 1; }
+						50% { opacity: 0.5; }
+					}
+					.skeleton-nav > div, .skeleton-content > div, .skeleton-grid > div {
+						animation: pulse 1.5s ease-in-out infinite;
+					}
+					.skeleton-nav > div:nth-child(2) > div:nth-child(1) { animation-delay: 0.1s; }
+					.skeleton-nav > div:nth-child(2) > div:nth-child(2) { animation-delay: 0.2s; }
+					.skeleton-nav > div:nth-child(2) > div:nth-child(3) { animation-delay: 0.3s; }
+				`;
+				const style = document.createElement('style');
+				style.textContent = skeletonPulse;
+				document.head.appendChild(style);
+
+				// Enhanced click handler with loading states
+				navLinks.forEach(link => {
+					// Add hover effect with delay
+					let hoverTimeout;
+					link.addEventListener('mouseenter', () => {
+						if (!link.classList.contains('active')) {
+							hoverTimeout = setTimeout(() => {
+								link.style.transform = 'translateY(-1px)';
+								link.style.color = 'var(--color-accent)';
+							}, 100);
+						}
+					});
+
+					link.addEventListener('mouseleave', () => {
+						if (!link.classList.contains('active')) {
+							clearTimeout(hoverTimeout);
+							link.style.transform = 'translateY(0)';
+							link.style.color = 'var(--color-text-secondary)';
+						}
+					});
+
+					link.addEventListener('click', (e) => {
+						const href = link.getAttribute('href');
+						if (href && !href.startsWith('http') && !href.startsWith('mailto')) {
+							e.preventDefault();
+
+							// Cancel any previous navigation
+							if (navigationTimeout) {
+								clearTimeout(navigationTimeout);
+							}
+
+							// Start loading indicators
+							if (loadingIndicator) {
+								loadingIndicator.style.transform = 'scaleX(1)';
+							}
+
+							if (skeletonLoader) {
+								skeletonLoader.style.display = 'block';
+							}
+
+							// Add loading state to link
+							link.style.opacity = '0.5';
+							link.style.cursor = 'wait';
+
+							// Navigate after a short delay for smooth transition
+							navigationTimeout = setTimeout(() => {
+								window.location.href = href;
+							}, 150);
+						}
+					});
+
+					// Add transition styles
+					if (!link.classList.contains('active')) {
+						link.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+					}
+				});
+
+				// Add smooth scroll behavior for anchor links
+				document.addEventListener('click', (e) => {
+					if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('#')) {
+						e.preventDefault();
+						const target = document.querySelector(e.target.getAttribute('href'));
+						if (target) {
+							target.scrollIntoView({
+								behavior: 'smooth',
+								block: 'start'
+							});
+						}
+					}
+				});
+
+				// Remove loading states on page unload
+				window.addEventListener('beforeunload', () => {
+					if (skeletonLoader) {
+						skeletonLoader.style.display = 'block';
+					}
+				});
+
+				// Lazy loading for images
+				const lazyLoadImages = () => {
+					const images = document.querySelectorAll('img[data-src]');
+					const imageObserver = new IntersectionObserver((entries) => {
+						entries.forEach(entry => {
+							if (entry.isIntersecting) {
+								const img = entry.target;
+								img.src = img.dataset.src;
+								img.onload = () => img.classList.add('loaded');
+								img.removeAttribute('data-src');
+								imageObserver.unobserve(img);
+							}
+						});
+					});
+
+					images.forEach(img => imageObserver.observe(img));
+				};
+
+				// Initialize lazy loading
+				if ('IntersectionObserver' in window) {
+					lazyLoadImages();
+				}
+
+				// Add keyboard navigation
+				document.addEventListener('keydown', (e) => {
+					// Alt/Option + Arrow keys for navigation
+					if (e.altKey) {
+						const currentIndex = Array.from(navLinks).findIndex(link => link.classList.contains('active'));
+						let targetIndex = -1;
+
+						if (e.key === 'ArrowLeft' && currentIndex > 0) {
+							targetIndex = currentIndex - 1;
+						} else if (e.key === 'ArrowRight' && currentIndex < navLinks.length - 1) {
+							targetIndex = currentIndex + 1;
+						}
+
+						if (targetIndex >= 0 && navLinks[targetIndex]) {
+							navLinks[targetIndex].click();
+						}
+					}
+				});
+
+				// Add touch gestures for mobile
+				let touchStartX = 0;
+				let touchEndX = 0;
+
+				document.addEventListener('touchstart', (e) => {
+					touchStartX = e.changedTouches[0].screenX;
+				});
+
+				document.addEventListener('touchend', (e) => {
+					touchEndX = e.changedTouches[0].screenX;
+					handleSwipe();
+				});
+
+				const handleSwipe = () => {
+					const swipeThreshold = 50;
+					const diff = touchStartX - touchEndX;
+
+					if (Math.abs(diff) > swipeThreshold) {
+						const currentIndex = Array.from(navLinks).findIndex(link => link.classList.contains('active'));
+						let targetIndex = -1;
+
+						if (diff > 0 && currentIndex < navLinks.length - 1) {
+							// Swipe left - next page
+							targetIndex = currentIndex + 1;
+						} else if (diff < 0 && currentIndex > 0) {
+							// Swipe right - previous page
+							targetIndex = currentIndex - 1;
+						}
+
+						if (targetIndex >= 0 && navLinks[targetIndex]) {
+							navLinks[targetIndex].click();
+						}
+					}
+				};
+			});
+		</script>
 	</body>
 </html>
