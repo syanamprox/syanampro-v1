@@ -30,8 +30,8 @@ const description = 'Connect with me to discuss technology, business, AI, and po
 				<div class="contact-methods">
 					<h2 style="text-align: center; margin: 32px 0 16px 0;">Ways to Reach Me</h2>
 
-					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-						<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; text-align: center;">
+					<div class="contact-methods-grid">
+						<div class="contact-card">
 							<h3 style="margin: 0 0 16px 0; font-size: 1.125rem;">Email</h3>
 							<div style="font-family: monospace; font-size: 1rem; margin-bottom: 8px;">
 								<a href="mailto:iam@syanam.pro" style="text-decoration: none; color: var(--color-text);">iam@syanam.pro</a>
@@ -41,7 +41,7 @@ const description = 'Connect with me to discuss technology, business, AI, and po
 							</p>
 						</div>
 
-						<div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 24px; text-align: center;">
+						<div class="contact-card">
 							<h3 style="margin: 0 0 16px 0; font-size: 1.125rem;">WhatsApp</h3>
 							<div style="font-family: monospace; font-size: 1rem; margin-bottom: 8px;">
 								<a href="https://wa.me/6285156858298?text=Hi+Syaiful+Anam,+I'm+interested+in+discussing+business+with+Digital360" target="_blank" style="text-decoration: none; color: var(--color-text);" rel="noopener noreferrer">0851-5685-8298</a>
@@ -332,6 +332,53 @@ oqNtREk69msjGoYb9A==
 		color: var(--color-text);
 	}
 
+	/* Contact methods grid - desktop side-by-side, mobile vertical */
+	.contact-methods-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-md);
+		margin-bottom: var(--spacing-md);
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.contact-methods-grid .contact-card {
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--spacing-lg);
+		text-align: center;
+		transition: all 0.3s ease;
+	}
+
+	.contact-methods-grid .contact-card:hover {
+		transform: translateY(-2px);
+		border-color: var(--color-accent);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.contact-methods-grid .contact-card h3 {
+		margin: 0 0 var(--spacing-sm) 0;
+		font-size: 1.125rem;
+		font-weight: 600;
+	}
+
+	.contact-methods-grid .contact-card div[style*="font-family: monospace"] {
+		font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+		font-size: 1rem;
+		margin-bottom: var(--spacing-sm);
+		word-break: break-all;
+		line-height: 1.4;
+	}
+
+	.contact-methods-grid .contact-card p {
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+		margin: 0;
+		line-height: 1.4;
+	}
+
 	/* Mobile-specific styles for contact grid */
 	.contact-methods .contact-grid {
 		display: grid;
@@ -391,6 +438,28 @@ oqNtREk69msjGoYb9A==
 	@media (max-width: 768px) {
 		.connect-content {
 			padding: var(--spacing-lg) 20px;
+		}
+
+		.contact-methods-grid {
+			grid-template-columns: 1fr; /* Mobile: vertical layout */
+			gap: var(--spacing-sm);
+			max-width: none;
+		}
+
+		.contact-methods-grid .contact-card {
+			padding: var(--spacing-md);
+		}
+
+		.contact-methods-grid .contact-card h3 {
+			font-size: 1rem;
+		}
+
+		.contact-methods-grid .contact-card div[style*="font-family: monospace"] {
+			font-size: 0.875rem;
+		}
+
+		.contact-methods-grid .contact-card p {
+			font-size: 0.75rem;
 		}
 
 		.contact-methods .contact-grid {
