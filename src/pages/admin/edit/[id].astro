@@ -1,0 +1,799 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getNotesCollection, type Note } from '../../../lib/db';
+import { ObjectId } from 'mongodb';
+
+const { id } = Astro.params;
+
+// Get the note to edit
+const collection = await getNotesCollection();
+const note = await collection.findOne({ _id: new ObjectId(id) });
+
+// If note doesn't exist, redirect
+if (!note) {
+  return Astro.redirect('/admin');
+}
+
+// Format date for input
+const formatDate = (date: Date | string) => {
+  const d = new Date(date);
+  return d.toISOString().split('T')[0];
+};
+---
+
+<Layout title="Edit Note - Admin" description="Edit note">
+	<div class="admin-container">
+		<header class="admin-header">
+			<h1>Edit Note</h1>
+			<a href="/admin" class="back-btn">← Back to Admin</a>
+		</header>
+
+		<main class="admin-main">
+			<form id="edit-form" class="note-form">
+				<input type="hidden" id="note-id" value={note._id?.toString() || ''}>
+
+				<!-- Language Tabs -->
+				<div class="language-tabs">
+					<button type="button" class="lang-tab active" data-lang="en">🇺🇸 English</button>
+					<button type="button" class="lang-tab" data-lang="id">🇮🇩 Bahasa Indonesia</button>
+				</div>
+
+				<!-- English Content -->
+				<div class="lang-content active" id="content-en">
+					<div class="form-group">
+						<label for="title_en">English Title *</label>
+						<input type="text" id="title_en" name="title_en" value={note.title_en || ''} required>
+					</div>
+					<div class="form-group">
+						<label for="summary_en">English Summary</label>
+						<textarea id="summary_en" name="summary_en" rows="3" placeholder="Brief description for the notes list...">{note.summary_en || ''}</textarea>
+					</div>
+					<div class="form-group">
+						<label for="content_en">English Content (Markdown) *</label>
+						<textarea id="content_en" name="content_en" rows="15" placeholder="Write your content here..." required>{note.content_en || ''}</textarea>
+						<div class="content-image-upload">
+							<button type="button" id="insertImageBtn_en" class="btn-secondary btn-small">Insert Image</button>
+							<input type="file" id="contentImageInput_en" accept="image/*" style="display: none;" multiple />
+						</div>
+					</div>
+				</div>
+
+				<!-- Indonesian Content -->
+				<div class="lang-content" id="content-id">
+					<div class="form-group">
+						<label for="title_id">Indonesian Title *</label>
+						<input type="text" id="title_id" name="title_id" value={note.title_id || ''} required>
+					</div>
+					<div class="form-group">
+						<label for="summary_id">Indonesian Summary</label>
+						<textarea id="summary_id" name="summary_id" rows="3" placeholder="Deskripsi singkat untuk daftar catatan...">{note.summary_id || ''}</textarea>
+					</div>
+					<div class="form-group">
+						<label for="content_id">Indonesian Content (Markdown) *</label>
+						<textarea id="content_id" name="content_id" rows="15" placeholder="Tulis konten Anda di sini..." required>{note.content_id || ''}</textarea>
+						<div class="content-image-upload">
+							<button type="button" id="insertImageBtn_id" class="btn-secondary btn-small">Insert Image</button>
+							<input type="file" id="contentImageInput_id" accept="image/*" style="display: none;" multiple />
+						</div>
+					</div>
+				</div>
+
+				<!-- Shared Fields -->
+				<div class="shared-fields">
+					<h3>📋 Shared Settings</h3>
+					<div class="form-row">
+						<div class="form-group">
+							<label for="category">Category *</label>
+							<select id="category" name="category" required>
+								<option value="">Select Category</option>
+								<option value="Portfolio" selected={note.category === 'Portfolio'}>Portfolio</option>
+								<option value="Education" selected={note.category === 'Education'}>Education</option>
+								<option value="Personal" selected={note.category === 'Personal'}>Personal</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<label for="status">Status</label>
+							<select id="status" name="status">
+								<option value="draft" selected={note.status === 'draft'}>Draft</option>
+								<option value="published" selected={note.status === 'published'}>Published</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="publishedDate">Published Date</label>
+							<input type="date" id="publishedDate" name="publishedDate" value={formatDate(note.publishedDate)}>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="tags">Tags (comma-separated)</label>
+						<input type="text" id="tags" name="tags" placeholder="e.g., javascript, tutorial, webdev" value={note.tags ? note.tags.join(', ') : ''}>
+					</div>
+
+					<div class="form-group">
+						<label for="headerImage">Header Image</label>
+						<input type="file" id="headerImage" accept="image/*" />
+						<input type="hidden" id="headerImageUrl" name="headerImage" value={note.headerImage || ''} />
+						<div id="headerImagePreview" class="image-preview" style={note.headerImage ? '' : 'display: none;'}>
+							<img id="headerImagePreviewImg" src={note.headerImage || ''} alt="Header image preview" />
+							<button type="button" id="removeHeaderImage" class="remove-image-btn">&times;</button>
+						</div>
+						<div class="image-upload-info">
+							<small>Upload an image for the note header (optional)</small>
+						</div>
+					</div>
+				</div>
+
+			
+				<div class="form-actions">
+					<button type="submit" class="btn-primary">Update Note</button>
+					<button type="button" id="preview-btn" class="btn-secondary">Preview</button>
+					<a href="/admin" class="btn-cancel">Cancel</a>
+				</div>
+			</form>
+		</main>
+	</div>
+
+	<!-- Preview Modal -->
+	<div id="preview-modal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2>Preview</h2>
+				<button class="close-modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div id="preview-content"></div>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.admin-container {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: var(--spacing-xl);
+	}
+
+	.admin-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: var(--spacing-xl);
+		padding-bottom: var(--spacing-md);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.admin-header h1 {
+		font-size: 2rem;
+		margin: 0;
+	}
+
+	.back-btn {
+		color: var(--color-accent);
+		text-decoration: none;
+		font-weight: 600;
+		padding: var(--spacing-sm) var(--spacing-md);
+		border: 1px solid var(--color-accent);
+		border-radius: 6px;
+		transition: all 0.2s ease;
+	}
+
+	.back-btn:hover {
+		background-color: var(--color-accent);
+		color: white;
+	}
+
+	/* Form Styles */
+	.note-form {
+		background-color: var(--color-surface);
+		padding: var(--spacing-lg);
+		border-radius: 12px;
+		border: 1px solid var(--color-border);
+	}
+
+	/* Language Tabs */
+	.language-tabs {
+		display: flex;
+		gap: var(--spacing-xs);
+		margin-bottom: var(--spacing-lg);
+		border-bottom: 1px solid var(--color-border);
+		padding-bottom: var(--spacing-xs);
+	}
+
+	.lang-tab {
+		background: none;
+		border: none;
+		padding: var(--spacing-sm) var(--spacing-md);
+		cursor: pointer;
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		font-weight: 500;
+		color: var(--color-text-secondary);
+		border-bottom: 2px solid transparent;
+		transition: all 0.2s ease;
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+	}
+
+	.lang-tab:hover {
+		color: var(--color-text);
+		background-color: var(--color-surface);
+		border-radius: 6px 6px 0 0;
+	}
+
+	.lang-tab.active {
+		color: var(--color-accent);
+		border-bottom-color: var(--color-accent);
+		background-color: var(--color-surface);
+	}
+
+	.lang-content {
+		display: none;
+	}
+
+	.lang-content.active {
+		display: block;
+	}
+
+	.shared-fields {
+		border-top: 2px solid var(--color-border);
+		padding-top: var(--spacing-lg);
+		margin-top: var(--spacing-lg);
+	}
+
+	.shared-fields h3 {
+		margin: 0 0 var(--spacing-md) 0;
+		color: var(--color-text);
+		font-size: 1.1rem;
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+	}
+
+	.form-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-md);
+	}
+
+	.form-group {
+		margin-bottom: var(--spacing-md);
+	}
+
+	.form-group label {
+		display: block;
+		margin-bottom: var(--spacing-xs);
+		font-weight: 600;
+		color: var(--color-text);
+	}
+
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		width: 100%;
+		padding: var(--spacing-sm);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		background-color: var(--color-background);
+		color: var(--color-text);
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		transition: border-color 0.2s ease;
+	}
+
+	.form-group input:focus,
+	.form-group select:focus,
+	.form-group textarea:focus {
+		outline: none;
+		border-color: var(--color-accent);
+	}
+
+	.form-group textarea {
+		resize: vertical;
+		font-family: var(--font-mono);
+	}
+
+	.form-actions {
+		display: flex;
+		gap: var(--spacing-sm);
+		margin-top: var(--spacing-lg);
+	}
+
+	.btn-primary {
+		background-color: var(--color-accent);
+		color: white;
+		border: none;
+		padding: var(--spacing-sm) var(--spacing-lg);
+		border-radius: 6px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		height: 44px;
+		line-height: 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.btn-primary:hover {
+		background-color: var(--color-accent-hover);
+	}
+
+	.btn-secondary {
+		background-color: var(--color-surface);
+		color: var(--color-text);
+		border: 1px solid var(--color-border);
+		padding: var(--spacing-sm) var(--spacing-lg);
+		border-radius: 6px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		text-decoration: none;
+		display: inline-flex;
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		height: 44px;
+		line-height: 1;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.btn-secondary:hover {
+		background-color: var(--color-border);
+	}
+
+	.btn-cancel {
+		background-color: var(--color-surface);
+		color: var(--color-text);
+		border: 1px solid var(--color-border);
+		padding: var(--spacing-sm) var(--spacing-lg);
+		border-radius: 6px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		text-decoration: none;
+		display: inline-flex;
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		height: 44px;
+		line-height: 1;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.btn-cancel:hover {
+		background-color: var(--color-border);
+	}
+
+	/* Modal */
+	.modal {
+		display: none;
+		position: fixed;
+		z-index: 1000;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.modal-content {
+		background-color: var(--color-background);
+		margin: 5% auto;
+		padding: 0;
+		border-radius: 12px;
+		width: 90%;
+		max-width: 800px;
+		max-height: 80vh;
+		overflow: hidden;
+	}
+
+	.modal-header {
+		padding: var(--spacing-lg);
+		border-bottom: 1px solid var(--color-border);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.modal-header h2 {
+		margin: 0;
+	}
+
+	.close-modal {
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
+		color: var(--color-text-secondary);
+		font-family: var(--font-sans);
+	}
+
+	.modal-body {
+		padding: var(--spacing-lg);
+		overflow-y: auto;
+		max-height: 60vh;
+	}
+
+	.modal-body h1 {
+		margin-top: 0;
+	}
+
+	/* Image Upload Styles */
+	.image-preview {
+		position: relative;
+		margin-top: var(--spacing-sm);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		overflow: hidden;
+		width: 200px;
+		height: 120px;
+	}
+
+	.image-preview img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.remove-image-btn {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		background: rgba(0, 0, 0, 0.7);
+		color: white;
+		border: none;
+		border-radius: 50%;
+		width: 24px;
+		height: 24px;
+		cursor: pointer;
+		font-size: 16px;
+		line-height: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: background-color 0.2s ease;
+	}
+
+	.remove-image-btn:hover {
+		background: rgba(0, 0, 0, 0.9);
+	}
+
+	.image-upload-info {
+		margin-top: var(--spacing-xs);
+		color: var(--color-text-secondary);
+	}
+
+	.content-image-upload {
+		margin-top: var(--spacing-sm);
+	}
+
+	.btn-small {
+		padding: var(--spacing-xs) var(--spacing-md);
+		font-size: 0.875rem;
+		height: auto;
+		min-height: auto;
+		line-height: 1.5;
+	}
+
+	/* Markdown Guide Styles */
+	.markdown-guide {
+		background-color: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: var(--spacing-md);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	.markdown-guide h4 {
+		margin: 0 0 var(--spacing-sm) 0;
+		font-size: 1rem;
+		color: var(--color-text);
+	}
+
+	.guide-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.guide-item {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		padding: var(--spacing-xs);
+		border-radius: 4px;
+		background-color: var(--color-background);
+	}
+
+	.guide-item code {
+		background-color: var(--color-border);
+		padding: 2px 6px;
+		border-radius: 4px;
+		font-size: 0.75rem;
+		font-family: monospace;
+		flex-shrink: 0;
+	}
+
+	.guide-desc {
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+	}
+
+	.guide-examples {
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--spacing-sm);
+		margin-top: var(--spacing-sm);
+	}
+
+	.guide-examples p {
+		margin: 0 0 var(--spacing-xs) 0;
+		font-size: 0.875rem;
+	}
+
+	.guide-examples ul {
+		margin: 0;
+		padding-left: var(--spacing-lg);
+	}
+
+	.guide-examples li {
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.guide-examples code {
+		background-color: var(--color-border);
+		padding: 1px 3px;
+		border-radius: 2px;
+		font-size: 0.75rem;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.form-row {
+			grid-template-columns: 1fr;
+		}
+
+		.admin-container {
+			padding: var(--spacing-md);
+		}
+
+		.admin-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--spacing-md);
+		}
+
+		.form-actions {
+			flex-direction: column;
+		}
+	}
+</style>
+
+<script>
+	// Import marked for markdown parsing
+	import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
+
+	// Language tabs functionality
+	const langTabs = document.querySelectorAll('.lang-tab');
+	const langContents = document.querySelectorAll('.lang-content');
+
+	langTabs.forEach(tab => {
+		tab.addEventListener('click', () => {
+			const targetLang = tab.dataset.lang;
+
+			// Update active tab
+			langTabs.forEach(t => t.classList.remove('active'));
+			tab.classList.add('active');
+
+			// Update active content
+			langContents.forEach(content => {
+				content.classList.remove('active');
+				if (content.id === `content-${targetLang}`) {
+					content.classList.add('active');
+				}
+			});
+		});
+	});
+
+	// Preview functionality
+	document.getElementById('preview-btn').addEventListener('click', () => {
+		const activeTab = document.querySelector('.lang-tab.active');
+		const activeLang = activeTab.dataset.lang;
+		const title = document.getElementById(`title_${activeLang}`).value || 'Untitled';
+		const content = document.getElementById(`content_${activeLang}`).value || '';
+
+		// Markdown to HTML conversion
+		let html;
+		try {
+			// Only parse if content exists and is not empty
+			if (content && content.trim()) {
+				html = marked.parse(content);
+			} else {
+				html = '<p>No content to preview</p>';
+			}
+		} catch (e) {
+			console.error('Markdown parsing error:', e);
+			// Fallback to simple HTML with line breaks
+			html = content ? content.replace(/\n/g, '<br>') : '<p>No content to preview</p>';
+		}
+
+		document.getElementById('preview-content').innerHTML = `
+			<h1>${title}</h1>
+			${html}
+		`;
+		document.getElementById('preview-modal').style.display = 'block';
+	});
+
+	// Close modal
+	document.querySelector('.close-modal').addEventListener('click', () => {
+		document.getElementById('preview-modal').style.display = 'none';
+	});
+
+	// Form submission
+	document.getElementById('edit-form').addEventListener('submit', async (e) => {
+		e.preventDefault();
+
+		const noteId = document.getElementById('note-id').value;
+		console.log('Note ID being sent:', noteId); // Debugging
+		const formData = new FormData(e.target);
+
+		const data = {
+			title_en: formData.get('title_en'),
+			title_id: formData.get('title_id'),
+			category: formData.get('category'),
+			status: formData.get('status'),
+			publishedDate: formData.get('publishedDate'),
+			summary_en: formData.get('summary_en'),
+			summary_id: formData.get('summary_id'),
+			content_en: formData.get('content_en'),
+			content_id: formData.get('content_id'),
+			tags: formData.get('tags') ? formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag) : [],
+			headerImage: formData.get('headerImage') || null
+		};
+
+		try {
+			const response = await fetch(`/api/notes/${noteId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			});
+
+			const result = await response.json();
+
+			if (response.ok) {
+				alert('Note updated successfully!');
+				window.location.href = '/admin';
+			} else {
+				alert(`Failed to update note: ${result.error || 'Unknown error'}`);
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			alert('Error updating note');
+		}
+	});
+
+	// Close modal when clicking outside
+	window.addEventListener('click', (e) => {
+		const modal = document.getElementById('preview-modal');
+		if (e.target === modal) {
+			modal.style.display = 'none';
+		}
+	});
+
+	// Header Image Upload
+	const headerImageInput = document.getElementById('headerImage');
+	const headerImageUrlInput = document.getElementById('headerImageUrl');
+	const headerImagePreview = document.getElementById('headerImagePreview');
+	const headerImagePreviewImg = document.getElementById('headerImagePreviewImg');
+	const removeHeaderImageBtn = document.getElementById('removeHeaderImage');
+
+	headerImageInput.addEventListener('change', async (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const formData = new FormData();
+			formData.append('file', file);
+
+			try {
+				const response = await fetch('/api/upload', {
+					method: 'POST',
+					body: formData
+				});
+
+				const result = await response.json();
+				if (result.success) {
+					headerImageUrlInput.value = result.url;
+					headerImagePreviewImg.src = result.url;
+					headerImagePreview.style.display = 'block';
+				} else {
+					alert('Failed to upload image: ' + result.error);
+				}
+			} catch (error) {
+				console.error('Upload error:', error);
+				alert('Error uploading image');
+			}
+		}
+	});
+
+	removeHeaderImageBtn.addEventListener('click', () => {
+		headerImageUrlInput.value = '';
+		headerImagePreview.style.display = 'none';
+		headerImageInput.value = '';
+	});
+
+	// Content Image Upload for both languages
+	const insertImageBtn_en = document.getElementById('insertImageBtn_en');
+	const contentImageInput_en = document.getElementById('contentImageInput_en');
+	const contentTextarea_en = document.getElementById('content_en');
+
+	insertImageBtn_en.addEventListener('click', () => {
+		contentImageInput_en.click();
+	});
+
+	contentImageInput_en.addEventListener('change', async (e) => {
+		await handleContentImageUpload(e, contentTextarea_en);
+	});
+
+	const insertImageBtn_id = document.getElementById('insertImageBtn_id');
+	const contentImageInput_id = document.getElementById('contentImageInput_id');
+	const contentTextarea_id = document.getElementById('content_id');
+
+	insertImageBtn_id.addEventListener('click', () => {
+		contentImageInput_id.click();
+	});
+
+	contentImageInput_id.addEventListener('change', async (e) => {
+		await handleContentImageUpload(e, contentTextarea_id);
+	});
+
+	// Helper function for content image upload
+	async function handleContentImageUpload(e, textarea) {
+		const files = Array.from(e.target.files);
+
+		for (const file of files) {
+			const formData = new FormData();
+			formData.append('file', file);
+
+			try {
+				const response = await fetch('/api/upload', {
+					method: 'POST',
+					body: formData
+				});
+
+				const result = await response.json();
+				if (result.success) {
+					// Insert markdown image syntax at cursor position
+					const imageMarkdown = `\n![${file.name}](${result.url})\n`;
+					const startPos = textarea.selectionStart;
+					const endPos = textarea.selectionEnd;
+					const currentText = textarea.value;
+
+					textarea.value = currentText.substring(0, startPos) + imageMarkdown + currentText.substring(endPos);
+
+					// Set cursor position after inserted text
+					const newCursorPos = startPos + imageMarkdown.length;
+					textarea.setSelectionRange(newCursorPos, newCursorPos);
+					textarea.focus();
+				} else {
+					alert('Failed to upload image: ' + result.error);
+				}
+			} catch (error) {
+				console.error('Upload error:', error);
+				alert('Error uploading image');
+			}
+		}
+
+		// Clear input for future uploads
+		e.target.value = '';
+	}
+</script>

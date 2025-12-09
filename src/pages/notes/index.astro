@@ -1,7 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getNotesCollection, type Note } from '../../lib/db';
 
 const currentPath = Astro.url.pathname;
 const lang = 'en';
@@ -9,73 +10,32 @@ const lang = 'en';
 const title = 'My Notes - Syaiful Anam';
 const description = 'My public notebook where I document experiments, share thoughts on technology, and track my progress as a lifelong builder.';
 
-// Sample learning log entries
-const learningLogs = [
-	{
-		title: 'E-commerce Platform Development for Fabrik Group',
-		summary: 'Building a scalable e-commerce platform to manage multiple fashion brands with inventory and payment gateway integration.',
-		category: 'Portfolio',
-		date: '2024-11-15',
-		link: '#',
-		tags: ['E-commerce', 'Multi-brand', 'Laravel']
-	},
-	{
-		title: 'B2B SaaS Architecture for Digital360',
-		summary: 'Designing and implementing microservices architecture for B2B software with high availability and auto-scaling.',
-		category: 'Portfolio',
-		date: '2024-10-28',
-		link: '#',
-		tags: ['SaaS', 'Microservices', 'DevOps']
-	},
-	{
-		title: 'WordPress Development for Hundreds of Clients',
-		summary: 'Experience developing 200+ WordPress websites with custom themes and plugins for various industries.',
-		category: 'Portfolio',
-		date: '2024-10-15',
-		link: '#',
-		tags: ['WordPress', 'PHP', 'Custom Development']
-	},
-	{
-		title: 'Continuous Technology Learning Strategy',
-		summary: 'Methods and approaches I use to stay updated with latest technologies while building a career in tech industry.',
-		category: 'Education',
-		date: '2024-09-30',
-		link: '#',
-		tags: ['Learning', 'Career Development', 'Tech']
-	},
-	{
-		title: 'From Designer to Full-Stack Developer',
-		summary: 'Transformation journey from graphic designer to full-stack developer and how design background helps development.',
-		category: 'Education',
-		date: '2024-09-12',
-		link: '#',
-		tags: ['Career Change', 'Design', 'Development']
-	},
-	{
-		title: 'Mentorship and Networking in Tech Industry',
-		summary: 'Importance of mentors and networking in career acceleration, and how to build meaningful relationships in tech.',
-		category: 'Personal',
-		date: '2024-08-25',
-		link: '#',
-		tags: ['Mentorship', 'Networking', 'Career']
-	},
-	{
-		title: 'Work-Life Balance as Tech Entrepreneur',
-		summary: 'Strategies and tips for maintaining life balance while leading technology companies and managing multiple projects.',
-		category: 'Personal',
-		date: '2024-08-10',
-		link: '#',
-		tags: ['Entrepreneurship', 'Productivity', 'Lifestyle']
-	},
-	{
-		title: 'Leading Development Team in Startup',
-		summary: 'Experience building and leading development team, from hiring to scaling team for complex B2B products.',
-		category: 'Personal',
-		date: '2024-07-20',
-		link: '#',
-		tags: ['Leadership', 'Team Building', 'Management']
-	}
-];
+// Fetch notes directly from database
+const collection = await getNotesCollection();
+const notes = await collection
+  .find({ status: 'published' })
+  .sort({ publishedDate: -1 })
+  .toArray();
+
+// Transform notes to legacy format for backward compatibility
+const transformedNotes = notes.map(note => ({
+  ...note,
+  title: note.title_en,
+  summary: note.summary_en,
+  content: note.content_en,
+}));
+
+// Get unique categories for filter buttons
+const categories = ['All Posts', ...Array.from(new Set(notes.map(note => note.category)))];
+
+// Format date helper
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
 ---
 
 <Layout title={title} description={description} lang={lang}>
@@ -94,47 +54,62 @@ const learningLogs = [
 				</div>
 
 				<div class="filters">
-					<button class="filter-btn active" data-category="all">All Posts</button>
-					<button class="filter-btn" data-category="Portfolio">Portfolio</button>
-					<button class="filter-btn" data-category="Education">Education</button>
-					<button class="filter-btn" data-category="Personal">Personal</button>
+					{categories.map((category) => (
+						<button
+							class="filter-btn active"
+							data-category={category === 'All Posts' ? 'all' : category}
+						>
+							{category}
+						</button>
+					))}
 				</div>
 
 				<div class="log-list">
-					{learningLogs.map((post) => (
-						<article class="log-item" data-category={post.category}>
-							<div class="log-header">
-								<div class="log-meta">
-									<time datetime={post.date} class="log-date">
-										{new Date(post.date).toLocaleDateString('en-US', {
-											year: 'numeric',
-											month: 'short',
-											day: 'numeric'
-										})}
-									</time>
-									<span class="log-category">{post.category}</span>
-								</div>
-							</div>
-
-							<div class="log-content">
-								<h2 class="log-title">
-									<a href={post.link}>{post.title}</a>
-								</h2>
-								<p class="log-summary">{post.summary}</p>
-
-								<div class="log-tags">
-									{post.tags.map((tag) => (
-										<span class="tag" data-tag={tag}>{tag}</span>
-									))}
+					{transformedNotes.map((note) => (
+						<a href={`/notes/${note.slug}`} class="log-item-link">
+							<article class="log-item" data-category={note.category}>
+								{note.headerImage && (
+									<div class="log-image">
+										<img src={note.headerImage} alt={note.title} loading="lazy" />
+									</div>
+								)}
+								<div class="log-header">
+									<div class="log-meta">
+										<time datetime={note.publishedDate} class="log-date">
+											{formatDate(note.publishedDate)}
+										</time>
+										<span class="log-category">{note.category}</span>
+									</div>
 								</div>
 
-								<a href={post.link} class="read-more">
-									Read more →
-								</a>
-							</div>
-						</article>
+								<div class="log-content">
+									<h2 class="log-title">
+										{note.title}
+									</h2>
+									{note.summary && <p class="log-summary">{note.summary}</p>}
+
+									{note.tags && note.tags.length > 0 && (
+										<div class="log-tags">
+											{note.tags.map((tagItem) => (
+												<span class="tag" data-tag={tagItem}>{tagItem}</span>
+											))}
+										</div>
+									)}
+
+									<span class="read-more">
+										Read more →
+									</span>
+								</div>
+							</article>
+						</a>
 					))}
 				</div>
+
+				{transformedNotes.length === 0 && (
+					<div class="empty-state">
+						<p>No notes published yet. Check back soon!</p>
+					</div>
+				)}
 
 				<div class="footer-note">
 					<p>
@@ -154,7 +129,7 @@ const learningLogs = [
 	}
 
 	.log-content {
-		padding: var(--spacing-xl) 0;
+		padding: 0;
 	}
 
 	.intro-section {
@@ -207,6 +182,12 @@ const learningLogs = [
 		margin-bottom: var(--spacing-xl);
 	}
 
+	.log-item-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
 	.log-item {
 		background-color: var(--color-surface);
 		border: 1px solid var(--color-border);
@@ -215,7 +196,7 @@ const learningLogs = [
 		transition: all 0.3s ease;
 	}
 
-	.log-item:hover {
+	.log-item-link:hover .log-item {
 		transform: translateY(-2px);
 		border-color: var(--color-accent);
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -238,26 +219,17 @@ const learningLogs = [
 
 	.log-category {
 		background-color: var(--color-accent);
-			color: white;
-			padding: 2px var(--spacing-sm);
-			border-radius: 12px;
-			font-weight: 600;
-			font-size: 0.75rem;
-		}
-
-	.log-title {
-		margin: 0 0 var(--spacing-sm) 0;
-		font-size: 1.25rem;
+		color: white;
+		padding: 2px var(--spacing-sm);
+		border-radius: 12px;
+		font-weight: 600;
+		font-size: 0.75rem;
 	}
 
-	.log-title a {
+	.log-title {
 		color: var(--color-text);
-		text-decoration: none;
-			transition: color 0.2s ease;
-		}
-
-	.log-title a:hover {
-		color: var(--color-accent);
+		margin: 0 0 var(--spacing-sm) 0;
+		font-size: 1.25rem;
 	}
 
 	.log-summary {
@@ -297,6 +269,25 @@ const learningLogs = [
 		transform: translateX(4px);
 	}
 
+	.log-image {
+		width: 100%;
+		height: 200px;
+		border-radius: 8px;
+		overflow: hidden;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.log-image img {
+		width: 100%;
+		height: 100%;
+	}
+
+	.empty-state {
+		text-align: center;
+		padding: var(--spacing-2xl);
+		color: var(--color-text-secondary);
+	}
+
 	.footer-note {
 		background-color: var(--color-surface);
 		border: 1px solid var(--color-border);
@@ -318,7 +309,7 @@ const learningLogs = [
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.log-content {
-			padding: var(--spacing-lg) 0;
+			padding: 0;
 		}
 
 		.filters {

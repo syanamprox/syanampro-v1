@@ -2,80 +2,40 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { getNotesCollection, type Note } from '../../lib/db';
 
 const currentPath = Astro.url.pathname;
 const lang = 'id';
 
 const title = 'Catatan Saya - Syaiful Anam';
-const description = 'Buku catatan publik saya tempat saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi, dan melacak kemajuan saya.';
+const description = 'Buku catatan publik saya tempat saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi, dan melacak kemajuan saya sebagai pembangun seumur hidup.';
 
-// Sample learning log entries dalam bahasa Indonesia
-const learningLogs = [
-	{
-		title: 'E-commerce Platform Development untuk Fabrik Group',
-		summary: 'Membangun platform e-commerce scalable untuk mengelola multiple brand fashion dengan integrasi inventory dan payment gateway.',
-		category: 'Portfolio',
-		date: '2024-11-15',
-		link: '#',
-		tags: ['E-commerce', 'Multi-brand', 'Laravel']
-	},
-	{
-		title: 'B2B SaaS Architecture untuk Digital360',
-		summary: 'Merancang dan mengimplementasikan arsitektur microservices untuk software B2B dengan high availability dan auto-scaling.',
-		category: 'Portfolio',
-		date: '2024-10-28',
-		link: '#',
-		tags: ['SaaS', 'Microservices', 'DevOps']
-	},
-	{
-		title: 'WordPress Development untuk Ratusan Klien',
-		summary: 'Pengalaman mengembangkan 200+ website WordPress dengan custom themes dan plugins untuk berbagai industri.',
-		category: 'Portfolio',
-		date: '2024-10-15',
-		link: '#',
-		tags: ['WordPress', 'PHP', 'Custom Development']
-	},
-	{
-		title: 'Strategi Pembelajaran Teknologi Berkelanjutan',
-		summary: 'Metode dan pendekatan yang saya gunakan untuk tetap update dengan teknologi terbaru sambil membangun karir di tech industry.',
-		category: 'Edukasi',
-		date: '2024-09-30',
-		link: '#',
-		tags: ['Learning', 'Career Development', 'Tech']
-	},
-	{
-		title: 'Dari Designer ke Full-Stack Developer',
-		summary: 'Perjalanan transformasi dari graphic designer menjadi full-stack developer dan bagaimana design background membantu development.',
-		category: 'Edukasi',
-		date: '2024-09-12',
-		link: '#',
-		tags: ['Career Change', 'Design', 'Development']
-	},
-	{
-		title: 'Mentorship dan Networking di Tech Industry',
-		summary: 'Pentingnya mentor dan networking dalam percepatan karir, serta bagaimana membangun relasi yang meaningful di industri teknologi.',
-		category: 'Personal',
-		date: '2024-08-25',
-		link: '#',
-		tags: ['Mentorship', 'Networking', 'Career']
-	},
-	{
-		title: 'Work-Life Balance sebagai Tech Entrepreneur',
-		summary: 'Strategi dan tips menjaga keseimbangan hidup sambil memimpin perusahaan teknologi dan mengelola multiple projects.',
-		category: 'Personal',
-		date: '2024-08-10',
-		link: '#',
-		tags: ['Entrepreneurship', 'Productivity', 'Lifestyle']
-	},
-	{
-		title: 'Memimpin Team Development di Startup',
-		summary: 'Pengalaman membangun dan memimpin development team, dari hiring hingga scaling team untuk produk B2B yang kompleks.',
-		category: 'Personal',
-		date: '2024-07-20',
-		link: '#',
-		tags: ['Leadership', 'Team Building', 'Management']
-	}
-];
+// Fetch notes directly from database
+const collection = await getNotesCollection();
+const notes = await collection
+  .find({ status: 'published' })
+  .sort({ publishedDate: -1 })
+  .toArray();
+
+// Transform notes to Indonesian format
+const transformedNotes = notes.map(note => ({
+  ...note,
+  title: note.title_id,
+  summary: note.summary_id,
+  content: note.content_id,
+}));
+
+// Get unique categories for filter buttons
+const categories = ['Semua Catatan', ...Array.from(new Set(notes.map(note => note.category)))];
+
+// Format date helper
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
 ---
 
 <Layout title={title} description={description} lang={lang}>
@@ -94,47 +54,62 @@ const learningLogs = [
 				</div>
 
 				<div class="filters">
-					<button class="filter-btn active" data-category="all">Semua Post</button>
-					<button class="filter-btn" data-category="Portfolio">Portfolio</button>
-					<button class="filter-btn" data-category="Edukasi">Edukasi</button>
-					<button class="filter-btn" data-category="Personal">Personal</button>
-				</div>
-
-				<div class="log-list">
-					{learningLogs.map((post) => (
-						<article class="log-item" data-category={post.category}>
-							<div class="log-header">
-								<div class="log-meta">
-									<time datetime={post.date} class="log-date">
-										{new Date(post.date).toLocaleDateString('id-ID', {
-											year: 'numeric',
-											month: 'short',
-											day: 'numeric'
-										})}
-									</time>
-									<span class="log-category">{post.category}</span>
-								</div>
-							</div>
-
-							<div class="log-content">
-								<h2 class="log-title">
-									<a href={post.link}>{post.title}</a>
-								</h2>
-								<p class="log-summary">{post.summary}</p>
-
-								<div class="log-tags">
-									{post.tags.map((tag) => (
-										<span class="tag" data-tag={tag}>{tag}</span>
-									))}
-								</div>
-
-								<a href={post.link} class="read-more">
-									Baca selengkapnya →
-								</a>
-							</div>
-						</article>
+					{categories.map((category) => (
+						<button
+							class="filter-btn active"
+							data-category={category === 'Semua Catatan' ? 'all' : category}
+						>
+							{category}
+						</button>
 					))}
 				</div>
+
+			<div class="log-list">
+					{transformedNotes.map((note) => (
+						<a href={`/id/notes/${note.slug}`} class="log-item-link">
+							<article class="log-item" data-category={note.category}>
+								{note.headerImage && (
+									<div class="log-image">
+										<img src={note.headerImage} alt={note.title} loading="lazy" />
+									</div>
+								)}
+								<div class="log-header">
+									<div class="log-meta">
+										<time datetime={note.publishedDate} class="log-date">
+											{formatDate(note.publishedDate)}
+										</time>
+										<span class="log-category">{note.category}</span>
+									</div>
+								</div>
+
+								<div class="log-content">
+									<h2 class="log-title">
+										{note.title}
+									</h2>
+									{note.summary && <p class="log-summary">{note.summary}</p>}
+
+									{note.tags && note.tags.length > 0 && (
+										<div class="log-tags">
+											{note.tags.map((tagItem) => (
+												<span class="tag" data-tag={tagItem}>{tagItem}</span>
+											))}
+										</div>
+									)}
+
+									<span class="read-more">
+										Baca selengkapnya →
+									</span>
+								</div>
+							</article>
+						</a>
+					))}
+				</div>
+
+				{transformedNotes.length === 0 && (
+					<div class="empty-state">
+						<p>Belum ada catatan yang diterbitkan. Periksa kembali segera!</p>
+					</div>
+				)}
 
 				<div class="footer-note">
 					<p>
@@ -154,7 +129,7 @@ const learningLogs = [
 	}
 
 	.log-content {
-		padding: var(--spacing-xl) 0;
+		padding: 0;
 	}
 
 	.intro-section {
@@ -207,6 +182,12 @@ const learningLogs = [
 		margin-bottom: var(--spacing-xl);
 	}
 
+	.log-item-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
 	.log-item {
 		background-color: var(--color-surface);
 		border: 1px solid var(--color-border);
@@ -215,7 +196,7 @@ const learningLogs = [
 		transition: all 0.3s ease;
 	}
 
-	.log-item:hover {
+	.log-item-link:hover .log-item {
 		transform: translateY(-2px);
 		border-color: var(--color-accent);
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -245,19 +226,29 @@ const learningLogs = [
 			font-size: 0.75rem;
 		}
 
-	.log-title {
-		margin: 0 0 var(--spacing-sm) 0;
-		font-size: 1.25rem;
+	.log-image {
+		width: 100%;
+		height: 200px;
+		border-radius: 8px;
+		overflow: hidden;
+		margin-bottom: var(--spacing-md);
 	}
 
-	.log-title a {
-		color: var(--color-text);
-		text-decoration: none;
-			transition: color 0.2s ease;
-		}
+	.log-image img {
+		width: 100%;
+		height: 100%;
+	}
 
-	.log-title a:hover {
-		color: var(--color-accent);
+	.empty-state {
+		text-align: center;
+		padding: var(--spacing-2xl);
+		color: var(--color-text-secondary);
+	}
+
+	.log-title {
+		color: var(--color-text);
+		margin: 0 0 var(--spacing-sm) 0;
+		font-size: 1.25rem;
 	}
 
 	.log-summary {
@@ -318,7 +309,7 @@ const learningLogs = [
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.log-content {
-			padding: var(--spacing-lg) 0;
+			padding: 0;
 		}
 
 		.filters {
@@ -366,4 +357,4 @@ const learningLogs = [
 			});
 		});
 	});
-</script>
+	</script>

@@ -22,6 +22,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<link rel="apple-touch-icon" href="/favicon.ico?v=2" />
 		<meta name="generator" content={Astro.generator} />
 
+		<!-- Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-0BP4ZVW94K"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-0BP4ZVW94K');
+		</script>
+
 		<!-- Preload SF Pro fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -182,6 +191,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 				max-width: var(--max-width);
 				margin: 0 auto;
 				padding: 0 var(--spacing-sm);
+			}
+
+			/* Wider container for note content */
+			.note-content {
+				max-width: 1200px !important;
+			}
+
+			/* Global image styling for markdown content */
+			.note-content img {
+				max-width: 100% !important;
+				height: auto !important;
+				border-radius: 12px !important;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				display: block !important;
+				margin: var(--spacing-lg) auto !important;
+				object-fit: contain;
 			}
 
 			
