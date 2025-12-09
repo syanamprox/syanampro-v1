@@ -53,6 +53,15 @@ const formatDate = (dateString: string) => {
 					</p>
 				</div>
 
+				<div class="search-section">
+					<input
+						type="text"
+						id="search-input"
+						placeholder="Search notes by title or content..."
+						class="search-input"
+					/>
+				</div>
+
 				<div class="filters">
 					{categories.map((category) => (
 						<button
@@ -67,7 +76,7 @@ const formatDate = (dateString: string) => {
 				<div class="log-list">
 					{transformedNotes.map((note) => (
 						<a href={`/notes/${note.slug}`} class="log-item-link">
-							<article class="log-item" data-category={note.category}>
+							<article class="log-item" data-category={note.category} data-title={note.title.toLowerCase()} data-content={(note.summary || '').toLowerCase()} data-tags={(note.tags?.join(' ') || '').toLowerCase()}>
 								{note.headerImage && (
 									<div class="log-image">
 										<img src={note.headerImage} alt={note.title} loading="lazy" />
@@ -142,6 +151,34 @@ const formatDate = (dateString: string) => {
 		color: var(--color-text-secondary);
 		max-width: 600px;
 		margin: 0 auto;
+	}
+
+	.search-section {
+		margin-bottom: var(--spacing-lg);
+	}
+
+	.search-input {
+		width: 100%;
+		max-width: 600px;
+		margin: 0 auto;
+		display: block;
+		padding: var(--spacing-md);
+		font-size: 1rem;
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		background-color: var(--color-background);
+		color: var(--color-text);
+		outline: none;
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.search-input:focus {
+		border-color: var(--color-accent);
+		box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+	}
+
+	.search-input::placeholder {
+		color: var(--color-text-light);
 	}
 
 	.filters {
@@ -336,10 +373,40 @@ const formatDate = (dateString: string) => {
 </style>
 
 <script>
-	// Filter functionality
+	// Search and Filter functionality
+	const searchInput = document.getElementById('search-input');
 	const filterButtons = document.querySelectorAll('.filter-btn');
 	const logItems = document.querySelectorAll('.log-item');
 
+	function filterItems() {
+		const searchTerm = searchInput.value.toLowerCase().trim();
+		const activeCategory = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
+
+		logItems.forEach(item => {
+			const title = item.dataset.title || '';
+			const content = item.dataset.content || '';
+			const tags = item.dataset.tags || '';
+			const category = item.dataset.category || '';
+
+			const matchesSearch = searchTerm === '' ||
+				title.includes(searchTerm) ||
+				content.includes(searchTerm) ||
+				tags.includes(searchTerm);
+
+			const matchesCategory = activeCategory === 'all' || category === activeCategory;
+
+			if (matchesSearch && matchesCategory) {
+				item.style.display = 'block';
+			} else {
+				item.style.display = 'none';
+			}
+		});
+	}
+
+	// Search input event listener
+	searchInput.addEventListener('input', filterItems);
+
+	// Filter functionality
 	filterButtons.forEach(button => {
 		button.addEventListener('click', () => {
 			const category = button.dataset.category;
@@ -348,14 +415,8 @@ const formatDate = (dateString: string) => {
 			filterButtons.forEach(btn => btn.classList.remove('active'));
 			button.classList.add('active');
 
-			// Filter items
-			logItems.forEach(item => {
-				if (category === 'all' || item.dataset.category === category) {
-					item.style.display = 'block';
-				} else {
-					item.style.display = 'none';
-				}
-			});
+			// Apply filter
+			filterItems();
 		});
 	});
 </script>

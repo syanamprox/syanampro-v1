@@ -1,0 +1,469 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Detect language from URL path
+const currentPath = Astro.url.pathname;
+const isIndonesian = currentPath.startsWith('/id') || currentPath.startsWith('//id');
+
+// Set content based on language detection
+const title = isIndonesian
+	? '500 - Kegagalan Sistem! | Syaiful Anam'
+	: '500 - System Meltdown! | Syaiful Anam';
+const description = isIndonesian
+	? 'Wah! Robot kami baru saja menemukan bahwa kopi itu hanya air berwarna cokelat... dan seluruh programnya crash!'
+	: 'Oops! Our digital brain just had a brainstorm... literally!';
+const lang = isIndonesian ? 'id' : 'en';
+
+// Content variables
+const errorTitle = isIndonesian ? 'Kegagalan Sistem!' : 'System Meltdown!';
+const errorSubtitle = isIndonesian ? 'Kesalahan Server Internal' : 'Internal Server Error';
+const errorDescription1 = isIndonesian
+	? 'Aduh! Robot kami baru menemukan bahwa kopi itu hanya air berwarna cokelat... dan seluruh pemrogramannya crash! 🤖☕💥'
+	: 'Oh no! Our robot just discovered that coffee is actually just brown water... and its entire programming crashed! 🤖☕💥';
+const errorDescription2 = isIndonesian
+	? 'Tim developer kami yang penuh kafein sedang memperbaiki ini sekarang. Sementara itu, Anda bisa:'
+	: 'Our team of highly caffeinated developers is fixing this right now. In the meantime, you can:';
+const btnHome = isIndonesian ? '🏠 Kabur ke Tempat Aman' : '🏠 Escape to Safety';
+const btnNotes = isIndonesian ? '📖 Baca Sesuatu yang Pintar' : '📖 Read Something Smart';
+const btnRobot = isIndonesian ? '🔄 Reboot Robotnya' : '🔄 Reboot the Robot';
+const terminalLine1 = isIndonesian ? '$ ./perbaiki_semua.sh' : '$ ./fix_everything.sh';
+const terminalLine2 = isIndonesian ? 'Error: Tidak bisa memperbaiki alam semesta' : 'Error: Cannot fix universe';
+const terminalLine3 = isIndonesian ? 'Error: Kopi sudah habis' : 'Error: Coffee is empty';
+const terminalLine4 = isIndonesian ? '$sudo buat-bisa-jalan' : '$sudo make-it-work';
+const terminalLine5 = isIndonesian ? 'Me-reboot...' : 'Rebooting...';
+const homeUrl = isIndonesian ? '/id' : '/';
+const notesUrl = isIndonesian ? '/id/notes' : '/notes';
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="error-container">
+				<div class="robot-scene">
+					<div class="robot">
+						<div class="robot-head">
+							<div class="robot-eyes">
+								<div class="eye left"></div>
+								<div class="eye right"></div>
+							</div>
+							<div class="robot-mouth"></div>
+							<div class="error-sparks">
+								<div class="spark"></div>
+								<div class="spark"></div>
+								<div class="spark"></div>
+							</div>
+						</div>
+						<div class="robot-body">
+							<div class="robot-panel">
+								<div class="panel-light red"></div>
+								<div class="panel-light yellow"></div>
+								<div class="panel-light red"></div>
+							</div>
+						</div>
+						<div class="robot-arms">
+							<div class="arm-left"></div>
+							<div class="arm-right"></div>
+						</div>
+					</div>
+					<div class="error-code">500</div>
+				</div>
+
+				<div class="error-content">
+					<h1 class="error-title">{errorTitle}</h1>
+					<p class="error-subtitle">{errorSubtitle}</p>
+					<p class="error-description">
+						{errorDescription1}
+					</p>
+					<p class="error-description">
+						{errorDescription2}
+					</p>
+
+					<div class="error-actions">
+						<a href={homeUrl} class="btn btn-primary">{btnHome}</a>
+						<a href={notesUrl} class="btn btn-secondary">{btnNotes}</a>
+						<button class="btn btn-robot" onclick="location.reload()">{btnRobot}</button>
+					</div>
+
+					<div class="error-messages">
+						<div class="terminal">
+							<p class="terminal-line">{terminalLine1}</p>
+							<p class="terminal-line error">{terminalLine2}</p>
+							<p class="terminal-line error">{terminalLine3}</p>
+							<p class="terminal-line">{terminalLine4}</p>
+							<p class="terminal-line success">{terminalLine5}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.error-container {
+		text-align: center;
+		max-width: 900px;
+		padding: var(--spacing-xl);
+		position: relative;
+		z-index: 1;
+	}
+
+	.robot-scene {
+		position: relative;
+		height: 300px;
+		margin-bottom: var(--spacing-xl);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.robot {
+		position: relative;
+		width: 100px;
+		height: 180px;
+		margin: 0 auto var(--spacing-lg);
+		animation: shake 0.5s ease-in-out infinite;
+	}
+
+	.robot-head {
+		width: 80px;
+		height: 60px;
+		background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
+		border-radius: 20px 20px 10px 10px;
+		margin: 0 auto;
+		position: relative;
+		border: 3px solid #333;
+	}
+
+	.robot-eyes {
+		display: flex;
+		justify-content: space-around;
+		padding: 15px 10px 5px;
+	}
+
+	.eye {
+		width: 15px;
+		height: 15px;
+		background: #ff4444;
+		border-radius: 50%;
+		border: 2px solid #fff;
+		position: relative;
+		animation: blink 3s ease-in-out infinite;
+	}
+
+	.eye::after {
+		content: '';
+		position: absolute;
+		width: 5px;
+		height: 5px;
+		background: #000;
+		border-radius: 50%;
+		top: 5px;
+		left: 5px;
+	}
+
+	.robot-mouth {
+		width: 30px;
+		height: 8px;
+		background: #333;
+		border-radius: 0 0 10px 10px;
+		margin: 5px auto;
+	}
+
+	.error-sparks {
+		position: absolute;
+		top: -20px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 120px;
+		height: 40px;
+	}
+
+	.spark {
+		position: absolute;
+		width: 3px;
+		height: 3px;
+		background: #ffeb3b;
+		border-radius: 50%;
+		animation: spark-fly 1s ease-in-out infinite;
+		box-shadow: 0 0 6px #ffeb3b;
+	}
+
+	.spark:nth-child(1) { left: 20%; animation-delay: 0s; }
+	.spark:nth-child(2) { left: 50%; animation-delay: 0.3s; }
+	.spark:nth-child(3) { left: 80%; animation-delay: 0.6s; }
+
+	.robot-body {
+		width: 60px;
+		height: 70px;
+		background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+		margin: -5px auto 0;
+		border-radius: 10px;
+		border: 3px solid #333;
+		position: relative;
+	}
+
+	.robot-panel {
+		display: flex;
+		justify-content: space-around;
+		padding: 15px 5px 0;
+	}
+
+	.panel-light {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		animation: light-blink 0.5s ease-in-out infinite;
+	}
+
+	.panel-light.red { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+	.panel-light.yellow { background: #ffeb3b; box-shadow: 0 0 10px #ffeb3b; animation-delay: 0.2s; }
+
+	.robot-arms {
+		position: absolute;
+		width: 120px;
+		height: 30px;
+		top: 80px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.arm-left, .arm-right {
+		position: absolute;
+		width: 15px;
+		height: 40px;
+		background: #f5f5f5;
+		border-radius: 8px;
+		border: 3px solid #333;
+	}
+
+	.arm-left {
+		left: -10px;
+		transform: rotate(-30deg);
+		animation: arm-flail 1s ease-in-out infinite;
+	}
+
+	.arm-right {
+		right: -10px;
+		transform: rotate(30deg);
+		animation: arm-flail 1s ease-in-out infinite reverse;
+	}
+
+	.error-code {
+		position: absolute;
+		right: -50px;
+		top: 50%;
+		transform: translateY(-50%) rotate(15deg);
+		font-size: 5rem;
+		font-weight: 900;
+		color: rgba(255, 255, 255, 0.3);
+		text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+	}
+
+	.error-content {
+		background: rgba(255, 255, 255, 0.95);
+		padding: var(--spacing-xl);
+		border-radius: 20px;
+		backdrop-filter: blur(10px);
+	}
+
+	.error-title {
+		font-size: 2.5rem;
+		margin-bottom: var(--spacing-sm);
+		color: var(--color-text);
+		font-weight: 700;
+	}
+
+	.error-subtitle {
+		font-size: 1.5rem;
+		margin-bottom: var(--spacing-lg);
+		color: #ff6b6b;
+		font-weight: 600;
+	}
+
+	.error-description {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-md);
+		line-height: 1.6;
+	}
+
+	.error-description a {
+		color: #ef4444;
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.2s ease;
+	}
+
+	.error-description a:hover {
+		border-bottom-color: #ef4444;
+	}
+
+	.error-actions {
+		display: flex;
+		gap: var(--spacing-md);
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.btn {
+		padding: var(--spacing-md) var(--spacing-lg);
+		border-radius: 12px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.3s ease;
+		display: inline-block;
+		cursor: pointer;
+		border: none;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.btn-primary {
+		background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+		color: white;
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-3px) scale(1.05);
+		box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+	}
+
+	.btn-secondary {
+		background: white;
+		color: #ef4444;
+		border: 2px solid #ef4444;
+	}
+
+	.btn-secondary:hover {
+		background: #ef4444;
+		color: white;
+		transform: translateY(-3px) scale(1.05);
+	}
+
+	.btn-robot {
+		background: linear-gradient(135deg, #424242 0%, #212121 100%);
+		color: #00ff00;
+		border: 2px solid #00ff00;
+		font-family: 'Courier New', monospace;
+	}
+
+	.btn-robot:hover {
+		background: #00ff00;
+		color: #000;
+		transform: translateY(-3px) scale(1.05);
+		box-shadow: 0 0 20px #00ff00;
+	}
+
+	.error-messages {
+		margin-top: var(--spacing-lg);
+	}
+
+	.terminal {
+		background: #1a1a1a;
+		color: #00ff00;
+		padding: var(--spacing-lg);
+		border-radius: 10px;
+		font-family: 'Courier New', monospace;
+		font-size: 0.9rem;
+		text-align: left;
+		border: 2px solid #333;
+	}
+
+	.terminal-line {
+		margin-bottom: var(--spacing-xs);
+		position: relative;
+		padding-left: var(--spacing-md);
+	}
+
+	.terminal-line::before {
+		content: '>';
+		position: absolute;
+		left: 0;
+	}
+
+	.terminal-line.error {
+		color: #ff6b6b;
+	}
+
+	.terminal-line.success {
+		color: #4caf50;
+	}
+
+	@keyframes shake {
+		0%, 100% { transform: translateX(0); }
+		25% { transform: translateX(-5px); }
+		75% { transform: translateX(5px); }
+	}
+
+	@keyframes blink {
+		0%, 90%, 100% { height: 15px; }
+		95% { height: 2px; }
+	}
+
+	@keyframes spark-fly {
+		0% { transform: translateY(0) scale(1); opacity: 1; }
+		50% { transform: translateY(-20px) scale(0.5); opacity: 0.5; }
+		100% { transform: translateY(-40px) scale(0); opacity: 0; }
+	}
+
+	@keyframes light-blink {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.3; }
+	}
+
+	@keyframes arm-flail {
+		0%, 100% { transform: rotate(-30deg); }
+		50% { transform: rotate(-50deg); }
+	}
+
+	@media (max-width: 768px) {
+		.error-title {
+			font-size: 2rem;
+		}
+
+		.error-subtitle {
+			font-size: 1.25rem;
+		}
+
+		.error-description {
+			font-size: 1rem;
+		}
+
+		.error-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.btn {
+			width: 100%;
+			max-width: 250px;
+		}
+
+		.error-code {
+			font-size: 3rem;
+			right: -30px;
+		}
+
+		.robot {
+			transform: scale(0.8);
+		}
+	}
+</style>

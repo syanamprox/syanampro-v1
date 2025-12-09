@@ -1,0 +1,522 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Detect language from URL path
+const currentPath = Astro.url.pathname;
+const isIndonesian = currentPath.startsWith('/id') || currentPath.startsWith('//id');
+
+// Set content based on language detection
+const title = isIndonesian
+	? '403 - Portal Terkunci! | Syaiful Anam'
+	: '403 - Mystic Portal Locked! | Syaiful Anam';
+const description = isIndonesian
+	? 'Anda menemukan portal mistis yang membutuhkan kunci khusus untuk masuk.'
+	: 'You\'ve discovered a mystical portal that requires a special key to enter.';
+const lang = isIndonesian ? 'id' : 'en';
+
+// Content variables
+const errorTitle = isIndonesian ? 'Portal Terkunci!' : 'Mystic Portal Locked!';
+const errorSubtitle = isIndonesian ? 'Akses Ditolak' : 'Access Forbidden';
+const errorDescription1 = isIndonesian
+	? 'Anda telah menemukan portal mistis yang dijaga oleh penjaga kuno! Hanya pemegang kunci langka yang dapat melewati gerbang ini.'
+	: 'You\'ve discovered a mystical portal guarded by an ancient guardian! Only those wielding the legendary key may pass through this gateway.';
+const errorDescription2 = isIndonesian ? 'Mungkin Anda ingin:' : 'Perhaps you\'d like to:';
+const btnHome = isIndonesian ? '🏰 Kembali ke Kerajaan' : '🏰 Return to the Kingdom';
+const btnNotes = isIndonesian ? '📚 Baca Kitab Suci' : '📚 Read the Ancient Tomes';
+const btnMagic = isIndonesian ? '✨ Coba Mantra Ajaib' : '✨ Try Magic Spell';
+const spellLine1 = isIndonesian ? 'Mantra rahasia: "OpenSesame123!"' : 'Secret incantation: "OpenSesame123!"';
+const spellLine2 = isIndonesian ? '⚠️ Tapi mungkin tidak berhasil...' : '⚠️ But it probably won\'t work...';
+const spellLine3 = isIndonesian ? 'Kembali besok dengan keberuntungan lebih baik! 🍀' : 'Return tomorrow with better luck! 🍀';
+const homeUrl = isIndonesian ? '/id' : '/';
+const notesUrl = isIndonesian ? '/id/notes' : '/notes';
+
+// JavaScript messages
+const magicMessages = isIndonesian ? [
+	"✨ Mantra gagal! Coba lagi besok...",
+	"🔮 Kunci mistis menolak mantra Anda!",
+	"⚡ Portal bergetar tapi tetap terkunci!",
+	"🗝️ Anda butuh kunci legendaris, bukan mantra!"
+] : [
+	"✨ Spell failed! Try again tomorrow...",
+	"🔮 The mystical lock rejects your incantation!",
+	"⚡ The portal shudders but remains sealed!",
+	"🗝️ You need the legendary key, not magic!"
+];
+---
+
+<Layout title={title} description={description} lang={lang}>
+	<div class="container">
+		<Header currentPath={currentPath} lang={lang} />
+
+		<main class="main-content">
+			<div class="error-container">
+				<div class="guardian-scene">
+					<div class="guardian">
+						<div class="guardian-body">
+							<div class="guardian-shield"></div>
+							<div class="guardian-sword"></div>
+						</div>
+						<div class="guardian-head">
+							<div class="guardian-eyes">
+								<div class="eye left"></div>
+								<div class="eye right"></div>
+							</div>
+							<div class="guardian-helmet"></div>
+						</div>
+						<div class="magic-circle">
+							<div class="circle-ring"></div>
+							<div class="circle-ring"></div>
+							<div class="circle-ring"></div>
+						</div>
+					</div>
+					<div class="floating-locks">
+						<div class="lock lock-1"></div>
+						<div class="lock lock-2"></div>
+						<div class="lock lock-3"></div>
+					</div>
+				</div>
+
+				<div class="error-content">
+					<div class="error-code">403</div>
+					<h1 class="error-title">{errorTitle}</h1>
+					<p class="error-subtitle">{errorSubtitle}</p>
+					<p class="error-description">
+						{errorDescription1}
+					</p>
+					<p class="error-description">
+						{errorDescription2}
+					</p>
+
+					<div class="error-actions">
+						<a href={homeUrl} class="btn btn-primary">{btnHome}</a>
+						<a href={notesUrl} class="btn btn-secondary">{btnNotes}</a>
+						<button class="btn btn-magic" onclick="attemptMagic()">{btnMagic}</button>
+					</div>
+
+					<div class="magic-messages">
+						<div class="spell-book">
+							<p class="spell-line">{spellLine1}</p>
+							<p class="spell-line warning">{spellLine2}</p>
+							<p class="spell-line">{spellLine3}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<Footer lang={lang} />
+	</div>
+</Layout>
+
+<style>
+	.main-content {
+		min-height: calc(100vh - 200px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #92400e 100%);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.error-container {
+		text-align: center;
+		max-width: 900px;
+		padding: var(--spacing-xl);
+		position: relative;
+		z-index: 1;
+	}
+
+	.guardian-scene {
+		position: relative;
+		height: 300px;
+		margin-bottom: var(--spacing-xl);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.guardian {
+		position: relative;
+		width: 100px;
+		height: 200px;
+		margin: 0 auto var(--spacing-lg);
+		animation: guard-pulse 2s ease-in-out infinite;
+	}
+
+	.guardian-head {
+		width: 70px;
+		height: 70px;
+		background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+		border-radius: 50%;
+		margin: 0 auto;
+		position: relative;
+		border: 4px solid #92400e;
+	}
+
+	.guardian-helmet {
+		position: absolute;
+		top: -15px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 80px;
+		height: 30px;
+		background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+		border-radius: 20px 20px 0 0;
+		border: 3px solid #451a03;
+	}
+
+	.guardian-eyes {
+		display: flex;
+		justify-content: space-around;
+		padding: 20px 15px 0;
+	}
+
+	.eye {
+		width: 12px;
+		height: 12px;
+		background: #dc2626;
+		border-radius: 50%;
+		border: 2px solid #fff;
+		position: relative;
+		animation: eye-watch 2s ease-in-out infinite;
+	}
+
+	.eye::after {
+		content: '';
+		position: absolute;
+		width: 4px;
+		height: 4px;
+		background: #000;
+		border-radius: 50%;
+		top: 4px;
+		left: 4px;
+	}
+
+	.guardian-body {
+		width: 90px;
+		height: 80px;
+		background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+		margin: -10px auto 0;
+		border-radius: 15px;
+		border: 4px solid #92400e;
+		position: relative;
+	}
+
+	.guardian-shield {
+		position: absolute;
+		width: 40px;
+		height: 50px;
+		background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+		border-radius: 20px 20px 25px 25px;
+		left: -25px;
+		top: 15px;
+		border: 3px solid #7f1d1d;
+		transform: rotate(-10deg);
+	}
+
+	.guardian-sword {
+		position: absolute;
+		width: 8px;
+		height: 60px;
+		background: linear-gradient(135deg, #e5e7eb 0%, #9ca3af 100%);
+		right: -20px;
+		top: 10px;
+		border-radius: 4px;
+		border: 2px solid #6b7280;
+		transform: rotate(15deg);
+	}
+
+	.guardian-sword::before {
+		content: '';
+		position: absolute;
+		top: -15px;
+		left: -6px;
+		width: 20px;
+		height: 20px;
+		background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+		border-radius: 50%;
+		border: 2px solid #92400e;
+	}
+
+	.magic-circle {
+		position: absolute;
+		bottom: -30px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 120px;
+		height: 120px;
+		animation: rotate 10s linear infinite;
+	}
+
+	.circle-ring {
+		position: absolute;
+		border: 2px solid #fbbf24;
+		border-radius: 50%;
+		animation: pulse 2s ease-in-out infinite;
+	}
+
+	.circle-ring:nth-child(1) {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+	}
+
+	.circle-ring:nth-child(2) {
+		width: 80%;
+		height: 80%;
+		top: 10%;
+		left: 10%;
+		animation-delay: 0.5s;
+	}
+
+	.circle-ring:nth-child(3) {
+		width: 60%;
+		height: 60%;
+		top: 20%;
+		left: 20%;
+		animation-delay: 1s;
+	}
+
+	.floating-locks {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+	}
+
+	.lock {
+		position: absolute;
+		width: 20px;
+		height: 25px;
+		background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+		border-radius: 5px 5px 8px 8px;
+		animation: float-lock 3s ease-in-out infinite;
+	}
+
+	.lock::before {
+		content: '';
+		position: absolute;
+		top: -8px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 15px;
+		height: 12px;
+		border: 3px solid #6b7280;
+		border-bottom: none;
+		border-radius: 10px 10px 0 0;
+	}
+
+	.lock::after {
+		content: '';
+		position: absolute;
+		top: 8px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 4px;
+		height: 6px;
+		background: #1f2937;
+		border-radius: 2px;
+	}
+
+	.lock-1 { top: 20px; left: 20%; animation-delay: 0s; }
+	.lock-2 { top: 50px; right: 25%; animation-delay: 1s; }
+	.lock-3 { bottom: 80px; left: 30%; animation-delay: 2s; }
+
+	.error-content {
+		background: rgba(255, 255, 255, 0.95);
+		padding: var(--spacing-xl);
+		border-radius: 20px;
+		backdrop-filter: blur(10px);
+	}
+
+	.error-code {
+		font-size: 5rem;
+		font-weight: 900;
+		color: #f59e0b;
+		margin-bottom: var(--spacing-sm);
+		line-height: 1;
+		text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+	}
+
+	.error-title {
+		font-size: 2.5rem;
+		margin-bottom: var(--spacing-sm);
+		color: var(--color-text);
+		font-weight: 700;
+	}
+
+	.error-subtitle {
+		font-size: 1.5rem;
+		margin-bottom: var(--spacing-lg);
+		color: #d97706;
+		font-weight: 600;
+	}
+
+	.error-description {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--spacing-md);
+		line-height: 1.6;
+	}
+
+	.error-description a {
+		color: #f59e0b;
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.2s ease;
+	}
+
+	.error-description a:hover {
+		border-bottom-color: #f59e0b;
+	}
+
+	.error-actions {
+		display: flex;
+		gap: var(--spacing-md);
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.btn {
+		padding: var(--spacing-md) var(--spacing-lg);
+		border-radius: 12px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.3s ease;
+		display: inline-block;
+		cursor: pointer;
+		border: none;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.btn-primary {
+		background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+		color: white;
+	}
+
+	.btn-primary:hover {
+		transform: translateY(-3px) scale(1.05);
+		box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+	}
+
+	.btn-secondary {
+		background: white;
+		color: #f59e0b;
+		border: 2px solid #f59e0b;
+	}
+
+	.btn-secondary:hover {
+		background: #f59e0b;
+		color: white;
+		transform: translateY(-3px) scale(1.05);
+	}
+
+	.btn-magic {
+		background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+		color: white;
+		border: 2px solid #7c3aed;
+	}
+
+	.btn-magic:hover {
+		background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+		transform: translateY(-3px) scale(1.05);
+		box-shadow: 0 0 20px #8b5cf6;
+	}
+
+	.magic-messages {
+		margin-top: var(--spacing-lg);
+	}
+
+	.spell-book {
+		background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+		padding: var(--spacing-lg);
+		border-radius: 15px;
+		border: 2px solid #f59e0b;
+		font-family: 'Courier New', monospace;
+	}
+
+	.spell-line {
+		margin-bottom: var(--spacing-xs);
+		color: #92400e;
+		font-size: 0.9rem;
+	}
+
+	.spell-line.warning {
+		color: #dc2626;
+		font-weight: 600;
+	}
+
+	@keyframes guard-pulse {
+		0%, 100% { transform: scale(1); }
+		50% { transform: scale(1.05); }
+	}
+
+	@keyframes eye-watch {
+		0%, 100% { transform: scale(1); }
+		50% { transform: scale(0.8); }
+	}
+
+	@keyframes rotate {
+		from { transform: translateX(-50%) rotate(0deg); }
+		to { transform: translateX(-50%) rotate(360deg); }
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 1; transform: scale(1); }
+		50% { opacity: 0.5; transform: scale(0.95); }
+	}
+
+	@keyframes float-lock {
+		0%, 100% { transform: translateY(0px) rotate(0deg); }
+		25% { transform: translateY(-10px) rotate(5deg); }
+		75% { transform: translateY(10px) rotate(-5deg); }
+	}
+
+	@media (max-width: 768px) {
+		.error-title {
+			font-size: 2rem;
+		}
+
+		.error-subtitle {
+			font-size: 1.25rem;
+		}
+
+		.error-description {
+			font-size: 1rem;
+		}
+
+		.error-actions {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.btn {
+			width: 100%;
+			max-width: 250px;
+		}
+
+		.error-code {
+			font-size: 3rem;
+		}
+
+		.guardian {
+			transform: scale(0.8);
+		}
+	}
+</style>
+
+<script>
+	window.magicMessages = {magicMessages};
+
+	function attemptMagic() {
+		const randomMessage = window.magicMessages[Math.floor(Math.random() * window.magicMessages.length)];
+		alert(randomMessage);
+	}
+</script>
