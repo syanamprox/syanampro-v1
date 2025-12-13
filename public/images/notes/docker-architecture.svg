@@ -1,0 +1,168 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dockerEngine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0db7ed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0997cc;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="containerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5f5f5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="SF Pro Display, Arial, sans-serif" font-size="24" font-weight="600" text-anchor="middle" fill="#333">
+    Docker Architecture
+  </text>
+
+  <!-- Host Machine -->
+  <rect x="50" y="60" width="700" height="420" rx="10" fill="none" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="70" y="85" font-family="SF Pro Text, Arial, sans-serif" font-size="16" font-weight="500" fill="#666">
+    Host Machine (Linux/macOS/Windows)
+  </text>
+
+  <!-- Docker Engine -->
+  <rect x="80" y="100" width="640" height="160" rx="8" fill="url(#dockerEngine)"/>
+  <text x="400" y="130" font-family="SF Pro Display, Arial, sans-serif" font-size="20" font-weight="600" text-anchor="middle" fill="#ffffff">
+    Docker Engine
+  </text>
+
+  <!-- Docker Engine Components -->
+  <g id="engine-components">
+    <!-- Docker Daemon -->
+    <rect x="100" y="150" width="180" height="80" rx="5" fill="#ffffff" opacity="0.95"/>
+    <text x="190" y="175" font-family="SF Pro Text, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#333">
+      Docker Daemon
+    </text>
+    <text x="190" y="195" font-family="SF Pro Text, Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">
+      (dockerd)
+    </text>
+    <text x="190" y="215" font-family="SF Pro Text, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#888">
+      • Manages containers
+      </text>
+
+    <!-- REST API -->
+    <rect x="310" y="150" width="180" height="80" rx="5" fill="#ffffff" opacity="0.95"/>
+    <text x="400" y="175" font-family="SF Pro Text, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#333">
+      REST API
+    </text>
+    <text x="400" y="195" font-family="SF Pro Text, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#888">
+      • Communication
+    </text>
+    <text x="400" y="210" font-family="SF Pro Text, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#888">
+      • Interface
+    </text>
+
+    <!-- Docker CLI -->
+    <rect x="520" y="150" width="180" height="80" rx="5" fill="#ffffff" opacity="0.95"/>
+    <text x="610" y="175" font-family="SF Pro Text, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#333">
+      Docker CLI
+    </text>
+    <text x="610" y="195" font-family="SF Pro Text, Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">
+      (docker)
+    </text>
+    <text x="610" y="215" font-family="SF Pro Text, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#888">
+      • User interface
+    </text>
+  </g>
+
+  <!-- Containers -->
+  <text x="80" y="290" font-family="SF Pro Text, Arial, sans-serif" font-size="16" font-weight="500" fill="#666">
+    Containers
+  </text>
+
+  <g id="containers">
+    <!-- Container 1 -->
+    <g transform="translate(80, 310)">
+      <rect width="140" height="140" rx="8" fill="url(#containerGrad)" stroke="#0db7ed" stroke-width="2"/>
+      <rect x="10" y="10" width="120" height="30" rx="5" fill="#0db7ed" opacity="0.1"/>
+      <text x="70" y="30" font-family="SF Pro Text, Arial, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#333">
+        Container 1
+      </text>
+      <text x="70" y="60" font-family="SF Pro Text, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">
+        App: Web Server
+      </text>
+      <text x="70" y="75" font-family="SF Pro Text, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">
+        Port: 3000
+      </text>
+      <rect x="15" y="90" width="110" height="35" rx="3" fill="#f0f0f0"/>
+      <text x="70" y="105" font-family="monospace" font-size="9" text-anchor="middle" fill="#333">
+        +-----------------+
+      </text>
+      <text x="70" y="118" font-family="monospace" font-size="9" text-anchor="middle" fill="#333">
+        |    Application   |
+      </text>
+    </g>
+
+    <!-- Container 2 -->
+    <g transform="translate(250, 310)">
+      <rect width="140" height="140" rx="8" fill="url(#containerGrad)" stroke="#0db7ed" stroke-width="2"/>
+      <rect x="10" y="10" width="120" height="30" rx="5" fill="#0db7ed" opacity="0.1"/>
+      <text x="70" y="30" font-family="SF Pro Text, Arial, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#333">
+        Container 2
+      </text>
+      <text x="70" y="60" font-family="SF Pro Text, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">
+        App: Database
+      </text>
+      <text x="70" y="75" font-family="SF Pro Text, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">
+        Port: 5432
+      </text>
+      <rect x="15" y="90" width="110" height="35" rx="3" fill="#f0f0f0"/>
+      <text x="70" y="105" font-family="monospace" font-size="9" text-anchor="middle" fill="#333">
+        +-----------------+
+      </text>
+      <text x="70" y="118" font-family="monospace" font-size="9" text-anchor="middle" fill="#333">
+        |    PostgreSQL    |
+      </text>
+    </g>
+
+    <!-- Container 3 -->
+    <g transform="translate(420, 310)">
+      <rect width="140" height="140" rx="8" fill="url(#containerGrad)" stroke="#0db7ed" stroke-width="2"/>
+      <rect x="10" y="10" width="120" height="30" rx="5" fill="#0db7ed" opacity="0.1"/>
+      <text x="70" y="30" font-family="SF Pro Text, Arial, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#333">
+        Container 3
+      </text>
+      <text x="70" y="60" font-family="SF Pro Text, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">
+        App: Cache
+      </text>
+      <text x="70" y="75" font-family="SF Pro Text, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">
+        Port: 6379
+      </text>
+      <rect x="15" y="90" width="110" height="35" rx="3" fill="#f0f0f0"/>
+      <text x="70" y="105" font-family="monospace" font-size="9" text-anchor="middle" fill="#333">
+        +-----------------+
+      </text>
+      <text x="70" y="118" font-family="monospace" font-size="9" text-anchor="middle" fill="#333">
+        |      Redis      |
+      </text>
+    </g>
+
+    <!-- Add Container Button -->
+    <g transform="translate(590, 350)">
+      <circle cx="50" cy="50" r="45" fill="#0db7ed" opacity="0.1" stroke="#0db7ed" stroke-width="2" stroke-dasharray="5,5"/>
+      <text x="50" y="45" font-family="SF Pro Text, Arial, sans-serif" font-size="36" font-weight="300" text-anchor="middle" fill="#0db7ed">
+        +
+      </text>
+      <text x="50" y="65" font-family="SF Pro Text, Arial, sans-serif" font-size="10" font-weight="500" text-anchor="middle" fill="#666">
+        Add more
+      </text>
+    </g>
+  </g>
+
+  <!-- Arrows -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+
+  <!-- Arrow from CLI to API -->
+  <line x1="520" y1="180" x2="490" y2="180" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow from API to Daemon -->
+  <line x1="310" y1="180" x2="280" y2="180" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow from Daemon to Containers -->
+  <line x1="190" y1="230" x2="190" y2="310" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+</svg>

@@ -70,7 +70,7 @@ const formatDate = (dateString: string) => {
 				</header>
 
 				<div class="note-content">
-					<md>{note.content}</md>
+					<div set:html={note.content}></div>
 				</div>
 
 				<footer class="note-footer">

@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
+import { marked } from 'marked';
 
 export interface Note {
   slug: string;
@@ -35,6 +36,8 @@ export async function getAllNotes(lang: 'en' | 'id' = 'en'): Promise<Array<Omit<
         const { data } = matter(fileContents);
 
         // Transform based on language
+        const rawContent = lang === 'en' ? data.content_en || data.content || '' : data.content_id || data.content || '';
+
         return {
           slug,
           title: lang === 'en' ? data.title_en || data.title : data.title_id || data.title,
@@ -44,7 +47,7 @@ export async function getAllNotes(lang: 'en' | 'id' = 'en'): Promise<Array<Omit<
           summary: lang === 'en' ? (data.summary_en || data.summary || '') : (data.summary_id || data.summary || ''),
           tags: Array.isArray(data.tags) ? data.tags : [],
           headerImage: data.headerImage || '',
-          content: lang === 'en' ? data.content_en || data.content || '' : data.content_id || data.content || '',
+          content: marked(rawContent),
           // Keep original fields for reference
           title_en: data.title_en || data.title || '',
           title_id: data.title_id || data.title || '',
@@ -78,6 +81,8 @@ export async function getNoteBySlug(slug: string, lang: 'en' | 'id' = 'en'): Pro
     const { data } = matter(fileContents);
 
     // Transform based on language
+    const rawContent = lang === 'en' ? data.content_en || data.content || '' : data.content_id || data.content || '';
+
     return {
       slug,
       title: lang === 'en' ? data.title_en || data.title : data.title_id || data.title,
@@ -87,7 +92,7 @@ export async function getNoteBySlug(slug: string, lang: 'en' | 'id' = 'en'): Pro
       summary: lang === 'en' ? (data.summary_en || data.summary || '') : (data.summary_id || data.summary || ''),
       tags: Array.isArray(data.tags) ? data.tags : [],
       headerImage: data.headerImage || '',
-      content: lang === 'en' ? data.content_en || data.content || '' : data.content_id || data.content || '',
+      content: marked(rawContent),
       // Keep original fields for reference
       title_en: data.title_en || data.title || '',
       title_id: data.title_id || data.title || '',

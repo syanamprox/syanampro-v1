@@ -14,5 +14,12 @@ export default defineConfig({
       'process.env.MONGODB_URI': JSON.stringify(process.env.MONGODB_URI),
       'process.env.ADMIN_PASSWORD': JSON.stringify(process.env.ADMIN_PASSWORD),
     }
+  },
+  markdown: {
+    shikiConfig: {
+      theme: 'github-dark',
+      wrap: true
+    },
+    gfm: true,
   }
 });

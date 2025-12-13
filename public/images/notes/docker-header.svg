@@ -1,0 +1,62 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0db7ed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0db7ed;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="container" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Whale Container -->
+  <g transform="translate(350, 200)">
+    <!-- Whale body -->
+    <ellipse cx="250" cy="100" rx="180" ry="80" fill="#0db7ed" opacity="0.9"/>
+
+    <!-- Whale tail -->
+    <path d="M 80 100 Q 40 80 40 100 Q 40 120 80 100" fill="#0db7ed" opacity="0.9"/>
+
+    <!-- Whale eye -->
+    <circle cx="350" cy="80" r="15" fill="#ffffff"/>
+    <circle cx="355" cy="78" r="8" fill="#000000"/>
+
+    <!-- Containers on whale -->
+    <g id="container-box">
+      <!-- Container 1 -->
+      <rect x="200" y="50" width="60" height="40" rx="5" fill="url(#container)" stroke="#0db7ed" stroke-width="2"/>
+
+      <!-- Container 2 -->
+      <rect x="270" y="30" width="60" height="40" rx="5" fill="url(#container)" stroke="#0db7ed" stroke-width="2"/>
+
+      <!-- Container 3 -->
+      <rect x="340" y="50" width="60" height="40" rx="5" fill="url(#container)" stroke="#0db7ed" stroke-width="2"/>
+    </g>
+
+    <!-- Water spout -->
+    <g transform="translate(380, 60)">
+      <path d="M 0 0 Q -10 -10 0 -20 Q 10 -30 0 -40" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
+      <path d="M 0 -5 Q 8 -15 0 -25 Q -8 -35 0 -45" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
+      <path d="M 0 -10 Q -6 -20 0 -30 Q 6 -40 0 -50" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.3"/>
+    </g>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="450" font-family="SF Pro Display, Arial, sans-serif" font-size="48" font-weight="700" text-anchor="middle" fill="#ffffff">
+    Docker untuk Pemula
+  </text>
+
+  <text x="600" y="500" font-family="SF Pro Text, Arial, sans-serif" font-size="28" font-weight="400" text-anchor="middle" fill="#ffffff" opacity="0.9">
+    Panduan Lengkap Memulai Containerisasi
+  </text>
+
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="30" fill="#ffffff" opacity="0.1"/>
+  <circle cx="1100" cy="500" r="40" fill="#ffffff" opacity="0.1"/>
+  <circle cx="150" cy="450" r="25" fill="#ffffff" opacity="0.1"/>
+  <circle cx="1050" cy="150" r="35" fill="#ffffff" opacity="0.1"/>
+</svg>
