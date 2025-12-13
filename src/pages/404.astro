@@ -3,369 +3,98 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// Detect language from URL path
+// Function to detect language from URL
+const lang = Astro.url.pathname.startsWith('/id') ? 'id' : 'en';
+
+const message = lang === 'id'
+  ? "Mohon maaf, Anda tersesat. Kembalilah ke jalan yang benar."
+  : "Sorry, you're lost. Please return to the right path.";
+
+
+// SEO variables
+const pageTitle = lang === 'id'
+  ? '404 | Syaiful Anam'
+  : '404 | Syaiful Anam';
+const pageDescription = lang === 'id'
+  ? 'Error 404 - Halaman tidak ditemukan.'
+  : 'Error 404 - Page not found.';
 const currentPath = Astro.url.pathname;
-const isIndonesian = currentPath.startsWith('/id') || currentPath.startsWith('//id');
-
-// Set content based on language detection
-const title = isIndonesian
-	? '404 - Tersesat di Dunia Digital | Syaiful Anam'
-	: '404 - Lost in Digital Space | Syaiful Anam';
-const description = isIndonesian
-	? 'Ups! Anda menemukan halaman yang ada di alam paralel.'
-	: 'Oops! You\'ve discovered a page that exists in a parallel universe.';
-const lang = isIndonesian ? 'id' : 'en';
-
-// Content variables
-const errorTitle = isIndonesian
-	? 'Tersesat di Dunia Digital'
-	: 'Lost in Digital Space';
-const errorSubtitle = isIndonesian
-	? 'Error 404: Halaman Tidak Ditemukan'
-	: 'Error 404: Page Not Found';
-const errorDescription1 = isIndonesian
-	? 'Anda melayang ke wilayah yang tidak terpetakan! Halaman ini ada di alam paralel dimana kucing memerintah internet dan sinyal WiFi terbuat dari marshmallow.'
-	: 'You\'ve drifted into uncharted territory! This page exists in a parallel universe where cats rule the internet and WiFi signals are made of marshmallows.';
-const errorDescription2 = isIndonesian
-	? 'Mari kita bawa Anda kembali ke peradaban:'
-	: 'Let\'s get you back to civilization:';
-const btnHome = isIndonesian ? '🚀 Kembali ke Bumi' : '🚀 Back to Earth';
-const btnNotes = isIndonesian ? '📖 Baca Catatan' : '📖 Read Some Notes';
-const btnBack = isIndonesian ? '↩️ Mundur ke Masa Lalu' : '↩️ Time Travel Back';
-const factTitle = isIndonesian ? '🌟 Fakta Menarik:' : '🌟 Fun Fact:';
-const factText = isIndonesian
-	? 'Error 404 itu seperti menemukan tempat parkir unicorn yang tersesat!'
-	: '404 errors are the digital equivalent of finding a unicorn\'s parking spot!';
-const homeUrl = isIndonesian ? '/id' : '/';
-const notesUrl = isIndonesian ? '/id/notes' : '/notes';
 ---
 
-<Layout title={title} description={description} lang={lang}>
-	<div class="container">
-		<Header currentPath={currentPath} lang={lang} />
+<Layout title={pageTitle} description={pageDescription} lang={lang}>
+  <div class="container">
+    <Header currentPath={currentPath} lang={lang} />
 
-		<main class="main-content">
-			<div class="error-container">
-				<div class="space-scene">
-					<div class="astronaut">
-						<div class="helmet"></div>
-						<div class="body"></div>
-						<div class="arm-left"></div>
-						<div class="arm-right"></div>
-						<div class="leg-left"></div>
-						<div class="leg-right"></div>
-					</div>
-					<div class="stars">
-						<div class="star"></div>
-						<div class="star"></div>
-						<div class="star"></div>
-						<div class="star"></div>
-						<div class="star"></div>
-					</div>
-				</div>
+    <main class="main-content">
+      <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="text-center max-w-5xl mx-auto">
+          <!-- 404 Big Number -->
+          <div class="text-9xl md:text-[12rem] lg:text-[15rem] font-black text-gray-200 dark:text-gray-700 leading-none mb-8">
+            404
+          </div>
 
-				<div class="error-content">
-					<h1 class="error-title">{errorTitle}</h1>
-					<p class="error-subtitle">{errorSubtitle}</p>
-					<p class="error-description">
-						{errorDescription1}
-					</p>
-					<p class="error-description">
-						{errorDescription2}
-					</p>
+          <!-- Message -->
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white mb-8 leading-tight">
+            {lang === 'id' ? 'Anda Tersesat' : 'You Are Lost'}
+          </h1>
 
-					<div class="error-actions">
-						<a href={homeUrl} class="btn btn-primary">{btnHome}</a>
-						<a href={notesUrl} class="btn btn-secondary">{btnNotes}</a>
-						<a href="javascript:history.back()" class="btn btn-ghost">{btnBack}</a>
-					</div>
+          <!-- Message -->
+          <p class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 dark:text-gray-200 mb-16 leading-relaxed">
+            {message}
+          </p>
 
-					<div class="fun-facts">
-						<p class="fact-title">{factTitle}</p>
-						<p class="fact-text">{factText}</p>
-					</div>
-				</div>
-			</div>
-		</main>
+          <!-- Back to Path Button -->
+          <a
+            href={lang === 'id' ? '/id' : '/'}
+            class="inline-block px-8 py-3 bg-black dark:bg-white text-white dark:text-black font-bold text-lg rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+          >
+            {lang === 'id' ? 'KEMBALI KE JALAN BENAR' : 'BACK TO RIGHT PATH'}
+          </a>
+        </div>
+      </div>
+    </main>
 
-		<Footer lang={lang} />
-	</div>
+    <Footer lang={lang} />
+  </div>
 </Layout>
 
 <style>
-	.main-content {
-		min-height: calc(100vh - 200px);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-		position: relative;
-		overflow: hidden;
-	}
+  .main-content {
+    min-height: calc(100vh - 200px);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-	.error-container {
-		text-align: center;
-		max-width: 800px;
-		padding: var(--spacing-xl);
-		position: relative;
-		z-index: 1;
-	}
+  /* Remove all backgrounds */
+  body, html {
+    background: transparent !important;
+  }
 
-	.space-scene {
-		position: relative;
-		height: 300px;
-		margin-bottom: var(--spacing-xl);
-	}
+  main {
+    background: transparent !important;
+  }
 
-	.astronaut {
-		position: relative;
-		width: 120px;
-		height: 150px;
-		margin: 0 auto var(--spacing-lg);
-		animation: float 3s ease-in-out infinite;
-	}
+  /* Ensure centering */
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
 
-	.helmet {
-		width: 60px;
-		height: 60px;
-		background: #f0f0f0;
-		border-radius: 50%;
-		margin: 0 auto;
-		border: 3px solid #333;
-		position: relative;
-	}
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .text-\[15rem\] {
+      font-size: 8rem;
+    }
 
-	.helmet::before {
-		content: '';
-		position: absolute;
-		width: 20px;
-		height: 20px;
-		background: rgba(135, 206, 235, 0.7);
-		border-radius: 50%;
-		top: 10px;
-		left: 10px;
-		border: 2px solid #fff;
-	}
+    .text-7xl {
+      font-size: 2.5rem;
+    }
 
-	.body {
-		width: 80px;
-		height: 60px;
-		background: #f0f0f0;
-		border-radius: 30px;
-		margin: -10px auto 0;
-		border: 3px solid #333;
-	}
-
-	.arm-left, .arm-right {
-		position: absolute;
-		width: 20px;
-		height: 50px;
-		background: #f0f0f0;
-		border-radius: 10px;
-		border: 3px solid #333;
-		top: 80px;
-	}
-
-	.arm-left {
-		left: calc(50% - 60px);
-		transform: rotate(-20deg);
-		animation: wave 2s ease-in-out infinite;
-	}
-
-	.arm-right {
-		right: calc(50% - 60px);
-		transform: rotate(20deg);
-	}
-
-	.leg-left, .leg-right {
-		position: absolute;
-		width: 25px;
-		height: 40px;
-		background: #f0f0f0;
-		border-radius: 10px;
-		border: 3px solid #333;
-		bottom: 0;
-	}
-
-	.leg-left {
-		left: calc(50% - 35px);
-	}
-
-	.leg-right {
-		right: calc(50% - 35px);
-	}
-
-	.stars {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-	}
-
-	.star {
-		position: absolute;
-		background: white;
-		border-radius: 50%;
-		animation: twinkle 2s ease-in-out infinite;
-	}
-
-	.star:nth-child(1) { width: 4px; height: 4px; top: 20%; left: 10%; animation-delay: 0s; }
-	.star:nth-child(2) { width: 3px; height: 3px; top: 30%; right: 20%; animation-delay: 0.5s; }
-	.star:nth-child(3) { width: 5px; height: 5px; top: 60%; left: 30%; animation-delay: 1s; }
-	.star:nth-child(4) { width: 2px; height: 2px; top: 80%; right: 15%; animation-delay: 1.5s; }
-	.star:nth-child(5) { width: 6px; height: 6px; top: 15%; right: 40%; animation-delay: 0.3s; }
-
-	.error-content {
-		background: rgba(255, 255, 255, 0.95);
-		padding: var(--spacing-xl);
-		border-radius: 20px;
-		backdrop-filter: blur(10px);
-	}
-
-	.error-title {
-		font-size: 2.5rem;
-		margin-bottom: var(--spacing-sm);
-		color: var(--color-text);
-		font-weight: 700;
-	}
-
-	.error-subtitle {
-		font-size: 1.5rem;
-		margin-bottom: var(--spacing-lg);
-		color: #6366f1;
-		font-weight: 600;
-	}
-
-	.error-description {
-		font-size: 1.125rem;
-		color: var(--color-text-secondary);
-		margin-bottom: var(--spacing-md);
-		line-height: 1.6;
-	}
-
-	.error-description a {
-		color: #6366f1;
-		text-decoration: none;
-		border-bottom: 1px solid transparent;
-		transition: border-color 0.2s ease;
-	}
-
-	.error-description a:hover {
-		border-bottom-color: #6366f1;
-	}
-
-	.error-actions {
-		display: flex;
-		gap: var(--spacing-md);
-		justify-content: center;
-		flex-wrap: wrap;
-		margin-bottom: var(--spacing-xl);
-	}
-
-	.btn {
-		padding: var(--spacing-md) var(--spacing-lg);
-		border-radius: 12px;
-		text-decoration: none;
-		font-weight: 600;
-		transition: all 0.3s ease;
-		display: inline-block;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.btn-primary {
-		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-		color: white;
-	}
-
-	.btn-primary:hover {
-		transform: translateY(-3px) scale(1.05);
-		box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-	}
-
-	.btn-secondary {
-		background: white;
-		color: #6366f1;
-		border: 2px solid #6366f1;
-	}
-
-	.btn-secondary:hover {
-		background: #6366f1;
-		color: white;
-		transform: translateY(-3px) scale(1.05);
-	}
-
-	.btn-ghost {
-		background: transparent;
-		color: var(--color-text);
-		border: 2px dashed var(--color-text-secondary);
-	}
-
-	.btn-ghost:hover {
-		background: var(--color-text);
-		color: white;
-		transform: translateY(-3px) scale(1.05);
-	}
-
-	.fun-facts {
-		background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-		padding: var(--spacing-lg);
-		border-radius: 15px;
-		margin-top: var(--spacing-lg);
-	}
-
-	.fact-title {
-		font-weight: 700;
-		color: #2d3436;
-		margin-bottom: var(--spacing-sm);
-	}
-
-	.fact-text {
-		color: #2d3436;
-		font-style: italic;
-	}
-
-	@keyframes float {
-		0%, 100% { transform: translateY(0px); }
-		50% { transform: translateY(-20px); }
-	}
-
-	@keyframes wave {
-		0%, 100% { transform: rotate(-20deg); }
-		50% { transform: rotate(-40deg); }
-	}
-
-	@keyframes twinkle {
-		0%, 100% { opacity: 1; transform: scale(1); }
-		50% { opacity: 0.5; transform: scale(0.8); }
-	}
-
-	@media (max-width: 768px) {
-		.error-title {
-			font-size: 2rem;
-		}
-
-		.error-subtitle {
-			font-size: 1.25rem;
-		}
-
-		.error-description {
-			font-size: 1rem;
-		}
-
-		.error-actions {
-			flex-direction: column;
-			align-items: center;
-		}
-
-		.btn {
-			width: 100%;
-			max-width: 250px;
-		}
-
-		.astronaut {
-			transform: scale(0.8);
-		}
-	}
+    .text-4xl {
+      font-size: 1.5rem;
+    }
+  }
 </style>
