@@ -110,6 +110,64 @@ const formatDate = (dateString: string) => {
 		</main>
 		<Footer lang={currentLang} />
 	</div>
+
+	<script>
+		// Enhanced smooth scroll for table of contents
+		document.addEventListener('astro:page-load', () => {
+			initSmoothScroll();
+		});
+
+		// Also initialize on initial load
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initSmoothScroll);
+		} else {
+			initSmoothScroll();
+		}
+
+		function initSmoothScroll() {
+			// Find all anchor links in the content
+			const noteContent = document.querySelector('.note-content');
+			if (!noteContent) return;
+
+			const anchorLinks = noteContent.querySelectorAll('a[href^="#"]');
+
+			anchorLinks.forEach(anchor => {
+				anchor.addEventListener('click', function(e) {
+					e.preventDefault();
+					const targetId = this.getAttribute('href');
+					const targetElement = document.querySelector(targetId);
+
+					if (targetElement) {
+						const headerHeight = 100; // Account for fixed header
+						const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+
+						window.scrollTo({
+							top: targetPosition,
+							behavior: 'smooth'
+						});
+
+						// Update URL without jumping
+						history.pushState(null, null, targetId);
+					}
+				});
+			});
+
+			// Handle direct navigation with hash
+			if (window.location.hash) {
+				const targetElement = document.querySelector(window.location.hash);
+				if (targetElement) {
+					setTimeout(() => {
+						const headerHeight = 100;
+						const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+						window.scrollTo({
+							top: targetPosition,
+							behavior: 'smooth'
+						});
+					}, 300);
+				}
+			}
+		}
+	</script>
 </Layout>
 
 <style>

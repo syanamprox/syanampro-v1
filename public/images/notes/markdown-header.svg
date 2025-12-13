@@ -1,0 +1,58 @@
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="code" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <text x="5" y="25" font-family="monospace" font-size="12" fill="#334155" opacity="0.5">
+        { }
+      </text>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bg)"/>
+  <rect width="800" height="400" fill="url(#code)"/>
+
+  <!-- Main content -->
+  <g transform="translate(50, 100)">
+    <!-- Markdown icon -->
+    <rect x="0" y="0" width="120" height="160" rx="8" fill="#ffffff" opacity="0.1"/>
+    <text x="60" y="50" font-family="monospace" font-size="24" fill="#e2e8f0" text-anchor="middle" font-weight="bold">M</text>
+    <text x="30" y="80" font-family="monospace" font-size="12" fill="#94a3b8">#</text>
+    <text x="30" y="100" font-family="monospace" font-size="12" fill="#94a3b8">##</text>
+    <text x="30" y="120" font-family="monospace" font-size="12" fill="#94a3b8">###</text>
+    <text x="30" y="140" font-family="monospace" font-size="10" fill="#94a3b8">**bold**</text>
+
+    <!-- Code elements -->
+    <rect x="160" y="20" width="200" height="120" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <text x="170" y="40" font-family="monospace" font-size="12" fill="#94a3b8">function hello() {</text>
+    <text x="180" y="60" font-family="monospace" font-size="12" fill="#f8fafc">  console.log('Markdown');</text>
+    <text x="170" y="80" font-family="monospace" font-size="12" fill="#94a3b8">}</text>
+
+    <!-- Text elements -->
+    <g transform="translate(420, 0)">
+      <text font-family="system-ui, sans-serif" font-size="48" fill="#f8fafc" font-weight="bold">Markdown</text>
+      <text font-family="system-ui, sans-serif" font-size="24" fill="#cbd5e1" y="40">Write with style</text>
+      <text font-family="system-ui, sans-serif" font-size="16" fill="#94a3b8" y="70">Simple • Fast • Powerful</text>
+    </g>
+
+    <!-- Decorative elements -->
+    <circle cx="140" cy="180" r="3" fill="#60a5fa" opacity="0.8"/>
+    <circle cx="155" cy="185" r="2" fill="#34d399" opacity="0.8"/>
+    <circle cx="145" cy="195" r="2.5" fill="#fbbf24" opacity="0.8"/>
+
+    <!-- Bottom line -->
+    <rect x="0" y="220" width="580" height="2" fill="#334155" opacity="0.5"/>
+  </g>
+
+  <!-- Subtle overlay -->
+  <rect width="800" height="400" fill="url(#gradient-overlay)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="gradient-overlay" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+</svg>

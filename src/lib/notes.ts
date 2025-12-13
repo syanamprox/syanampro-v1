@@ -3,6 +3,52 @@ import path from 'path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
+// Configure marked to add IDs to headings
+const renderer = new marked.Renderer();
+const originalHeadingRenderer = renderer.heading.bind(renderer);
+
+renderer.heading = function(text: any, level: number | string, raw?: string) {
+  // The text parameter might be a token object, extract the actual text
+  let textStr: string;
+
+  if (typeof text === 'string') {
+    textStr = text;
+  } else if (raw) {
+    textStr = raw;
+  } else if (text && text.text) {
+    textStr = text.text;
+  } else {
+    textStr = String(text);
+  }
+
+  // Convert level to number if it's a string
+  const levelNum = typeof level === 'string' ? parseInt(level, 10) : level;
+
+  // Default to h2 if level is undefined or invalid
+  const finalLevel = (levelNum && levelNum >= 1 && levelNum <= 6) ? levelNum : 2;
+
+  // Generate slug from text
+  const slug = textStr
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .trim();
+
+  // Return heading with ID
+  return `<h${finalLevel} id="${slug}">${textStr}</h${finalLevel}>`;
+};
+
+marked.setOptions({
+  renderer: renderer,
+  gfm: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false
+});
+
 export interface Note {
   slug: string;
   title_en: string;
@@ -33,10 +79,11 @@ export async function getAllNotes(lang: 'en' | 'id' = 'en'): Promise<Array<Omit<
         const slug = filename.replace(/\.md$/, '');
         const fullPath = path.join(notesDirectory, filename);
         const fileContents = await fs.readFile(fullPath, 'utf8');
-        const { data } = matter(fileContents);
+        const { data, content } = matter(fileContents);
 
-        // Transform based on language
-        const rawContent = lang === 'en' ? data.content_en || data.content || '' : data.content_id || data.content || '';
+        // For now, use the same content for both languages
+        // TODO: Implement proper multi-language support
+        const rawContent = content;
 
         return {
           slug,
@@ -78,10 +125,11 @@ export async function getNoteBySlug(slug: string, lang: 'en' | 'id' = 'en'): Pro
   try {
     const fullPath = path.join(process.cwd(), 'src/content/notes', `${slug}.md`);
     const fileContents = await fs.readFile(fullPath, 'utf8');
-    const { data } = matter(fileContents);
+    const { data, content } = matter(fileContents);
 
-    // Transform based on language
-    const rawContent = lang === 'en' ? data.content_en || data.content || '' : data.content_id || data.content || '';
+    // For now, use the same content for both languages
+    // TODO: Implement proper multi-language support
+    const rawContent = content;
 
     return {
       slug,
