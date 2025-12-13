@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getNotesCollection, type Note } from '../../lib/db';
+import { getAllNotes, getCategories, type Note } from '../../lib/notes';
 
 const currentPath = Astro.url.pathname;
 const lang = 'id';
@@ -10,23 +10,9 @@ const lang = 'id';
 const title = 'Catatan Saya - Syaiful Anam';
 const description = 'Buku catatan publik saya tempat saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi, dan melacak kemajuan saya sebagai pembangun seumur hidup.';
 
-// Fetch notes directly from database
-const collection = await getNotesCollection();
-const notes = await collection
-  .find({ status: 'published' })
-  .sort({ publishedDate: -1 })
-  .toArray();
-
-// Transform notes to Indonesian format
-const transformedNotes = notes.map(note => ({
-  ...note,
-  title: note.title_id,
-  summary: note.summary_id,
-  content: note.content_id,
-}));
-
-// Get unique categories for filter buttons
-const categories = ['Semua Catatan', ...Array.from(new Set(notes.map(note => note.category)))];
+// Fetch notes from markdown files
+const notes = await getAllNotes(lang);
+const categories = ['Semua Catatan', ...await getCategories(lang)];
 
 // Format date helper
 const formatDate = (dateString: string) => {
@@ -74,7 +60,7 @@ const formatDate = (dateString: string) => {
 				</div>
 
 			<div class="log-list">
-					{transformedNotes.map((note) => (
+					{notes.map((note) => (
 						<a href={`/id/notes/${note.slug}`} class="log-item-link">
 							<article class="log-item" data-category={note.category} data-title={note.title.toLowerCase()} data-content={(note.summary || '').toLowerCase()} data-tags={(note.tags?.join(' ') || '').toLowerCase()}>
 								{note.headerImage && (
@@ -114,7 +100,7 @@ const formatDate = (dateString: string) => {
 					))}
 				</div>
 
-				{transformedNotes.length === 0 && (
+				{notes.length === 0 && (
 					<div class="empty-state">
 						<p>Belum ada catatan yang diterbitkan. Periksa kembali segera!</p>
 					</div>
@@ -256,12 +242,12 @@ const formatDate = (dateString: string) => {
 
 	.log-category {
 		background-color: var(--color-accent);
-			color: white;
-			padding: 2px var(--spacing-sm);
-			border-radius: 12px;
-			font-weight: 600;
-			font-size: 0.75rem;
-		}
+		color: white;
+		padding: 2px var(--spacing-sm);
+		border-radius: 12px;
+		font-weight: 600;
+		font-size: 0.75rem;
+	}
 
 	.log-image {
 		width: 100%;
@@ -419,4 +405,4 @@ const formatDate = (dateString: string) => {
 			filterItems();
 		});
 	});
-	</script>
+</script>

@@ -2,44 +2,30 @@
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
-import { getNotesCollection, getNoteBySlug, getNoteBySlugWithLang, type Note } from '../../../lib/db';
-import { marked } from 'marked';
+import { getNoteBySlug, getAllNotes, type Note } from '../../../lib/notes';
+
+export const prerender = false;
 
 const { slug } = Astro.params;
 const lang = 'id';
 
-// Get the current note (Indonesian version)
-const note: Note | null = await getNoteBySlugWithLang(slug || '', lang);
+// Get the current note
+const note: Note | null = await getNoteBySlug(slug || '', lang);
 
 // If note doesn't exist, return 404
 if (!note) {
   return Astro.redirect('/404');
 }
 
-// Get related notes (same category, excluding current, in Indonesian)
-const collection = await getNotesCollection();
-const relatedNotes = await collection
-  .find({
-    category: note.category,
-    status: 'published',
-    slug: { $ne: slug }
-  })
-  .sort({ publishedDate: -1 })
-  .limit(3)
-  .toArray();
-
-// Transform related notes to Indonesian format
-const transformedRelatedNotes = relatedNotes.map(relatedNote => ({
-  ...relatedNote,
-  title: relatedNote.title_id,
-  summary: relatedNote.summary_id,
-}));
+// Get related notes (same category, excluding current)
+const allNotes = await getAllNotes(lang);
+const relatedNotes = allNotes.filter(n => n.category === note.category && n.slug !== slug).slice(0, 3);
 
 const currentPath = Astro.url.pathname;
 const currentLang = 'id';
 
 const title = `${note.title} - Syaiful Anam`;
-const description = note.seo?.description || note.summary || `Baca tentang ${note.title} dalam buku catatan saya.`;
+const description = note.summary || `Baca tentang ${note.title} dalam buku catatan saya.`;
 
 // Format date helper
 const formatDate = (dateString: string) => {
@@ -48,11 +34,6 @@ const formatDate = (dateString: string) => {
     month: 'long',
     day: 'numeric'
   });
-};
-
-// Render markdown content
-const renderContent = (content: string): string => {
-  return marked(content);
 };
 ---
 
@@ -89,7 +70,7 @@ const renderContent = (content: string): string => {
 				</header>
 
 				<div class="note-content">
-					<div set:html={renderContent(note.content)} />
+					<md>{note.content}</md>
 				</div>
 
 				<footer class="note-footer">
@@ -99,11 +80,11 @@ const renderContent = (content: string): string => {
 				</footer>
 			</article>
 
-			{transformedRelatedNotes.length > 0 && (
+			{relatedNotes.length > 0 && (
 				<section class="related-notes">
 					<h2>Catatan Terkait</h2>
 					<div class="related-grid">
-						{transformedRelatedNotes.map((relatedNote) => (
+						{relatedNotes.map((relatedNote) => (
 							<article class="related-card">
 								<div class="related-meta">
 									<time datetime={relatedNote.publishedDate}>
@@ -224,45 +205,45 @@ const renderContent = (content: string): string => {
 		margin: 0 auto; /* Center the content container */
 	}
 
-	/* Rich text content styles */
-	.note-content h1,
-	.note-content h2,
-	.note-content h3,
-	.note-content h4,
-	.note-content h5,
-	.note-content h6 {
+	/* Markdown content styles */
+	.note-content :global(h1),
+	.note-content :global(h2),
+	.note-content :global(h3),
+	.note-content :global(h4),
+	.note-content :global(h5),
+	.note-content :global(h6) {
 		margin-top: var(--spacing-xl);
 		margin-bottom: var(--spacing-md);
 		font-weight: 600;
 	}
 
-	.note-content h1 {
+	.note-content :global(h1) {
 		font-size: 2rem;
 	}
 
-	.note-content h2 {
+	.note-content :global(h2) {
 		font-size: 1.75rem;
 	}
 
-	.note-content h3 {
+	.note-content :global(h3) {
 		font-size: 1.5rem;
 	}
 
-	.note-content p {
+	.note-content :global(p) {
 		margin-bottom: var(--spacing-md);
 	}
 
-	.note-content ul,
-	.note-content ol {
+	.note-content :global(ul),
+	.note-content :global(ol) {
 		margin-bottom: var(--spacing-md);
 		padding-left: var(--spacing-lg);
 	}
 
-	.note-content li {
+	.note-content :global(li) {
 		margin-bottom: var(--spacing-xs);
 	}
 
-	.note-content blockquote {
+	.note-content :global(blockquote) {
 		border-left: 4px solid var(--color-accent);
 		padding-left: var(--spacing-lg);
 		margin: var(--spacing-lg) 0;
@@ -270,7 +251,7 @@ const renderContent = (content: string): string => {
 		font-style: italic;
 	}
 
-	.note-content code {
+	.note-content :global(code) {
 		background-color: var(--color-surface);
 		padding: 2px 4px;
 		border-radius: 4px;
@@ -278,45 +259,36 @@ const renderContent = (content: string): string => {
 		font-size: 0.875em;
 	}
 
-	.note-content a {
+	.note-content :global(pre) {
+		background-color: var(--color-surface);
+		padding: var(--spacing-lg);
+		border-radius: 8px;
+		overflow-x: auto;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.note-content :global(pre code) {
+		background: none;
+		padding: 0;
+	}
+
+	.note-content :global(a) {
 		color: var(--color-accent);
 		text-decoration: none;
 		border-bottom: 1px solid transparent;
 		transition: border-color 0.2s ease;
 	}
 
-	.note-content a:hover {
+	.note-content :global(a:hover) {
 		border-bottom-color: var(--color-accent);
 	}
 
-	/* Target images directly with no container centering */
-	.note-content p img,
-	.note-content div img,
-	.note-content div[data-astro-cid-fezs4xpw] img {
-		max-width: 70% !important;
-		height: auto !important;
-		border-radius: 12px !important;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-		display: block !important;
-		margin: var(--spacing-lg) auto !important;
-		object-fit: contain;
-	}
-
-	/* Header image should remain full width with proportional height */
-	.note-header-image img {
-		max-width: 100% !important;
-		width: 100% !important;
-		height: auto !important;
-		object-fit: contain !important;
-		border-radius: 12px !important;
-		display: block !important;
-	}
-
-	/* Additional styling for header image container */
-	.note-header-image {
-		background: transparent !important;
-		border: none !important;
-		box-shadow: none !important;
+	.note-content :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 12px;
+		display: block;
+		margin: var(--spacing-lg) auto;
 	}
 
 	.note-footer {
