@@ -81,17 +81,25 @@ export async function getAllNotes(lang: 'en' | 'id' = 'en'): Promise<Array<Omit<
         const fileContents = await fs.readFile(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
 
-        // For now, use the same content for both languages
-        // TODO: Implement proper multi-language support
-        const rawContent = content;
+        // Use language-specific content from frontmatter, fallback to body content, then to general content field
+        let rawContent: string;
+        if (lang === 'en') {
+          rawContent = data.content_en || data.content || content;
+        } else {
+          rawContent = data.content_id || data.content || content;
+        }
 
         return {
           slug,
-          title: lang === 'en' ? data.title_en || data.title : data.title_id || data.title,
+          title: lang === 'en'
+            ? (data.title_en || data.title)
+            : (data.title_id || data.title),
           category: data.category || 'General',
           status: data.status || 'draft',
           publishedDate: data.publishedDate || new Date().toISOString().split('T')[0],
-          summary: lang === 'en' ? (data.summary_en || data.summary || '') : (data.summary_id || data.summary || ''),
+          summary: lang === 'en'
+            ? (data.summary_en || data.summary || '')
+            : (data.summary_id || data.summary || ''),
           tags: Array.isArray(data.tags) ? data.tags : [],
           headerImage: data.headerImage || '',
           content: marked(rawContent),
@@ -100,8 +108,8 @@ export async function getAllNotes(lang: 'en' | 'id' = 'en'): Promise<Array<Omit<
           title_id: data.title_id || data.title || '',
           summary_en: data.summary_en || data.summary || '',
           summary_id: data.summary_id || data.summary || '',
-          content_en: data.content_en || data.content || '',
-          content_id: data.content_id || data.content || '',
+          content_en: data.content_en || data.content || content,
+          content_id: data.content_id || data.content || content,
         };
       });
 
@@ -127,9 +135,13 @@ export async function getNoteBySlug(slug: string, lang: 'en' | 'id' = 'en'): Pro
     const fileContents = await fs.readFile(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
-    // For now, use the same content for both languages
-    // TODO: Implement proper multi-language support
-    const rawContent = content;
+    // Use language-specific content from frontmatter, fallback to body content, then to general content field
+    let rawContent: string;
+    if (lang === 'en') {
+      rawContent = data.content_en || data.content || content;
+    } else {
+      rawContent = data.content_id || data.content || content;
+    }
 
     return {
       slug,
@@ -146,8 +158,8 @@ export async function getNoteBySlug(slug: string, lang: 'en' | 'id' = 'en'): Pro
       title_id: data.title_id || data.title || '',
       summary_en: data.summary_en || data.summary || '',
       summary_id: data.summary_id || data.summary || '',
-      content_en: data.content_en || data.content || '',
-      content_id: data.content_id || data.content || '',
+      content_en: data.content_en || data.content || content,
+      content_id: data.content_id || data.content || content,
     };
   } catch (error) {
     console.error(`Error reading note ${slug}:`, error);
@@ -163,5 +175,69 @@ export async function getCategories(lang: 'en' | 'id' = 'en'): Promise<string[]>
   } catch (error) {
     console.error('Error getting categories:', error);
     return [];
+  }
+}
+
+export interface NotesPaginationParams {
+  lang: 'en' | 'id';
+  offset: number;
+  limit: number;
+  category?: string;
+  search?: string;
+}
+
+export interface NotesPaginationResult {
+  notes: Array<Omit<Note, 'content_' | 'summary_' | 'title_'> & {
+    title: string;
+    summary: string;
+    content: string;
+  }>;
+  total: number;
+  hasMore: boolean;
+}
+
+export async function getNotesPaginated(params: NotesPaginationParams): Promise<NotesPaginationResult> {
+  try {
+    const { lang, offset, limit, category, search } = params;
+
+    // Get all notes (we can optimize this later by reading files directly)
+    let notes = await getAllNotes(lang);
+
+    // Apply category filter
+    if (category && category !== 'all') {
+      notes = notes.filter(note => note.category === category);
+    }
+
+    // Apply search filter
+    if (search) {
+      const searchLower = search.toLowerCase();
+      notes = notes.filter(note => {
+        const title = note.title.toLowerCase();
+        const summary = (note.summary || '').toLowerCase();
+        const tags = (note.tags || []).join(' ').toLowerCase();
+        return title.includes(searchLower) ||
+               summary.includes(searchLower) ||
+               tags.includes(searchLower);
+      });
+    }
+
+    const total = notes.length;
+    const hasMore = offset + limit < total;
+
+    // Apply pagination
+    const paginatedNotes = notes.slice(offset, offset + limit);
+
+    return {
+      notes: paginatedNotes,
+      total,
+      hasMore
+    };
+  } catch (error) {
+    console.error('Error getting paginated notes:', error);
+    return {
+      notes: [],
+      total: 0,
+      hasMore: false
+    };
   }
 }

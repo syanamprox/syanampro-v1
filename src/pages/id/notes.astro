@@ -2,16 +2,25 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getAllNotes, getCategories, type Note } from '../../lib/notes';
+import NoteCardSkeleton from '../../components/ui/NoteCardSkeleton.astro';
+import { getNotesPaginated, getCategories } from '../../lib/notes';
 
 const currentPath = Astro.url.pathname;
-const lang = 'id';
+const lang: 'en' | 'id' = 'id';
 
 const title = 'Catatan Saya - Syaiful Anam';
 const description = 'Buku catatan publik saya tempat saya mendokumentasikan eksperimen, berbagi pemikiran tentang teknologi, dan melacak kemajuan saya sebagai pembangun seumur hidup.';
 
-// Fetch notes from markdown files
-const notes = await getAllNotes(lang);
+// Fetch only first batch for SEO and initial render
+const INITIAL_BATCH_SIZE = 20;
+const initialResult = await getNotesPaginated({
+  lang,
+  offset: 0,
+  limit: INITIAL_BATCH_SIZE
+});
+
+const initialNotes = initialResult.notes;
+const totalNotes = initialResult.total;
 const categories = ['Semua Catatan', ...await getCategories(lang)];
 
 // Format date helper
@@ -28,7 +37,7 @@ const formatDate = (dateString: string) => {
 	<div class="container">
 		<Header currentPath={currentPath} lang={lang} />
 
-		<main class="main-content" >
+		<main class="main-content">
 			<div class="log-content">
 				<h1 style="text-align: center;">Catatan Pembelajaran Saya</h1>
 
@@ -59,15 +68,17 @@ const formatDate = (dateString: string) => {
 					))}
 				</div>
 
-			<div class="log-list">
-					{notes.map((note) => (
+				<!-- Skeleton loader - shown during filter/search -->
+				<div id="skeleton-container" class="skeleton-loading" aria-hidden="true">
+					<NoteCardSkeleton />
+					<NoteCardSkeleton />
+					<NoteCardSkeleton />
+				</div>
+
+				<div class="log-list" id="log-list">
+					{initialNotes.map(note => (
 						<a href={`/id/notes/${note.slug}`} class="log-item-link">
 							<article class="log-item" data-category={note.category} data-title={note.title.toLowerCase()} data-content={(note.summary || '').toLowerCase()} data-tags={(note.tags?.join(' ') || '').toLowerCase()}>
-								{note.headerImage && (
-									<div class="log-image">
-										<img src={note.headerImage} alt={note.title} loading="lazy" />
-									</div>
-								)}
 								<div class="log-header">
 									<div class="log-meta">
 										<time datetime={note.publishedDate} class="log-date">
@@ -100,7 +111,13 @@ const formatDate = (dateString: string) => {
 					))}
 				</div>
 
-				{notes.length === 0 && (
+				<!-- Skeleton loader for infinite scroll -->
+				<div id="scroll-skeleton-container" class="scroll-skeleton-loading" aria-hidden="true">
+					<NoteCardSkeleton />
+					<NoteCardSkeleton />
+				</div>
+
+				{totalNotes === 0 && (
 					<div class="empty-state">
 						<p>Belum ada catatan yang diterbitkan. Periksa kembali segera!</p>
 					</div>
@@ -118,7 +135,7 @@ const formatDate = (dateString: string) => {
 	</div>
 </Layout>
 
-<style>
+<style is:global>
 	.main-content {
 		min-height: calc(100vh - 200px);
 	}
@@ -200,16 +217,43 @@ const formatDate = (dateString: string) => {
 		border-color: var(--color-accent);
 	}
 
+	/* Skeleton loading styles */
+	.skeleton-loading {
+		display: none;
+	}
+
+	.skeleton-loading.active {
+		display: grid;
+	}
+
 	.log-list {
 		display: grid;
 		gap: var(--spacing-lg);
 		margin-bottom: var(--spacing-xl);
 	}
 
+	/* Hide real content during skeleton loading */
+	.log-list.loading {
+		opacity: 0;
+		pointer-events: none;
+	}
+
 	.log-item-link {
 		text-decoration: none;
 		color: inherit;
 		display: block;
+		animation: fadeIn 0.3s ease-in-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	.log-item {
@@ -248,20 +292,6 @@ const formatDate = (dateString: string) => {
 		border-radius: 12px;
 		font-weight: 600;
 		font-size: 0.75rem;
-	}
-
-	.log-image {
-		width: 100%;
-		height: auto;
-		border-radius: 8px;
-		overflow: hidden;
-		margin-bottom: var(--spacing-md);
-	}
-
-	.log-image img {
-		width: 100%;
-		height: auto;
-		display: block;
 	}
 
 	.empty-state {
@@ -331,6 +361,39 @@ const formatDate = (dateString: string) => {
 		color: var(--color-text);
 	}
 
+	/* Infinite scroll sentinel */
+	.infinite-scroll-sentinel {
+		height: 1px;
+		width: 100%;
+		pointer-events: none;
+	}
+
+	/* Fade in animation for dynamically loaded items */
+	.log-item-link.fade-in {
+		animation: fadeInUp 0.5s ease-out forwards;
+		opacity: 0;
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Scroll skeleton loading */
+	.scroll-skeleton-loading {
+		display: none;
+	}
+
+	.scroll-skeleton-loading.active {
+		display: block;
+	}
+
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.log-content {
@@ -359,51 +422,303 @@ const formatDate = (dateString: string) => {
 	}
 </style>
 
-<script>
-	// Search and Filter functionality
+<script define:vars={{ INITIAL_BATCH_SIZE, totalNotes }}>
+	// Configuration
+	const ITEMS_PER_BATCH = 20;
+	const API_BASE = '/api/notes';
+	const LANG = 'id';
+	const SCROLL_DELAY = 500; // Delay before loading more items (ms)
+
+	let currentOffset = INITIAL_BATCH_SIZE;
+	let isLoading = false;
+	let hasMoreItems = totalNotes > INITIAL_BATCH_SIZE;
+	let currentSearch = '';
+	let currentCategory = 'all';
+	let searchTimeout = null;
+	let loadTimeout = null;
+
 	const searchInput = document.getElementById('search-input');
 	const filterButtons = document.querySelectorAll('.filter-btn');
-	const logItems = document.querySelectorAll('.log-item');
+	const logList = document.querySelector('#log-list');
+	const skeletonContainer = document.getElementById('skeleton-container');
+	const scrollSkeletonContainer = document.getElementById('scroll-skeleton-container');
 
-	function filterItems() {
-		const searchTerm = searchInput.value.toLowerCase().trim();
-		const activeCategory = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
-
-		logItems.forEach(item => {
-			const title = item.dataset.title || '';
-			const content = item.dataset.content || '';
-			const tags = item.dataset.tags || '';
-			const category = item.dataset.category || '';
-
-			const matchesSearch = searchTerm === '' ||
-				title.includes(searchTerm) ||
-				content.includes(searchTerm) ||
-				tags.includes(searchTerm);
-
-			const matchesCategory = activeCategory === 'all' || category === activeCategory;
-
-			if (matchesSearch && matchesCategory) {
-				item.style.display = 'block';
-			} else {
-				item.style.display = 'none';
-			}
+	// Format date for dynamically loaded items
+	function formatDate(dateString) {
+		return new Date(dateString).toLocaleDateString('id-ID', {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
 		});
 	}
 
+	// Create note card element using DOM manipulation (not innerHTML)
+	function createNoteCard(note) {
+		// Create main link element
+		const link = document.createElement('a');
+		link.href = `/id/notes/${note.slug}`;
+		link.className = 'log-item-link fade-in';
+		link.setAttribute('data-slug', note.slug);
+
+		// Create article
+		const article = document.createElement('article');
+		article.className = 'log-item';
+		article.setAttribute('data-category', note.category);
+		article.setAttribute('data-title', note.title.toLowerCase());
+		article.setAttribute('data-content', (note.summary || '').toLowerCase());
+		article.setAttribute('data-tags', (note.tags ? note.tags.join(' ') : '').toLowerCase());
+
+		// Create header
+		const header = document.createElement('div');
+		header.className = 'log-header';
+
+		const meta = document.createElement('div');
+		meta.className = 'log-meta';
+
+		const time = document.createElement('time');
+		time.className = 'log-date';
+		time.setAttribute('datetime', note.publishedDate);
+		time.textContent = formatDate(note.publishedDate);
+
+		const category = document.createElement('span');
+		category.className = 'log-category';
+		category.textContent = note.category;
+
+		meta.appendChild(time);
+		meta.appendChild(category);
+		header.appendChild(meta);
+
+		// Create content
+		const content = document.createElement('div');
+		content.className = 'log-content';
+
+		const title = document.createElement('h2');
+		title.className = 'log-title';
+		title.textContent = note.title;
+
+		content.appendChild(title);
+
+		if (note.summary) {
+			const summary = document.createElement('p');
+			summary.className = 'log-summary';
+			summary.textContent = note.summary;
+			content.appendChild(summary);
+		}
+
+		if (note.tags && note.tags.length > 0) {
+			const tagsDiv = document.createElement('div');
+			tagsDiv.className = 'log-tags';
+
+			note.tags.forEach((tag) => {
+				const tagSpan = document.createElement('span');
+				tagSpan.className = 'tag';
+				tagSpan.setAttribute('data-tag', tag);
+				tagSpan.textContent = tag;
+				tagsDiv.appendChild(tagSpan);
+			});
+
+			content.appendChild(tagsDiv);
+		}
+
+		const readMore = document.createElement('span');
+		readMore.className = 'read-more';
+		readMore.textContent = 'Baca selengkapnya →';
+		content.appendChild(readMore);
+
+		// Assemble article
+		article.appendChild(header);
+		article.appendChild(content);
+		link.appendChild(article);
+
+		return link;
+	}
+
+	// Fetch notes from API
+	async function fetchNotes(offset, search = '', category = 'all') {
+		const params = new URLSearchParams({
+			lang: LANG,
+			offset: offset.toString(),
+			limit: ITEMS_PER_BATCH.toString()
+		});
+
+		if (search) params.append('search', search);
+		if (category !== 'all') params.append('category', category);
+
+		const response = await fetch(`${API_BASE}?${params}`);
+		if (!response.ok) throw new Error('Failed to fetch notes');
+		return response.json();
+	}
+
+	// Load more items
+	async function loadMoreItems() {
+		if (isLoading || !hasMoreItems) return;
+
+		isLoading = true;
+		showScrollSkeleton();
+
+		try {
+			const result = await fetchNotes(currentOffset, currentSearch, currentCategory);
+
+			if (result.notes && result.notes.length > 0) {
+				result.notes.forEach((note, index) => {
+					const card = createNoteCard(note);
+					// Add staggered animation delay for smoother effect
+					card.style.animationDelay = `${index * 0.08}s`;
+					if (logList) logList.appendChild(card);
+				});
+
+				currentOffset += result.notes.length;
+				hasMoreItems = result.hasMore;
+			} else {
+				hasMoreItems = false;
+			}
+		} catch (error) {
+			console.error('Error loading more notes:', error);
+		} finally {
+			hideScrollSkeleton();
+			isLoading = false;
+		}
+	}
+
+	// Reset and load new items (for search/filter)
+	async function resetAndLoad(search = '', category = 'all') {
+		currentSearch = search;
+		currentCategory = category;
+		currentOffset = 0;
+		hasMoreItems = true;
+
+		// Clear existing items
+		if (logList) {
+			logList.innerHTML = '';
+		}
+
+		showSkeleton();
+
+		try {
+			const result = await fetchNotes(0, search, category);
+
+			if (result.notes && result.notes.length > 0) {
+				result.notes.forEach((note) => {
+					const card = createNoteCard(note);
+					if (logList) logList.appendChild(card);
+				});
+
+				currentOffset = result.notes.length;
+				hasMoreItems = result.hasMore;
+
+				// Update empty state
+				const emptyState = document.querySelector('.empty-state');
+				if (emptyState) {
+					emptyState.style.display = result.total === 0 ? 'block' : 'none';
+				}
+			} else {
+				hasMoreItems = false;
+			}
+		} catch (error) {
+			console.error('Error loading notes:', error);
+		} finally {
+			hideSkeleton();
+		}
+	}
+
+	function showSkeleton() {
+		if (skeletonContainer) {
+			skeletonContainer.classList.add('active');
+		}
+		if (logList) {
+			logList.classList.add('loading');
+		}
+	}
+
+	function hideSkeleton() {
+		if (skeletonContainer) {
+			skeletonContainer.classList.remove('active');
+		}
+		if (logList) {
+			logList.classList.remove('loading');
+		}
+	}
+
+	function showScrollSkeleton() {
+		if (scrollSkeletonContainer) {
+			scrollSkeletonContainer.classList.add('active');
+		}
+	}
+
+	function hideScrollSkeleton() {
+		if (scrollSkeletonContainer) {
+			scrollSkeletonContainer.classList.remove('active');
+		}
+	}
+
+	// Debounced search
+	function handleSearch() {
+		if (searchTimeout) clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(() => {
+			const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+			const activeCategoryBtn = document.querySelector('.filter-btn.active');
+			const activeCategory = activeCategoryBtn ? activeCategoryBtn.getAttribute('data-category') : 'all';
+			resetAndLoad(searchTerm, activeCategory);
+		}, 500);
+	}
+
 	// Search input event listener
-	searchInput.addEventListener('input', filterItems);
+	if (searchInput) {
+		searchInput.addEventListener('input', handleSearch);
+	}
 
 	// Filter functionality
 	filterButtons.forEach(button => {
 		button.addEventListener('click', () => {
-			const category = button.dataset.category;
-
 			// Update active button
 			filterButtons.forEach(btn => btn.classList.remove('active'));
 			button.classList.add('active');
 
 			// Apply filter
-			filterItems();
+			const category = button.getAttribute('data-category') || 'all';
+			const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+			resetAndLoad(searchTerm, category);
 		});
 	});
+
+	// Intersection Observer for infinite scroll
+	const observerOptions = {
+		root: null,
+		rootMargin: '200px',
+		threshold: 0.1
+	};
+
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting && !isLoading && hasMoreItems) {
+				// Clear any existing timeout
+				if (loadTimeout) clearTimeout(loadTimeout);
+
+				// Add delay before loading more items for better UX
+				loadTimeout = setTimeout(() => {
+					loadMoreItems();
+				}, SCROLL_DELAY);
+			} else if (!entry.isIntersecting && loadTimeout) {
+				// Cancel pending load if user scrolls away
+				clearTimeout(loadTimeout);
+				loadTimeout = null;
+			}
+		});
+	}, observerOptions);
+
+	// Create sentinel element for scroll detection
+	const sentinel = document.createElement('div');
+	sentinel.className = 'infinite-scroll-sentinel';
+
+	// Place sentinel after scroll skeleton container
+	if (scrollSkeletonContainer) {
+		scrollSkeletonContainer.after(sentinel);
+	} else if (logList) {
+		logList.after(sentinel);
+	}
+
+	observer.observe(sentinel);
+
+	// Log for debugging
+	console.log('Infinite scroll initialized:', { totalNotes, hasMoreItems, currentOffset });
 </script>

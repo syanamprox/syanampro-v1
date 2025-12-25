@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
+import Skeleton from '../../../components/ui/Skeleton.astro';
 import { getNoteBySlug, getAllNotes, type Note } from '../../../lib/notes';
 
 export const prerender = false;
@@ -42,6 +43,19 @@ const formatDate = (dateString: string) => {
 		<Header currentPath={currentPath} lang={currentLang} />
 
 		<main class="main-content">
+			<!-- Skeleton loader untuk transisi halaman -->
+			<div id="skeleton-container" class="skeleton-loading" aria-hidden="true">
+				<div class="skeleton-wrapper">
+					<div class="skeleton-image"></div>
+					<div class="skeleton-meta"></div>
+					<div class="skeleton-title"></div>
+					<div class="skeleton-summary"></div>
+					<div class="skeleton-content"></div>
+					<div class="skeleton-content"></div>
+					<div class="skeleton-content"></div>
+				</div>
+			</div>
+
 			<article class="note-article">
 				{note.headerImage && (
 					<div class="note-header-image">
@@ -112,6 +126,36 @@ const formatDate = (dateString: string) => {
 	</div>
 
 	<script>
+		// Skeleton loading untuk transisi tampilan
+		const skeletonContainer = document.getElementById('skeleton-container');
+		const noteArticle = document.querySelector('.note-article');
+
+		function showSkeleton() {
+			if (skeletonContainer) {
+				skeletonContainer.classList.add('active');
+			}
+			if (noteArticle) {
+				noteArticle.classList.add('loading');
+			}
+		}
+
+		function hideSkeleton() {
+			if (skeletonContainer) {
+				skeletonContainer.classList.remove('active');
+			}
+			if (noteArticle) {
+				noteArticle.classList.remove('loading');
+			}
+		}
+
+		// Tampilkan skeleton saat mulai navigasi
+		document.addEventListener('astro:before-preparation', showSkeleton);
+		document.addEventListener('astro:after-preparation', hideSkeleton);
+
+		// Sembunyikan skeleton saat halaman selesai dimuat
+		document.addEventListener('astro:page-load', hideSkeleton);
+		document.addEventListener('DOMContentLoaded', hideSkeleton);
+
 		// Enhanced smooth scroll for table of contents
 		document.addEventListener('astro:page-load', () => {
 			initSmoothScroll();
@@ -173,6 +217,106 @@ const formatDate = (dateString: string) => {
 <style>
 	.main-content {
 		min-height: calc(100vh - 200px);
+	}
+
+	/* Skeleton loading styles */
+	.skeleton-loading {
+		display: none;
+	}
+
+	.skeleton-loading.active {
+		display: block;
+	}
+
+	.skeleton-wrapper {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: var(--spacing-xl) 0;
+	}
+
+	.skeleton-image {
+		width: 100%;
+		height: 300px;
+		background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-border) 50%, var(--color-surface) 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 12px;
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.skeleton-meta {
+		display: flex;
+		gap: var(--spacing-sm);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.skeleton-meta::before,
+	.skeleton-meta::after {
+		content: '';
+		height: 20px;
+		border-radius: 12px;
+		background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-border) 50%, var(--color-surface) 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+	}
+
+	.skeleton-meta::before {
+		width: 120px;
+	}
+
+	.skeleton-meta::after {
+		width: 80px;
+	}
+
+	.skeleton-title {
+		height: 48px;
+		background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-border) 50%, var(--color-surface) 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 8px;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.skeleton-summary {
+		height: 28px;
+		background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-border) 50%, var(--color-surface) 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 8px;
+		margin-bottom: var(--spacing-md);
+		width: 90%;
+	}
+
+	.skeleton-content {
+		height: 20px;
+		background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-border) 50%, var(--color-surface) 75%);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 8px;
+		margin-bottom: var(--spacing-sm);
+	}
+
+	.skeleton-content:nth-child(6) {
+		width: 95%;
+	}
+
+	.skeleton-content:nth-child(7) {
+		width: 85%;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: -200% 0;
+		}
+		100% {
+			background-position: 200% 0;
+		}
+	}
+
+	/* Sembunyikan konten asli selama skeleton loading */
+	.note-article.loading {
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.note-article {
@@ -367,13 +511,14 @@ const formatDate = (dateString: string) => {
 
 	.related-notes {
 		max-width: 800px;
-		margin: 0 auto;
-		padding: var(--spacing-xl) 0;
+		margin: var(--spacing-2xl) auto 0;
+		padding: var(--spacing-xl) 0 var(--spacing-xl);
 		border-top: 1px solid var(--color-border);
 	}
 
 	.related-notes h2 {
 		font-size: 1.5rem;
+		margin-top: 0;
 		margin-bottom: var(--spacing-lg);
 	}
 
@@ -387,7 +532,7 @@ const formatDate = (dateString: string) => {
 		background-color: var(--color-surface);
 		border: 1px solid var(--color-border);
 		border-radius: 12px;
-		padding: 0 var(--spacing-lg) var(--spacing-lg);
+		padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
 		transition: transform 0.2s ease, box-shadow 0.2s ease;
 	}
 
@@ -400,7 +545,7 @@ const formatDate = (dateString: string) => {
 		display: flex;
 		align-items: center;
 		gap: var(--spacing-sm);
-		margin-bottom: var(--spacing-sm);
+		margin-bottom: var(--spacing-xs);
 		font-size: 0.75rem;
 	}
 

@@ -6,8 +6,13 @@ import netlify from '@astrojs/netlify';
 // Load environment variables
 dotenv.config();
 
+// Use localhost for development, production URL for build
+const siteUrl = import.meta.env.PROD
+  ? 'https://syanam.pro'
+  : 'http://localhost:4321';
+
 export default defineConfig({
-  site: 'https://syanam.pro',
+  site: siteUrl,
   output: 'server',
   adapter: netlify(),
   trailingSlash: 'ignore',
