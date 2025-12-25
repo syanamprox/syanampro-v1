@@ -1,0 +1,53 @@
+---
+interface Props {
+	size?: 'sm' | 'md' | 'lg'
+	class?: string
+}
+
+const { size = 'md', class: className = '' } = Astro.props
+
+const sizeMap = {
+	sm: '16px',
+	md: '24px',
+	lg: '32px'
+}
+---
+
+<div
+	class:list={['spinner', className, `spinner--${size}`]}
+	style={'width' ':' sizeMap[size] + ';' + 'height' ':' sizeMap[size]}
+></div>
+
+<style>
+	.spinner {
+		border: 2px solid var(--spinner-color, rgba(0, 0, 0, 0.1));
+		border-top-color: var(--spinner-accent, #000);
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+		flex-shrink: 0;
+	}
+
+	.spinner--sm {
+		border-width: 1.5px;
+	}
+
+	.spinner--lg {
+		border-width: 3px;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	:root {
+		--spinner-color: rgba(0, 0, 0, 0.1);
+		--spinner-accent: #000;
+	}
+
+	:root.dark {
+		--spinner-color: rgba(255, 255, 255, 0.1);
+		--spinner-accent: #fff;
+	}
+</style>

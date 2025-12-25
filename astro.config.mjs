@@ -1,13 +1,15 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import dotenv from 'dotenv';
+import netlify from '@astrojs/netlify';
 
 // Load environment variables
 dotenv.config();
 
 export default defineConfig({
   site: 'https://syanam.pro',
-  output: 'server', // Change to server to allow API routes
+  output: 'server',
+  adapter: netlify(),
   trailingSlash: 'ignore',
   vite: {
     define: {

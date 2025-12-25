@@ -1,0 +1,61 @@
+---
+export interface Props {
+	class?: string
+	variant?: 'text' | 'circular' | 'rectangular'
+	width?: string
+	height?: string
+}
+
+const { class: className = '', variant = 'rectangular', width, height } = Astro.props
+---
+
+<div
+	class:list={['skeleton', `skeleton--${variant}`, className]}
+	style={width || height ? `width: ${width}; height: ${height};` : ''}
+></div>
+
+<style>
+	.skeleton {
+		background: linear-gradient(
+			90deg,
+			var(--skeleton-base) 0%,
+			var(--skeleton-highlight) 50%,
+			var(--skeleton-base) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: var(--skeleton-radius, 4px);
+	}
+
+	.skeleton--text {
+		height: 1em;
+		border-radius: 4px;
+	}
+
+	.skeleton--circular {
+		border-radius: 50%;
+	}
+
+	.skeleton--rectangular {
+		border-radius: 8px;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	:root {
+		--skeleton-base: #f0f0f0;
+		--skeleton-highlight: #e0e0e0;
+	}
+
+	:root.dark {
+		--skeleton-base: #2a2a2a;
+		--skeleton-highlight: #3a3a3a;
+	}
+</style>

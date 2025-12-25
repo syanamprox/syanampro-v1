@@ -1,0 +1,105 @@
+---
+const hasImage = true;
+const hasTags = true;
+---
+
+<article class="log-item skeleton-item">
+	{hasImage && (
+		<div class="log-image skeleton-image"></div>
+	)}
+
+	<div class="log-header">
+		<div class="log-meta">
+			<div class="skeleton skeleton-date" style="width: 100px; height: 14px;"></div>
+			<div class="skeleton skeleton-category" style="width: 60px; height: 20px;"></div>
+		</div>
+	</div>
+
+	<div class="log-content">
+		<div class="skeleton skeleton-title" style="width: 70%; height: 24px; margin-bottom: 12px;"></div>
+		<div class="skeleton skeleton-summary" style="width: 100%; height: 16px; margin-bottom: 8px;"></div>
+		<div class="skeleton skeleton-summary" style="width: 80%; height: 16px; margin-bottom: 16px;"></div>
+
+		{hasTags && (
+			<div class="log-tags">
+				<div class="skeleton skeleton-tag" style="width: 50px; height: 20px;"></div>
+				<div class="skeleton skeleton-tag" style="width: 60px; height: 20px;"></div>
+				<div class="skeleton skeleton-tag" style="width: 45px; height: 20px;"></div>
+			</div>
+		)}
+
+		<div class="skeleton skeleton-read-more" style="width: 80px; height: 16px;"></div>
+	</div>
+</article>
+
+<style>
+	.skeleton-item {
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.skeleton-image {
+		width: 100%;
+		height: 200px;
+		background: linear-gradient(
+			90deg,
+			var(--skeleton-base) 0%,
+			var(--skeleton-highlight) 50%,
+			var(--skeleton-base) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 8px;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.skeleton-date,
+	.skeleton-category,
+	.skeleton-title,
+	.skeleton-summary,
+	.skeleton-tag,
+	.skeleton-read-more {
+		background: linear-gradient(
+			90deg,
+			var(--skeleton-base) 0%,
+			var(--skeleton-highlight) 50%,
+			var(--skeleton-base) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 4px;
+	}
+
+	.skeleton-date {
+		display: inline-block;
+	}
+
+	.skeleton-category {
+		display: inline-block;
+		border-radius: 12px;
+	}
+
+	.skeleton-tag {
+		display: inline-block;
+		border-radius: 12px;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	:root {
+		--skeleton-base: #f0f0f0;
+		--skeleton-highlight: #e0e0e0;
+	}
+
+	:root.dark {
+		--skeleton-base: #2a2a2a;
+		--skeleton-highlight: #3a3a3a;
+	}
+</style>

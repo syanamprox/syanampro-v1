@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import NoteCardSkeleton from '../components/ui/NoteCardSkeleton.astro';
 import { getAllNotes, getCategories, type Note } from '../lib/notes';
 
 const currentPath = Astro.url.pathname;
@@ -60,6 +61,13 @@ const formatDate = (dateString: string) => {
 				</div>
 
 				<div class="log-list">
+					<!-- Loading skeletons container -->
+					<div id="skeleton-container" class="skeleton-loading">
+						<NoteCardSkeleton />
+						<NoteCardSkeleton />
+						<NoteCardSkeleton />
+					</div>
+
 					{notes.map((note) => (
 						<a href={`/notes/${note.slug}`} class="log-item-link">
 							<article class="log-item" data-category={note.category} data-title={note.title.toLowerCase()} data-content={(note.summary || '').toLowerCase()} data-tags={(note.tags?.join(' ') || '').toLowerCase()}>
@@ -119,6 +127,18 @@ const formatDate = (dateString: string) => {
 </Layout>
 
 <style>
+	.skeleton-loading {
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+	}
+
+	.skeleton-loading.active {
+		opacity: 1;
+		pointer-events: auto;
+		position: relative;
+	}
+
 	.main-content {
 		min-height: calc(100vh - 200px);
 	}
@@ -360,6 +380,21 @@ const formatDate = (dateString: string) => {
 </style>
 
 <script>
+	// Show skeletons briefly during search/filter
+	function showSkeletons() {
+		const skeletonContainer = document.getElementById('skeleton-container');
+		if (skeletonContainer) {
+			skeletonContainer.classList.add('active');
+		}
+	}
+
+	function hideSkeletons() {
+		const skeletonContainer = document.getElementById('skeleton-container');
+		if (skeletonContainer) {
+			skeletonContainer.classList.remove('active');
+		}
+	}
+
 	// Search and Filter functionality
 	const searchInput = document.getElementById('search-input');
 	const filterButtons = document.querySelectorAll('.filter-btn');
@@ -368,6 +403,9 @@ const formatDate = (dateString: string) => {
 	function filterItems() {
 		const searchTerm = searchInput.value.toLowerCase().trim();
 		const activeCategory = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
+
+		// Show skeletons for a brief moment during filter
+		showSkeletons();
 
 		logItems.forEach(item => {
 			const title = item.dataset.title || '';
@@ -388,6 +426,9 @@ const formatDate = (dateString: string) => {
 				item.style.display = 'none';
 			}
 		});
+
+		// Hide skeletons after a short delay
+		setTimeout(hideSkeletons, 300);
 	}
 
 	// Search input event listener

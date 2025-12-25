@@ -1,0 +1,92 @@
+---
+interface Props {
+	src: string
+	alt: string
+	width?: number
+	height?: number
+	class?: string
+	priority?: boolean
+}
+
+const { src, alt, width, height, class: className = '', priority = false } = Astro.props
+---
+
+<div class:list={['image-wrapper', className]}>
+	<div class="image-skeleton"></div>
+	<img
+		src={src}
+		alt={alt}
+		width={width}
+		height={height}
+		loading={priority ? 'eager' : 'lazy'}
+		decoding="async"
+		onload="this.parentElement.classList.add('loaded')"
+		onerror="this.parentElement.classList.add('error')"
+	/>
+</div>
+
+<style>
+	.image-wrapper {
+		position: relative;
+		overflow: hidden;
+		background: var(--skeleton-base, #f0f0f0);
+	}
+
+	.image-wrapper img {
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.image-wrapper.loaded img {
+		opacity: 1;
+	}
+
+	.image-wrapper.loaded .image-skeleton {
+		opacity: 0;
+	}
+
+	.image-skeleton {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			90deg,
+			var(--skeleton-base) 0%,
+			var(--skeleton-highlight) 50%,
+			var(--skeleton-base) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		transition: opacity 0.3s ease;
+		z-index: 1;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	:root {
+		--skeleton-base: #f0f0f0;
+		--skeleton-highlight: #e0e0e0;
+	}
+
+	:root.dark {
+		--skeleton-base: #2a2a2a;
+		--skeleton-highlight: #3a3a3a;
+	}
+
+	.image-wrapper.error {
+		background: var(--error-bg, #fff0f0);
+	}
+
+	:root.dark .image-wrapper.error {
+		--error-bg: #2a1a1a;
+	}
+</style>
