@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import NoteCardSkeleton from '../components/ui/NoteCardSkeleton.astro';
 import { getAllNotes, getCategories, type Note } from '../lib/notes';
 
 const currentPath = Astro.url.pathname;
@@ -60,53 +59,46 @@ const formatDate = (dateString: string) => {
 					))}
 				</div>
 
-				<div class="log-list">
-					<!-- Loading skeletons container -->
-					<div id="skeleton-container" class="skeleton-loading">
-						<NoteCardSkeleton />
-						<NoteCardSkeleton />
-						<NoteCardSkeleton />
-					</div>
+			<div class="log-list">
+				{notes.map((note) => (
+					<a href={`/notes/${note.slug}`} class="log-item-link">
+						<article class="log-item" data-category={note.category} data-title={note.title.toLowerCase()} data-content={(note.summary || '').toLowerCase()} data-tags={(note.tags?.join(' ') || '').toLowerCase()}>
+							{note.headerImage && (
+								<div class="log-image">
+									<img src={note.headerImage} alt={note.title} loading="lazy" />
+								</div>
+							)}
+							<div class="log-header">
+								<div class="log-meta">
+									<time datetime={note.publishedDate} class="log-date">
+										{formatDate(note.publishedDate)}
+									</time>
+									<span class="log-category">{note.category}</span>
+								</div>
+							</div>
 
-					{notes.map((note) => (
-						<a href={`/notes/${note.slug}`} class="log-item-link">
-							<article class="log-item" data-category={note.category} data-title={note.title.toLowerCase()} data-content={(note.summary || '').toLowerCase()} data-tags={(note.tags?.join(' ') || '').toLowerCase()}>
-								{note.headerImage && (
-									<div class="log-image">
-										<img src={note.headerImage} alt={note.title} loading="lazy" />
+							<div class="log-content">
+								<h2 class="log-title">
+									{note.title}
+								</h2>
+								{note.summary && <p class="log-summary">{note.summary}</p>}
+
+								{note.tags && note.tags.length > 0 && (
+									<div class="log-tags">
+										{note.tags.map((tagItem) => (
+											<span class="tag" data-tag={tagItem}>#{tagItem}</span>
+										))}
 									</div>
 								)}
-								<div class="log-header">
-									<div class="log-meta">
-										<time datetime={note.publishedDate} class="log-date">
-											{formatDate(note.publishedDate)}
-										</time>
-										<span class="log-category">{note.category}</span>
-									</div>
-								</div>
 
-								<div class="log-content">
-									<h2 class="log-title">
-										{note.title}
-									</h2>
-									{note.summary && <p class="log-summary">{note.summary}</p>}
-
-									{note.tags && note.tags.length > 0 && (
-										<div class="log-tags">
-											{note.tags.map((tagItem) => (
-												<span class="tag" data-tag={tagItem}>#{tagItem}</span>
-											))}
-										</div>
-									)}
-
-									<span class="read-more">
-										Read more →
-									</span>
-								</div>
-							</article>
-						</a>
-					))}
-				</div>
+								<span class="read-more">
+									Read more →
+								</span>
+							</div>
+						</article>
+					</a>
+				))}
+			</div>
 
 				{notes.length === 0 && (
 					<div class="empty-state">
@@ -127,18 +119,6 @@ const formatDate = (dateString: string) => {
 </Layout>
 
 <style>
-	.skeleton-loading {
-		opacity: 0;
-		pointer-events: none;
-		position: absolute;
-	}
-
-	.skeleton-loading.active {
-		opacity: 1;
-		pointer-events: auto;
-		position: relative;
-	}
-
 	.main-content {
 		min-height: calc(100vh - 200px);
 	}
@@ -164,19 +144,19 @@ const formatDate = (dateString: string) => {
 	}
 
 	.search-input {
-		width: 100% !important;
-		max-width: 600px !important;
-		margin: 0 auto !important;
-		display: block !important;
-		padding: var(--spacing-md) !important;
-		font-size: 1rem !important;
-		font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-		border: 1px solid var(--color-border) !important;
-		border-radius: 8px !important;
-		background-color: var(--color-background) !important;
-		color: var(--color-text) !important;
-		outline: none !important;
-		transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+		width: 100%;
+		max-width: 600px;
+		margin: 0 auto;
+		display: block;
+		padding: var(--spacing-md);
+		font-size: 1rem;
+		font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		background-color: var(--color-background);
+		color: var(--color-text);
+		outline: none;
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
 	}
 
 	.search-input:focus {
@@ -201,23 +181,23 @@ const formatDate = (dateString: string) => {
 	}
 
 	.filter-btn {
-		padding: var(--spacing-xs) var(--spacing-md) !important;
-		border: 1px solid var(--color-border) !important;
-		background-color: var(--color-background) !important;
-		color: var(--color-text-secondary) !important;
-		border-radius: 20px !important;
-		cursor: pointer !important;
-		font-size: 0.875rem !important;
-		font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-		font-weight: 500 !important;
-		transition: all 0.2s ease !important;
+		padding: var(--spacing-xs) var(--spacing-md);
+		border: 1px solid var(--color-border);
+		background-color: var(--color-background);
+		color: var(--color-text-secondary);
+		border-radius: 20px;
+		cursor: pointer;
+		font-size: 0.875rem;
+		font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		font-weight: 500;
+		transition: all 0.2s ease;
 	}
 
 	.filter-btn:hover,
 	.filter-btn.active {
-		background-color: var(--color-accent) !important;
-		color: white !important;
-		border-color: var(--color-accent) !important;
+		background-color: var(--color-accent);
+		color: white;
+		border-color: var(--color-accent);
 	}
 
 	.log-list {
@@ -380,21 +360,6 @@ const formatDate = (dateString: string) => {
 </style>
 
 <script>
-	// Show skeletons briefly during search/filter
-	function showSkeletons() {
-		const skeletonContainer = document.getElementById('skeleton-container');
-		if (skeletonContainer) {
-			skeletonContainer.classList.add('active');
-		}
-	}
-
-	function hideSkeletons() {
-		const skeletonContainer = document.getElementById('skeleton-container');
-		if (skeletonContainer) {
-			skeletonContainer.classList.remove('active');
-		}
-	}
-
 	// Search and Filter functionality
 	const searchInput = document.getElementById('search-input');
 	const filterButtons = document.querySelectorAll('.filter-btn');
@@ -403,9 +368,6 @@ const formatDate = (dateString: string) => {
 	function filterItems() {
 		const searchTerm = searchInput.value.toLowerCase().trim();
 		const activeCategory = document.querySelector('.filter-btn.active')?.dataset.category || 'all';
-
-		// Show skeletons for a brief moment during filter
-		showSkeletons();
 
 		logItems.forEach(item => {
 			const title = item.dataset.title || '';
@@ -426,9 +388,6 @@ const formatDate = (dateString: string) => {
 				item.style.display = 'none';
 			}
 		});
-
-		// Hide skeletons after a short delay
-		setTimeout(hideSkeletons, 300);
 	}
 
 	// Search input event listener

@@ -3,98 +3,235 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// Function to detect language from URL
 const lang = Astro.url.pathname.startsWith('/id') ? 'id' : 'en';
-
-const message = lang === 'id'
-  ? "Mohon maaf, Anda tersesat. Kembalilah ke jalan yang benar."
-  : "Sorry, you're lost. Please return to the right path.";
-
-
-// SEO variables
-const pageTitle = lang === 'id'
-  ? '404 | Syaiful Anam'
-  : '404 | Syaiful Anam';
-const pageDescription = lang === 'id'
-  ? 'Error 404 - Halaman tidak ditemukan.'
-  : 'Error 404 - Page not found.';
 const currentPath = Astro.url.pathname;
+
+const title = lang === 'id' ? '404 | Syaiful Anam' : '404 | Syaiful Anam';
+const description = lang === 'id' ? 'Halaman tidak ditemukan' : 'Page not found';
 ---
 
-<Layout title={pageTitle} description={pageDescription} lang={lang}>
-  <div class="container">
-    <Header currentPath={currentPath} lang={lang} />
+<Layout title={title} description={description} lang={lang}>
+	<div class="page-wrapper">
+		<Header currentPath={currentPath} lang={lang} />
 
-    <main class="main-content">
-      <div class="min-h-screen flex items-center justify-center px-4">
-        <div class="text-center max-w-5xl mx-auto">
-          <!-- 404 Big Number -->
-          <div class="text-9xl md:text-[12rem] lg:text-[15rem] font-black text-gray-200 dark:text-gray-700 leading-none mb-8">
-            404
-          </div>
+		<main class="error-main">
+			<div class="error-wrapper">
+				<div class="logo-canvas">
+					<canvas id="logo-canvas"></canvas>
+				</div>
+			</div>
 
-          <!-- Message -->
-          <h1 class="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white mb-8 leading-tight">
-            {lang === 'id' ? 'Anda Tersesat' : 'You Are Lost'}
-          </h1>
+			<div class="error-content">
+				<h1 class="error-title">404</h1>
+				<p class="error-message">
+					{lang === 'id' ? 'Halaman tidak ditemukan' : 'Page not found'}
+				</p>
+				<a href={lang === 'id' ? '/id' : '/'} class="home-link">
+					{lang === 'id' ? 'Kembali ke beranda' : 'Back to home'}
+				</a>
+			</div>
+		</main>
 
-          <!-- Message -->
-          <p class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 dark:text-gray-200 mb-16 leading-relaxed">
-            {message}
-          </p>
-
-          <!-- Back to Path Button -->
-          <a
-            href={lang === 'id' ? '/id' : '/'}
-            class="inline-block px-8 py-3 bg-black dark:bg-white text-white dark:text-black font-bold text-lg rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-          >
-            {lang === 'id' ? 'KEMBALI KE JALAN BENAR' : 'BACK TO RIGHT PATH'}
-          </a>
-        </div>
-      </div>
-    </main>
-
-    <Footer lang={lang} />
-  </div>
+		<Footer lang={lang} />
+	</div>
 </Layout>
 
 <style>
-  .main-content {
-    min-height: calc(100vh - 200px);
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	.page-wrapper {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
 
-  /* Remove all backgrounds */
-  body, html {
-    background: transparent !important;
-  }
+	.error-main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: var(--spacing-2xl) var(--spacing-md);
+		min-height: calc(100vh - 140px);
+		gap: var(--spacing-2xl);
+	}
 
-  main {
-    background: transparent !important;
-  }
+	.error-wrapper {
+		width: 300px;
+		height: 300px;
+	}
 
-  /* Ensure centering */
-  .container {
-    width: 100%;
-    max-width: none;
-    padding: 0;
-  }
+	.logo-canvas {
+		width: 100%;
+		height: 100%;
+	}
 
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .text-\[15rem\] {
-      font-size: 8rem;
-    }
+	#logo-canvas {
+		width: 100%;
+		height: 100%;
+	}
 
-    .text-7xl {
-      font-size: 2.5rem;
-    }
+	.error-content {
+		text-align: center;
+	}
 
-    .text-4xl {
-      font-size: 1.5rem;
-    }
-  }
+	.error-title {
+		font-size: clamp(4rem, 12vw, 8rem);
+		font-weight: 900;
+		color: var(--color-text);
+		line-height: 1;
+		margin: 0 0 var(--spacing-md) 0;
+		letter-spacing: -0.05em;
+	}
+
+	.error-message {
+		font-size: 1.125rem;
+		color: var(--color-text-secondary);
+		margin: 0 0 var(--spacing-xl) 0;
+	}
+
+	.home-link {
+		display: inline-block;
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 0.9375rem;
+		font-weight: 500;
+		border-bottom: 1px solid var(--color-border);
+		transition: border-color 0.2s ease;
+	}
+
+	.home-link:hover {
+		border-color: var(--color-text);
+	}
+
+	@media (max-width: 640px) {
+		.error-wrapper {
+			width: 200px;
+			height: 200px;
+		}
+	}
 </style>
+
+<script>
+	// Canvas animation for 404 - inspired by norgram.co
+	const canvas = document.getElementById('logo-canvas');
+	if (canvas) {
+		const ctx = canvas.getContext('2d');
+		let time = 0;
+
+		// High DPI support
+		const dpr = window.devicePixelRatio || 1;
+		const rect = canvas.getBoundingClientRect();
+		canvas.width = rect.width * dpr;
+		canvas.height = rect.height * dpr;
+		ctx.scale(dpr, dpr);
+
+		const width = rect.width;
+		const height = rect.height;
+		const centerX = width / 2;
+		const centerY = height / 2;
+
+		function isDarkMode() {
+			return document.documentElement.classList.contains('dark');
+		}
+
+		function getColors() {
+			return isDarkMode()
+				? { primary: '#fafafa', secondary: '#71717a' }
+				: { primary: '#171717', secondary: '#a1a1aa' };
+		}
+
+		function draw() {
+			const colors = getColors();
+			ctx.clearRect(0, 0, width, height);
+
+			// Draw animated "404" text with distortion effect
+			ctx.save();
+			ctx.translate(centerX, centerY);
+
+			const fontSize = Math.min(width, height) * 0.35;
+			ctx.font = `900 ${fontSize}px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif`;
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+
+			// Text wave distortion
+			const text = '404';
+			const letterSpacing = fontSize * 0.05;
+
+			for (let i = 0; i < text.length; i++) {
+				const char = text[i];
+				const offsetX = (i - 1) * letterSpacing * 3;
+				const wave = Math.sin(time * 0.05 + i * 0.5) * fontSize * 0.05;
+				const waveY = Math.cos(time * 0.03 + i * 0.3) * fontSize * 0.03;
+
+				ctx.save();
+				ctx.translate(offsetX, waveY);
+				ctx.rotate(wave * 0.1);
+				ctx.fillStyle = colors.primary;
+				ctx.fillText(char, 0, 0);
+				ctx.restore();
+			}
+
+			ctx.restore();
+
+			// Draw orbiting elements
+		 const orbitCount = 8;
+			const orbitRadius = Math.min(width, height) * 0.45;
+
+			for (let i = 0; i < orbitCount; i++) {
+				const angle = (time * 0.02) + (i * (Math.PI * 2 / orbitCount));
+				const x = centerX + Math.cos(angle) * orbitRadius;
+				const y = centerY + Math.sin(angle) * orbitRadius;
+				const size = 2 + Math.sin(time * 0.05 + i) * 1;
+
+				ctx.beginPath();
+				ctx.arc(x, y, size, 0, Math.PI * 2);
+				ctx.fillStyle = colors.secondary;
+				ctx.fill();
+			}
+
+			// Draw connecting lines between orbiting dots
+			ctx.strokeStyle = colors.secondary;
+			ctx.lineWidth = 0.5;
+			ctx.globalAlpha = 0.3;
+
+			for (let i = 0; i < orbitCount; i++) {
+				const angle1 = (time * 0.02) + (i * (Math.PI * 2 / orbitCount));
+				const angle2 = (time * 0.02) + ((i + 1) * (Math.PI * 2 / orbitCount));
+
+				const x1 = centerX + Math.cos(angle1) * orbitRadius;
+				const y1 = centerY + Math.sin(angle1) * orbitRadius;
+				const x2 = centerX + Math.cos(angle2) * orbitRadius;
+				const y2 = centerY + Math.sin(angle2) * orbitRadius;
+
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x2, y2);
+				ctx.stroke();
+			}
+
+			ctx.globalAlpha = 1;
+
+			time++;
+			requestAnimationFrame(draw);
+		}
+
+		// Start animation
+		draw();
+
+		// Handle theme changes
+		const observer = new MutationObserver(() => {
+			draw();
+		});
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['class']
+		});
+
+		// Handle resize
+		window.addEventListener('resize', () => {
+			const rect = canvas.getBoundingClientRect();
+			canvas.width = rect.width * dpr;
+			canvas.height = rect.height * dpr;
+			ctx.scale(dpr, dpr);
+		});
+	}
+</script>

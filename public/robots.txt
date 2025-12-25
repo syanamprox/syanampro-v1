@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://syanam.pro/sitemap.xml
+# Sitemap Index
+Sitemap: https://syanam.pro/sitemap-index.xml
 
 # Allow specific directories
 Allow: /images/
