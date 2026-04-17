@@ -92,54 +92,18 @@ const description = 'Follow my journey from multi-talented designer to tech entr
 							</div>
 
 							<div class="tools-grid">
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="CorelDRAW" width="32" height="32" />
-									<span>CorelDRAW</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="Photoshop" width="32" height="32" />
-									<span>Photoshop</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="Illustrator" width="32" height="32" />
-									<span>Illustrator</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="InDesign" width="32" height="32" />
-									<span>InDesign</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="WordPress" width="32" height="32" />
-									<span>WordPress</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="HTML" width="32" height="32" />
-									<span>HTML</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="CSS" width="32" height="32" />
-									<span>CSS</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="JavaScript" width="32" height="32" />
-									<span>JavaScript</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="PHP" width="32" height="32" />
-									<span>PHP</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="MySQL" width="32" height="32" />
-									<span>MySQL</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="Git" width="32" height="32" />
-									<span>Git</span>
-								</div>
-								<div class="tool-item">
-									<img src="/images/tech/astro.svg" alt="GitHub" width="32" height="32" />
-									<span>GitHub</span>
-								</div>
+								<span class="tool-tag">CorelDRAW</span>
+								<span class="tool-tag">Photoshop</span>
+								<span class="tool-tag">Illustrator</span>
+								<span class="tool-tag">InDesign</span>
+								<span class="tool-tag">WordPress</span>
+								<span class="tool-tag">HTML</span>
+								<span class="tool-tag">CSS</span>
+								<span class="tool-tag">JavaScript</span>
+								<span class="tool-tag">PHP</span>
+								<span class="tool-tag">MySQL</span>
+								<span class="tool-tag">Git</span>
+								<span class="tool-tag">GitHub</span>
 							</div>
 						</div>
 					</div>
@@ -652,40 +616,27 @@ const description = 'Follow my journey from multi-talented designer to tech entr
 
 	/* Tools grid styling */
 	.tools-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-		gap: var(--spacing-md);
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm);
 		margin-top: var(--spacing-lg);
 	}
 
-	.tool-item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		padding: var(--spacing-sm);
+	.tool-tag {
+		display: inline-block;
+		padding: var(--spacing-xs) var(--spacing-md);
 		background-color: var(--color-surface);
 		border: 1px solid var(--color-border);
-		border-radius: 8px;
-		transition: all 0.3s ease;
-	}
-
-	.tool-item:hover {
-		border-color: var(--color-accent);
-		transform: translateY(-2px);
-	}
-
-	.tool-item img {
-		width: 32px;
-		height: 32px;
-		margin-bottom: var(--spacing-xs);
-		object-fit: contain;
-	}
-
-	.tool-item span {
+		border-radius: 6px;
 		font-size: 0.875rem;
 		color: var(--color-text-secondary);
 		font-weight: 500;
+		transition: all 0.2s ease;
+	}
+
+	.tool-tag:hover {
+		border-color: var(--color-accent);
+		color: var(--color-text);
 	}
 
 	.career-progression {
@@ -773,20 +724,11 @@ const description = 'Follow my journey from multi-talented designer to tech entr
 
 		/* Tools grid mobile fixes */
 		.tools-grid {
-			grid-template-columns: repeat(2, 1fr);
+			gap: var(--spacing-xs);
 		}
 
-		.tool-item {
-			padding: var(--spacing-md);
-		}
-
-		.tool-item img {
-			width: 28px;
-			height: 28px;
-		}
-
-		.tool-item span {
-			font-size: 0.875rem;
+		.tool-tag {
+			font-size: 0.8125rem;
 		}
 	}
 </style>

@@ -28,3 +28,6 @@ public/uploads/
 
 # Local Netlify folder
 .netlify
+
+# encryption keys
+encrypt_email/

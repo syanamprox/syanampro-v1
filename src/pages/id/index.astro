@@ -32,7 +32,12 @@ const description = 'A lifelong builder applying learnings in tech and business,
 
 				<div class="content-boxes">
 					<div class="content-box">
-						<h2>Berkontribusi di Digital360</h2>
+						<h2 class="box-heading">
+							Berkontribusi di
+							<a href="https://digital360.id/" target="_blank" rel="noopener noreferrer">
+								<img src="/images/business/logo-digital360.png" alt="Digital360" class="box-logo" loading="lazy" />
+							</a>
+						</h2>
 						<p>
 							Membangun solusi software B2B generasi berikutnya dengan
 							keahlian full-stack dan AI untuk mempercepat inovasi produk
@@ -44,7 +49,12 @@ const description = 'A lifelong builder applying learnings in tech and business,
 					</div>
 
 					<div class="content-box">
-						<h2>Berkontribusi di Fabrik Group</h2>
+						<h2 class="box-heading">
+							Berkontribusi di
+							<a href="https://fabrikgroup.id/" target="_blank" rel="noopener noreferrer">
+								<img src="/images/business/logo-fabrikgroup.png" alt="Fabrik Group" class="box-logo" loading="lazy" />
+							</a>
+						</h2>
 						<p>
 							Mengintegrasikan pendekatan *tech-first* ke industri garment.
 							Bekerja dengan founder brand fashion untuk menyederhanakan
@@ -131,6 +141,31 @@ const description = 'A lifelong builder applying learnings in tech and business,
 
 	.content-box:hover {
 		border-color: var(--color-text);
+	}
+
+	.box-heading {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-sm);
+		margin-top: 0;
+		margin-bottom: var(--spacing-md);
+		font-size: 1.25rem;
+	}
+
+	.box-heading a {
+		line-height: 0;
+	}
+
+	.box-logo {
+		height: 24px;
+		width: auto;
+		object-fit: contain;
+		opacity: 0.85;
+		transition: opacity 0.2s ease;
+	}
+
+	.content-box:hover .box-logo {
+		opacity: 1;
 	}
 
 	.content-box h2 {
