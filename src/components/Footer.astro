@@ -10,7 +10,8 @@ const socialLinks = [
 	{
 		name: 'LinkedIn',
 		url: 'https://id.linkedin.com/in/syanampro',
-		icon: '/images/social/ln.png'
+		icon: '/images/social/ln.png',
+		noDarkFilter: true
 	},
 	{
 		name: 'Google',
@@ -20,17 +21,20 @@ const socialLinks = [
 	{
 		name: 'Instagram',
 		url: 'https://instagram.com/syanampro',
-		icon: '/images/social/ig.png'
+		icon: '/images/social/ig.png',
+		noDarkFilter: true
 	},
 	{
 		name: 'Twitter/X',
 		url: 'https://x.com/syanampro',
-		icon: '/images/social/x.png'
+		icon: '/images/social/x.png',
+		noDarkFilter: true
 	},
 	{
 		name: 'Telegram',
 		url: 'https://t.me/syanampro',
-		icon: '/images/social/telegram.png'
+		icon: '/images/social/telegram.png',
+		noDarkFilter: true
 	},
 	{
 		name: 'GitHub',
@@ -107,7 +111,7 @@ const poweredByText = lang === 'id'
 							<img
 								src={social.icon}
 								alt={social.name}
-								class="social-icon"
+								class={`social-icon${social.noDarkFilter ? ' no-dark-filter' : ''}`}
 								width="30"
 								height="30"
 							/>
@@ -225,6 +229,11 @@ const poweredByText = lang === 'id'
 	}
 
 	/* Dark mode styles */
+	:global(.dark) .social-icon:not(.no-dark-filter),
+	:global(.dark) .tech-icon {
+		filter: brightness(0) invert(1);
+	}
+
 	.dark .social-link:hover {
 		background-color: var(--color-surface);
 	}
